@@ -57,6 +57,12 @@ platform :ios do
     )
   end
 
+  desc "Scan Development"
+  lane :scan_development do
+    match_fetch_development
+    scan
+  end
+
   desc "Reset Build Number"
   lane :reset_build_number do
     increment_build_number(build_number: "1")

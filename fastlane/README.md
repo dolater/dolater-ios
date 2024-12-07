@@ -39,6 +39,14 @@ Gym AdHoc
 
 Gym AppStore
 
+### ios scan_development
+
+```sh
+[bundle exec] fastlane ios scan_development
+```
+
+Scan Development
+
 ### ios reset_build_number
 
 ```sh
