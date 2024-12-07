@@ -15,6 +15,30 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
+### ios gym_development
+
+```sh
+[bundle exec] fastlane ios gym_development
+```
+
+Gym Development
+
+### ios gym_adhoc
+
+```sh
+[bundle exec] fastlane ios gym_adhoc
+```
+
+Gym AdHoc
+
+### ios gym_appstore
+
+```sh
+[bundle exec] fastlane ios gym_appstore
+```
+
+Gym AppStore
+
 ### ios reset_build_number
 
 ```sh

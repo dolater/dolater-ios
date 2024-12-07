@@ -18,6 +18,45 @@ platform :ios do
     reset_build_number
   end
 
+  desc "Gym Development"
+  lane :gym_development do
+    match_fetch_development
+    gym(
+      export_options: {
+        method: "development",
+        provisioningProfiles: {
+          "com.kantacky.TaskFlusher": "match Development com.kantacky.TaskFlusher"
+        }
+      },
+    )
+  end
+
+  desc "Gym AdHoc"
+  lane :gym_adhoc do
+    match_fetch_adhoc
+    gym(
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "com.kantacky.TaskFlusher": "match AdHoc com.kantacky.TaskFlusher"
+        }
+      },
+    )
+  end
+
+  desc "Gym AppStore"
+  lane :gym_appstore do
+    match_fetch_appstore
+    gym(
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: {
+          "com.kantacky.TaskFlusher": "match AppStore com.kantacky.TaskFlusher"
+        }
+      },
+    )
+  end
+
   desc "Reset Build Number"
   lane :reset_build_number do
     increment_build_number(build_number: "1")
