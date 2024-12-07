@@ -1,2 +1,5 @@
 app_identifier("com.kantacky.TaskFlusher")
 apple_id("k.oikawa@kantacky.com")
+app_name("Task Flusher")
+itc_team_id("125129798")
+itc_team_name("Kanta Oikawa")
