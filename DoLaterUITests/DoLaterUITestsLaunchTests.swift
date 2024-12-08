@@ -1,13 +1,13 @@
 //
-//  TaskFlusherUITestsLaunchTests.swift
-//  TaskFlusherUITests
+//  DoLaterUITestsLaunchTests.swift
+//  DoLaterUITests
 //
 //  Created by Kanta Oikawa on 12/7/24.
 //
 
 import XCTest
 
-final class TaskFlusherUITestsLaunchTests: XCTestCase {
+final class DoLaterUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

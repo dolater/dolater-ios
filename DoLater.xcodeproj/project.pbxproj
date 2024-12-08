@@ -12,50 +12,50 @@
 			containerPortal = F1773F392D04753600F162C4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F1773F402D04753600F162C4;
-			remoteInfo = TaskFlusher;
+			remoteInfo = DoLater;
 		};
 		F1773F5C2D04753800F162C4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F1773F392D04753600F162C4 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F1773F402D04753600F162C4;
-			remoteInfo = TaskFlusher;
+			remoteInfo = DoLater;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F1773F412D04753600F162C4 /* TaskFlusher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskFlusher.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1773F512D04753800F162C4 /* TaskFlusherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskFlusherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1773F5B2D04753800F162C4 /* TaskFlusherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskFlusherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1773F412D04753600F162C4 /* DoLater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DoLater.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1773F512D04753800F162C4 /* DoLaterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DoLaterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1773F5B2D04753800F162C4 /* DoLaterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DoLaterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F118B8FE2D048AAA00534E58 /* Exceptions for "TaskFlusher" folder in "TaskFlusher" target */ = {
+		F118B8FE2D048AAA00534E58 /* Exceptions for "DoLater" folder in "DoLater" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = F1773F402D04753600F162C4 /* TaskFlusher */;
+			target = F1773F402D04753600F162C4 /* DoLater */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F1773F432D04753600F162C4 /* TaskFlusher */ = {
+		F1773F432D04753600F162C4 /* DoLater */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				F118B8FE2D048AAA00534E58 /* Exceptions for "TaskFlusher" folder in "TaskFlusher" target */,
+				F118B8FE2D048AAA00534E58 /* Exceptions for "DoLater" folder in "DoLater" target */,
 			);
-			path = TaskFlusher;
+			path = DoLater;
 			sourceTree = "<group>";
 		};
-		F1773F542D04753800F162C4 /* TaskFlusherTests */ = {
+		F1773F542D04753800F162C4 /* DoLaterTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TaskFlusherTests;
+			path = DoLaterTests;
 			sourceTree = "<group>";
 		};
-		F1773F5E2D04753800F162C4 /* TaskFlusherUITests */ = {
+		F1773F5E2D04753800F162C4 /* DoLaterUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TaskFlusherUITests;
+			path = DoLaterUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -88,9 +88,9 @@
 		F1773F382D04753600F162C4 = {
 			isa = PBXGroup;
 			children = (
-				F1773F432D04753600F162C4 /* TaskFlusher */,
-				F1773F542D04753800F162C4 /* TaskFlusherTests */,
-				F1773F5E2D04753800F162C4 /* TaskFlusherUITests */,
+				F1773F432D04753600F162C4 /* DoLater */,
+				F1773F542D04753800F162C4 /* DoLaterTests */,
+				F1773F5E2D04753800F162C4 /* DoLaterUITests */,
 				F1773F422D04753600F162C4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,9 +98,9 @@
 		F1773F422D04753600F162C4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F1773F412D04753600F162C4 /* TaskFlusher.app */,
-				F1773F512D04753800F162C4 /* TaskFlusherTests.xctest */,
-				F1773F5B2D04753800F162C4 /* TaskFlusherUITests.xctest */,
+				F1773F412D04753600F162C4 /* DoLater.app */,
+				F1773F512D04753800F162C4 /* DoLaterTests.xctest */,
+				F1773F5B2D04753800F162C4 /* DoLaterUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,9 +108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F1773F402D04753600F162C4 /* TaskFlusher */ = {
+		F1773F402D04753600F162C4 /* DoLater */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1773F652D04753800F162C4 /* Build configuration list for PBXNativeTarget "TaskFlusher" */;
+			buildConfigurationList = F1773F652D04753800F162C4 /* Build configuration list for PBXNativeTarget "DoLater" */;
 			buildPhases = (
 				F1773F3D2D04753600F162C4 /* Sources */,
 				F1773F3E2D04753600F162C4 /* Frameworks */,
@@ -121,18 +121,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F1773F432D04753600F162C4 /* TaskFlusher */,
+				F1773F432D04753600F162C4 /* DoLater */,
 			);
-			name = TaskFlusher;
+			name = DoLater;
 			packageProductDependencies = (
 			);
-			productName = TaskFlusher;
-			productReference = F1773F412D04753600F162C4 /* TaskFlusher.app */;
+			productName = DoLater;
+			productReference = F1773F412D04753600F162C4 /* DoLater.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F1773F502D04753800F162C4 /* TaskFlusherTests */ = {
+		F1773F502D04753800F162C4 /* DoLaterTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1773F682D04753800F162C4 /* Build configuration list for PBXNativeTarget "TaskFlusherTests" */;
+			buildConfigurationList = F1773F682D04753800F162C4 /* Build configuration list for PBXNativeTarget "DoLaterTests" */;
 			buildPhases = (
 				F1773F4D2D04753800F162C4 /* Sources */,
 				F1773F4E2D04753800F162C4 /* Frameworks */,
@@ -144,18 +144,18 @@
 				F1773F532D04753800F162C4 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				F1773F542D04753800F162C4 /* TaskFlusherTests */,
+				F1773F542D04753800F162C4 /* DoLaterTests */,
 			);
-			name = TaskFlusherTests;
+			name = DoLaterTests;
 			packageProductDependencies = (
 			);
-			productName = TaskFlusherTests;
-			productReference = F1773F512D04753800F162C4 /* TaskFlusherTests.xctest */;
+			productName = DoLaterTests;
+			productReference = F1773F512D04753800F162C4 /* DoLaterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F1773F5A2D04753800F162C4 /* TaskFlusherUITests */ = {
+		F1773F5A2D04753800F162C4 /* DoLaterUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1773F6B2D04753800F162C4 /* Build configuration list for PBXNativeTarget "TaskFlusherUITests" */;
+			buildConfigurationList = F1773F6B2D04753800F162C4 /* Build configuration list for PBXNativeTarget "DoLaterUITests" */;
 			buildPhases = (
 				F1773F572D04753800F162C4 /* Sources */,
 				F1773F582D04753800F162C4 /* Frameworks */,
@@ -167,13 +167,13 @@
 				F1773F5D2D04753800F162C4 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				F1773F5E2D04753800F162C4 /* TaskFlusherUITests */,
+				F1773F5E2D04753800F162C4 /* DoLaterUITests */,
 			);
-			name = TaskFlusherUITests;
+			name = DoLaterUITests;
 			packageProductDependencies = (
 			);
-			productName = TaskFlusherUITests;
-			productReference = F1773F5B2D04753800F162C4 /* TaskFlusherUITests.xctest */;
+			productName = DoLaterUITests;
+			productReference = F1773F5B2D04753800F162C4 /* DoLaterUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -199,7 +199,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F1773F3C2D04753600F162C4 /* Build configuration list for PBXProject "TaskFlusher" */;
+			buildConfigurationList = F1773F3C2D04753600F162C4 /* Build configuration list for PBXProject "DoLater" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -214,9 +214,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1773F402D04753600F162C4 /* TaskFlusher */,
-				F1773F502D04753800F162C4 /* TaskFlusherTests */,
-				F1773F5A2D04753800F162C4 /* TaskFlusherUITests */,
+				F1773F402D04753600F162C4 /* DoLater */,
+				F1773F502D04753800F162C4 /* DoLaterTests */,
+				F1773F5A2D04753800F162C4 /* DoLaterUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -272,12 +272,12 @@
 /* Begin PBXTargetDependency section */
 		F1773F532D04753800F162C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F1773F402D04753600F162C4 /* TaskFlusher */;
+			target = F1773F402D04753600F162C4 /* DoLater */;
 			targetProxy = F1773F522D04753800F162C4 /* PBXContainerItemProxy */;
 		};
 		F1773F5D2D04753800F162C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F1773F402D04753600F162C4 /* TaskFlusher */;
+			target = F1773F402D04753600F162C4 /* DoLater */;
 			targetProxy = F1773F5C2D04753800F162C4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -407,17 +407,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = TaskFlusher/TaskFlusher.entitlements;
+				CODE_SIGN_ENTITLEMENTS = DoLater/DoLater.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TaskFlusher/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"DoLater/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4YP7SQBLYV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TaskFlusher/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Task Flusher";
+				INFOPLIST_FILE = DoLater/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Do later.";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -430,10 +430,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.TaskFlusher;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.DoLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.kantacky.TaskFlusher";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.kantacky.DoLater";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -448,17 +448,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = TaskFlusher/TaskFlusher.entitlements;
+				CODE_SIGN_ENTITLEMENTS = DoLater/DoLater.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TaskFlusher/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"DoLater/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4YP7SQBLYV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = TaskFlusher/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Task Flusher";
+				INFOPLIST_FILE = DoLater/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Do later.";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -471,10 +471,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.TaskFlusher;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.DoLater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.kantacky.TaskFlusher";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.kantacky.DoLater";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -488,17 +488,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.TaskFlusherTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.DoLaterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaskFlusher.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TaskFlusher";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DoLater.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DoLater";
 			};
 			name = Debug;
 		};
@@ -506,17 +508,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.TaskFlusherTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.DoLaterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaskFlusher.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TaskFlusher";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DoLater.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DoLater";
 			};
 			name = Release;
 		};
@@ -528,11 +532,11 @@
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.TaskFlusherUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.DoLaterUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TaskFlusher;
+				TEST_TARGET_NAME = DoLater;
 			};
 			name = Debug;
 		};
@@ -544,18 +548,18 @@
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.TaskFlusherUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kantacky.DoLaterUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TaskFlusher;
+				TEST_TARGET_NAME = DoLater;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F1773F3C2D04753600F162C4 /* Build configuration list for PBXProject "TaskFlusher" */ = {
+		F1773F3C2D04753600F162C4 /* Build configuration list for PBXProject "DoLater" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1773F632D04753800F162C4 /* Debug */,
@@ -564,7 +568,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1773F652D04753800F162C4 /* Build configuration list for PBXNativeTarget "TaskFlusher" */ = {
+		F1773F652D04753800F162C4 /* Build configuration list for PBXNativeTarget "DoLater" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1773F662D04753800F162C4 /* Debug */,
@@ -573,7 +577,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1773F682D04753800F162C4 /* Build configuration list for PBXNativeTarget "TaskFlusherTests" */ = {
+		F1773F682D04753800F162C4 /* Build configuration list for PBXNativeTarget "DoLaterTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1773F692D04753800F162C4 /* Debug */,
@@ -582,7 +586,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1773F6B2D04753800F162C4 /* Build configuration list for PBXNativeTarget "TaskFlusherUITests" */ = {
+		F1773F6B2D04753800F162C4 /* Build configuration list for PBXNativeTarget "DoLaterUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1773F6C2D04753800F162C4 /* Debug */,

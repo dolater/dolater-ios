@@ -23,9 +23,9 @@ platform :ios do
     latest_release = firebase_app_distribution_get_latest_release(
       app: ENV["FIREBASE_APP_ID"],
     )
-    # increment_build_number(
-    #   build_number: latest_release[:buildVersion].to_i + 1
-    # )
+    increment_build_number(
+      build_number: latest_release[:buildVersion].to_i + 1
+    )
     match_fetch_development
     match_fetch_adhoc
     gym_adhoc
@@ -34,7 +34,7 @@ platform :ios do
       groups: ENV["FIREBASE_APP_DISTRIBUTION_GROUPS"],
     )
     slack(
-      message: "Task Flusher App Distributed to Firebase:",
+      message: "Do Later App Distributed to Firebase:",
       slack_url: ENV["SLACK_URL"],
       attachment_properties: {
         image_url: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=#{release[:testingUri]}",
@@ -61,7 +61,7 @@ platform :ios do
       export_options: {
         method: "development",
         provisioningProfiles: {
-          "com.kantacky.TaskFlusher": "match Development com.kantacky.TaskFlusher"
+          "com.kantacky.DoLater": "match Development com.kantacky.DoLater"
         }
       },
     )
@@ -74,7 +74,7 @@ platform :ios do
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "com.kantacky.TaskFlusher": "match AdHoc com.kantacky.TaskFlusher"
+          "com.kantacky.DoLater": "match AdHoc com.kantacky.DoLater"
         }
       },
     )
@@ -87,7 +87,7 @@ platform :ios do
       export_options: {
         method: "app-store",
         provisioningProfiles: {
-          "com.kantacky.TaskFlusher": "match AppStore com.kantacky.TaskFlusher"
+          "com.kantacky.DoLater": "match AppStore com.kantacky.DoLater"
         }
       },
     )

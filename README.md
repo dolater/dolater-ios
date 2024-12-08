@@ -1,4 +1,4 @@
-# Task Flusher iOS
+# Do Later iOS
 
 ## fastlane/.env.default
 
@@ -35,7 +35,7 @@ make match_fetch_development
 ### Register a new bundle identifier
 
 ```bash
-make register_bundle_id id='com.kantacky.TaskFlusher'
+make register_bundle_id id='com.kantacky.DoLater'
 ```
 
 ### Register a new device

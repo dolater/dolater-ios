@@ -1,5 +1,5 @@
-git_url("git@github.com:pukupuku-cheese/ios-certificates.git")
+git_url("git@github.com:dolater/ios-certificates.git")
 storage_mode("git")
 type("development")
-app_identifier(["com.kantacky.TaskFlusher"])
+app_identifier(["com.kantacky.DoLater"])
 username("k.oikawa@kantacky.com")

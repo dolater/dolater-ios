@@ -1,5 +1,5 @@
-app_identifier("com.kantacky.TaskFlusher")
+app_identifier("com.kantacky.DoLater")
 apple_id("k.oikawa@kantacky.com")
-app_name("Task Flusher")
+app_name("Do Later")
 itc_team_id("125129798")
 itc_team_name("Kanta Oikawa")

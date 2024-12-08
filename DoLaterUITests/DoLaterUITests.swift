@@ -1,13 +1,13 @@
 //
-//  TaskFlusherUITests.swift
-//  TaskFlusherUITests
+//  DoLaterUITests.swift
+//  DoLaterUITests
 //
 //  Created by Kanta Oikawa on 12/7/24.
 //
 
 import XCTest
 
-final class TaskFlusherUITests: XCTestCase {
+final class DoLaterUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
