@@ -15,6 +15,8 @@
 		F1D38C272D055EA400B12A9C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = F1D38C262D055EA400B12A9C /* FirebaseMessaging */; };
 		F1D38C292D055EA400B12A9C /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = F1D38C282D055EA400B12A9C /* FirebaseRemoteConfig */; };
 		F1D38C2B2D055EA400B12A9C /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F1D38C2A2D055EA400B12A9C /* FirebaseStorage */; };
+		F1D38CEF2D0560EA00B12A9C /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = F1D38CEE2D0560EA00B12A9C /* OpenAPIRuntime */; };
+		F1D38CF22D0560FD00B12A9C /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = F1D38CF12D0560FD00B12A9C /* OpenAPIURLSession */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,12 +79,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1D38C272D055EA400B12A9C /* FirebaseMessaging in Frameworks */,
+				F1D38CEF2D0560EA00B12A9C /* OpenAPIRuntime in Frameworks */,
 				F1D38C1F2D055EA400B12A9C /* FirebaseAppCheck in Frameworks */,
 				F1D38C212D055EA400B12A9C /* FirebaseAuth in Frameworks */,
 				F1D38C292D055EA400B12A9C /* FirebaseRemoteConfig in Frameworks */,
 				F1D38C252D055EA400B12A9C /* FirebaseCrashlytics in Frameworks */,
 				F1D38C2B2D055EA400B12A9C /* FirebaseStorage in Frameworks */,
 				F1D38C232D055EA400B12A9C /* FirebaseCore in Frameworks */,
+				F1D38CF22D0560FD00B12A9C /* OpenAPIURLSession in Frameworks */,
 				F1D38C1D2D055EA400B12A9C /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +142,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				F1D38CF42D05610A00B12A9C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F1773F432D04753600F162C4 /* DoLater */,
@@ -152,6 +157,8 @@
 				F1D38C262D055EA400B12A9C /* FirebaseMessaging */,
 				F1D38C282D055EA400B12A9C /* FirebaseRemoteConfig */,
 				F1D38C2A2D055EA400B12A9C /* FirebaseStorage */,
+				F1D38CEE2D0560EA00B12A9C /* OpenAPIRuntime */,
+				F1D38CF12D0560FD00B12A9C /* OpenAPIURLSession */,
 			);
 			productName = DoLater;
 			productReference = F1773F412D04753600F162C4 /* DoLater.app */;
@@ -238,6 +245,9 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F1D38C1B2D055EA400B12A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F1D38CEC2D0560D300B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
+				F1D38CED2D0560EA00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
+				F1D38CF02D0560FD00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F1773F422D04753600F162C4 /* Products */;
@@ -309,6 +319,10 @@
 			isa = PBXTargetDependency;
 			target = F1773F402D04753600F162C4 /* DoLater */;
 			targetProxy = F1773F5C2D04753800F162C4 /* PBXContainerItemProxy */;
+		};
+		F1D38CF42D05610A00B12A9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = F1D38CF32D05610A00B12A9C /* OpenAPIGenerator */;
 		};
 /* End PBXTargetDependency section */
 
@@ -636,6 +650,30 @@
 				minimumVersion = 11.6.0;
 			};
 		};
+		F1D38CEC2D0560D300B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-generator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-generator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+		F1D38CED2D0560EA00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-runtime";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.0;
+			};
+		};
+		F1D38CF02D0560FD00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-urlsession";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -678,6 +716,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F1D38C1B2D055EA400B12A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		F1D38CEE2D0560EA00B12A9C /* OpenAPIRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1D38CED2D0560EA00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */;
+			productName = OpenAPIRuntime;
+		};
+		F1D38CF12D0560FD00B12A9C /* OpenAPIURLSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1D38CF02D0560FD00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */;
+			productName = OpenAPIURLSession;
+		};
+		F1D38CF32D05610A00B12A9C /* OpenAPIGenerator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1D38CEC2D0560D300B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
+			productName = "plugin:OpenAPIGenerator";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

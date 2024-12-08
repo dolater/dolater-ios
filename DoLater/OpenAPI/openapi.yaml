@@ -1,0 +1,506 @@
+openapi: "3.0.3"
+info:
+  title: Do Later API
+  description: Do Later API
+  version: 1.0.0
+servers:
+  - url: https://api.dolater.kantacky.com
+    description: Production Server
+  - url: https://stg.api.dolater.kantacky.com
+    description: Staging Server
+  - url: https://dev.api.dolater.kantacky.com
+    description: Development Server
+  - url: http://localhost:8080
+    description: Local Server
+paths:
+  /users:
+    get:
+      summary: Get Users
+      description: Get users
+      operationId: getUsers
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  /users/{id}:
+    get:
+      summary: Get User
+      description: Get a user
+      operationId: getUser
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      summary: Update User
+      description: Update a user
+      operationId: updateUser
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  /pools:
+    get:
+      summary: Get Pools
+      description: Get all pools
+      operationId: getPools
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskPool"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create Pool
+      description: Create a pool
+      operationId: createPool
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskPool"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskPool"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  /pools/{id}:
+    get:
+      summary: Get Pool
+      description: Get a pool
+      operationId: getPool
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Pool ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskPool"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      summary: Update Pool
+      description: Update a pool
+      operationId: updatePool
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Pool ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskPool"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskPool"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete Pool
+      description: Delete a pool
+      operationId: deletePool
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Pool ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: No Content
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  /tasks:
+    get:
+      summary: Get Tasks
+      description: Get all tasks
+      operationId: getTasks
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      summary: Create Task
+      description: Create a task
+      operationId: createTask
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Task"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  /tasks/{id}:
+    get:
+      summary: Get Task
+      description: Get a task
+      operationId: getTask
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      summary: Update Task
+      description: Update a task
+      operationId: updateTask
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Task"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete Task
+      description: Delete a task
+      operationId: deleteTask
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: No Content
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        500:
+          $ref: "#/components/responses/InternalServerError"
+  /fcm/token:
+    post:
+      summary: Post FCM Token
+      description: Post Firebase Cloud Messaging registration token
+      operationId: postFCMToken
+      security:
+        - AppCheck: []
+        - AuthBearer: []
+      responses:
+        "204":
+          description: No Content
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                timestamp:
+                  type: string
+                  format: date-time
+              required:
+                - token
+                - timestamp
+components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            message: Unauthorized
+    NotFound:
+      description: NotFound
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            message: NotFound
+    MethodNotAllowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            message: Method Not Allowed
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            message: Internal Server Error
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        photoURL:
+          type: string
+          format: uri
+        pools:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaskPool"
+    TaskPool:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner:
+          $ref: "#/components/schemas/User"
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        url:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        archivedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        owner:
+          $ref: "#/components/schemas/User"
+        pool:
+          $ref: "#/components/schemas/TaskPool"
+  securitySchemes:
+    AuthBearer:
+      type: http
+      scheme: bearer
+      description: Bearer Access Token for Authorization
+    AppCheck:
+      type: apiKey
+      in: header
+      name: X-Firebase-AppCheck
+      description: Firebase App Check Token
