@@ -25,7 +25,7 @@ final actor PushNotificationRepositoryImpl: PushNotificationRepositoryProtocol {
     func postFCMToken(_ token: String, timestamp: Date) async throws {
         do {
             let client = try await Client.build()
-            let response = try await client.postFCMToken(
+            let response = try await client.upsertFCMToken(
                 .init(body: .json(.init(token: token, timestamp: timestamp))))
             switch response {
             case .noContent:
