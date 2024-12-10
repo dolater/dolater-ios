@@ -8,11 +8,13 @@
 protocol TaskRepositoryProtocol: Actor {
     func getTasks() async throws -> [Components.Schemas.Task]
 
-    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws -> Components.Schemas.Task
+    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws
+        -> Components.Schemas.Task
 
     func getTask(id: Components.Parameters.id) async throws -> Components.Schemas.Task
 
-    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id) async throws -> Components.Schemas.Task
+    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id)
+        async throws -> Components.Schemas.Task
 
     func deleteTask(id: Components.Parameters.id) async throws
 }
@@ -54,8 +56,10 @@ final actor TaskRepositoryImpl: TaskRepositoryProtocol {
             throw error
         }
     }
-    
-    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws -> Components.Schemas.Task {
+
+    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws
+        -> Components.Schemas.Task
+    {
         do {
             let client = try await Client.build()
             let response = try await client.createTask(body: .json(task))
@@ -89,7 +93,7 @@ final actor TaskRepositoryImpl: TaskRepositoryProtocol {
             throw error
         }
     }
-    
+
     func getTask(id: Components.Parameters.id) async throws -> Components.Schemas.Task {
         do {
             let client = try await Client.build()
@@ -130,8 +134,10 @@ final actor TaskRepositoryImpl: TaskRepositoryProtocol {
             throw error
         }
     }
-    
-    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id) async throws -> Components.Schemas.Task {
+
+    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id)
+        async throws -> Components.Schemas.Task
+    {
         do {
             let client = try await Client.build()
             let response = try await client.updateTask(
@@ -174,7 +180,7 @@ final actor TaskRepositoryImpl: TaskRepositoryProtocol {
             throw error
         }
     }
-    
+
     func deleteTask(id: Components.Parameters.id) async throws {
         do {
             let client = try await Client.build()

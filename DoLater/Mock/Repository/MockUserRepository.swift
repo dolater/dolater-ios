@@ -10,19 +10,21 @@ final actor MockUserRepository: UserRepositoryProtocol {
 
     func getUsers() async throws -> [Components.Schemas.User] {
         [
-            .mock1,
+            .mock1
         ]
     }
-    
+
     func createUser() async throws -> Components.Schemas.User {
         .mock1
     }
-    
+
     func getUser(id: Components.Parameters.id) async throws -> Components.Schemas.User {
         .mock1
     }
-    
-    func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.id) async throws -> Components.Schemas.User {
+
+    func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.id)
+        async throws -> Components.Schemas.User
+    {
         var updatedUser = Components.Schemas.User.mock1
         if let displayName = user.displayName {
             updatedUser.displayName = displayName
@@ -32,7 +34,7 @@ final actor MockUserRepository: UserRepositoryProtocol {
         }
         return updatedUser
     }
-    
+
     func deleteUser(id: Components.Parameters.id) async throws {
     }
 }

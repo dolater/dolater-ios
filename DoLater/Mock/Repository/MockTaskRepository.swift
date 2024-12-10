@@ -15,16 +15,20 @@ final actor MockTaskRepository: TaskRepositoryProtocol {
             .mock3,
         ]
     }
-    
-    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws -> Components.Schemas.Task {
+
+    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws
+        -> Components.Schemas.Task
+    {
         .mock1
     }
-    
+
     func getTask(id: Components.Parameters.id) async throws -> Components.Schemas.Task {
         .mock1
     }
-    
-    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id) async throws -> Components.Schemas.Task {
+
+    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id)
+        async throws -> Components.Schemas.Task
+    {
         var updatedTask = Components.Schemas.Task.mock1
         if let title = task.title {
             updatedTask.title = title

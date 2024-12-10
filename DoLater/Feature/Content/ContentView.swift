@@ -24,14 +24,14 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
             }
         }
         #if DEBUG
-            .sheet(isPresented: $presenter.state.isDebugScreenPresented) {
-                DebugView<Environment>()
-            }
-            .onReceive(
-                NotificationCenter.default.publisher(for: .deviceDidShakeNotification)
-            ) { _ in
-                presenter.state.isDebugScreenPresented = true
-            }
+        .sheet(isPresented: $presenter.state.isDebugScreenPresented) {
+            DebugView<Environment>()
+        }
+        .onReceive(
+            NotificationCenter.default.publisher(for: .deviceDidShakeNotification)
+        ) { _ in
+            presenter.state.isDebugScreenPresented = true
+        }
         #endif
     }
 }
@@ -41,22 +41,22 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
 }
 
 #if DEBUG
-    extension NSNotification.Name {
-        static let deviceDidShakeNotification = NSNotification.Name(
-            "DeviceDidShakeNotification"
+extension NSNotification.Name {
+    static let deviceDidShakeNotification = NSNotification.Name(
+        "DeviceDidShakeNotification"
+    )
+}
+
+extension UIWindow {
+    open override func motionEnded(
+        _ motion: UIEvent.EventSubtype,
+        with event: UIEvent?
+    ) {
+        super.motionEnded(motion, with: event)
+        NotificationCenter.default.post(
+            name: .deviceDidShakeNotification,
+            object: event
         )
     }
-
-    extension UIWindow {
-        open override func motionEnded(
-            _ motion: UIEvent.EventSubtype,
-            with event: UIEvent?
-        ) {
-            super.motionEnded(motion, with: event)
-            NotificationCenter.default.post(
-                name: .deviceDidShakeNotification,
-                object: event
-            )
-        }
-    }
+}
 #endif

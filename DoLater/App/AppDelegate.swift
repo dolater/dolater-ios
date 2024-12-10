@@ -22,9 +22,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         // AppCheck
         let providerFactory: AppCheckProviderFactory
         #if DEBUG
-            providerFactory = AppCheckDebugProviderFactory()
+        providerFactory = AppCheckDebugProviderFactory()
         #else
-            providerFactory = MyAppCheckProviderFactory()
+        providerFactory = MyAppCheckProviderFactory()
         #endif
         AppCheck.setAppCheckProviderFactory(providerFactory)
 
@@ -32,7 +32,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         FirebaseApp.configure()
 
         #if targetEnvironment(simulator)
-            //Auth.auth().useEmulator(withHost: "localhost", port: 9099)
+        //Auth.auth().useEmulator(withHost: "localhost", port: 9099)
         #endif
 
         // Push Notification
@@ -75,9 +75,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         Messaging.messaging().apnsToken = deviceToken
         let type: AuthAPNSTokenType
         #if DEBUG
-            type = .sandbox
+        type = .sandbox
         #else
-            type = .prod
+        type = .prod
         #endif
         Auth.auth().setAPNSToken(deviceToken, type: type)
     }

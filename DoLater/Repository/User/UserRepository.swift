@@ -12,7 +12,8 @@ protocol UserRepositoryProtocol: Actor {
 
     func getUser(id: Components.Parameters.id) async throws -> Components.Schemas.User
 
-    func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.id) async throws -> Components.Schemas.User
+    func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.id)
+        async throws -> Components.Schemas.User
 
     func deleteUser(id: Components.Parameters.id) async throws
 }
@@ -131,7 +132,9 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
         }
     }
 
-    func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.id) async throws -> Components.Schemas.User {
+    func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.id)
+        async throws -> Components.Schemas.User
+    {
         do {
             let client = try await Client.build()
             let response = try await client.updateUser(

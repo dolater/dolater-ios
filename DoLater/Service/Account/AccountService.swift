@@ -21,9 +21,10 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         return nonce
     }
 
-    func onSignInWithAppleCompleted(result: Result<ASAuthorization, Error>, currentNonce: String?)
-        async throws
-    {
+    func onSignInWithAppleCompleted(
+        result: Result<ASAuthorization, Error>,
+        currentNonce: String?
+    ) async throws {
         switch result {
         case .success(let success):
             if let appleIDCredential = success.credential as? ASAuthorizationAppleIDCredential {
@@ -62,18 +63,23 @@ final actor AccountService<Environment: EnvironmentProtocol> {
     func updateProfile(for user: User, displayName: String?, photoURL: URL?) async throws {
         if let displayName {
             try await Environment.shared.authRepository.updateDisplayName(
-                for: user, displayName: displayName)
+                for: user,
+                displayName: displayName
+            )
         }
         if let photoURL {
             try await Environment.shared.authRepository.updatePhotoURL(
-                for: user, photoURL: photoURL)
+                for: user,
+                photoURL: photoURL
+            )
         }
     }
 }
 
 extension AccountService {
     private func updateProfile(
-        for user: User, with appleIDCredential: ASAuthorizationAppleIDCredential,
+        for user: User,
+        with appleIDCredential: ASAuthorizationAppleIDCredential,
         force: Bool = false
     ) async throws {
         if !force && !(user.displayName ?? "").isEmpty {
@@ -84,6 +90,8 @@ extension AccountService {
         }
         let displayName = ProfileUtility.buildFullName(fullName: fullName)
         try await Environment.shared.authRepository.updateDisplayName(
-            for: user, displayName: displayName)
+            for: user,
+            displayName: displayName
+        )
     }
 }
