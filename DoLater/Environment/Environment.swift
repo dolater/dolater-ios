@@ -14,6 +14,7 @@ protocol EnvironmentProtocol: Actor {
     var messagingRepository: MessagingRepositoryProtocol { get }
     var remoteConfigRepository: RemoteConfigRepositoryProtocol { get }
     var storageRepository: StorageRepositoryProtocol { get }
+    var taskPoolRepository: TaskPoolRepositoryProtocol { get }
 }
 
 final actor EnvironmentImpl: EnvironmentProtocol {
@@ -25,6 +26,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
     let messagingRepository: any MessagingRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
     let storageRepository: any StorageRepositoryProtocol
+    let taskPoolRepository: any TaskPoolRepositoryProtocol
 
     init(
         appCheckRepository: any AppCheckRepositoryProtocol = AppCheckRepositoryImpl(),
@@ -32,7 +34,8 @@ final actor EnvironmentImpl: EnvironmentProtocol {
         localRepository: any LocalRepositoryProtocol = LocalRepositoryImpl(),
         messagingRepository: any MessagingRepositoryProtocol = MessagingRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = RemoteConfigRepositoryImpl(),
-        storageRepository: any StorageRepositoryProtocol = StorageRepositoryImpl()
+        storageRepository: any StorageRepositoryProtocol = StorageRepositoryImpl(),
+        taskPoolRepository: any TaskPoolRepositoryProtocol = TaskPoolRepositoryImpl()
     ) {
         self.appCheckRepository = appCheckRepository
         self.authRepository = authRepository
@@ -40,5 +43,6 @@ final actor EnvironmentImpl: EnvironmentProtocol {
         self.messagingRepository = messagingRepository
         self.remoteConfigRepository = remoteConfigRepository
         self.storageRepository = storageRepository
+        self.taskPoolRepository = taskPoolRepository
     }
 }
