@@ -134,8 +134,10 @@ extension AppDelegate: MessagingDelegate {
             guard let fcmToken else {
                 return
             }
-            try await EnvironmentImpl.shared.pushNotificationRepository.postFCMToken(
-                fcmToken, timestamp: .now)
+            try await EnvironmentImpl.shared.messagingRepository.postFCMToken(
+                fcmToken,
+                timestamp: .now
+            )
         }
     }
 }

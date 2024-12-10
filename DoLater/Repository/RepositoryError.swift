@@ -89,7 +89,7 @@ enum RepositoryError: LocalizedError {
 
     case invalidResponseBody((any Sendable & Hashable)?)
     case server(HTTPStatus, (any Sendable & Hashable)?)
-    case account(AccountRepositoryError)
+    case account(AuthRepositoryError)
     case local(LocalRepositoryError)
     case unknown(Error?)
 

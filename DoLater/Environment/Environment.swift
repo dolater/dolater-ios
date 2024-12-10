@@ -8,10 +8,10 @@
 protocol EnvironmentProtocol: Actor {
     static var shared: Self { get }
 
-    var accountRepository: AccountRepositoryProtocol { get }
     var appCheckRepository: AppCheckRepositoryProtocol { get }
+    var authRepository: AuthRepositoryProtocol { get }
     var localRepository: LocalRepositoryProtocol { get }
-    var pushNotificationRepository: PushNotificationRepositoryProtocol { get }
+    var messagingRepository: MessagingRepositoryProtocol { get }
     var remoteConfigRepository: RemoteConfigRepositoryProtocol { get }
     var storageRepository: StorageRepositoryProtocol { get }
 }
@@ -19,26 +19,25 @@ protocol EnvironmentProtocol: Actor {
 final actor EnvironmentImpl: EnvironmentProtocol {
     static let shared: EnvironmentImpl = .init()
 
-    let accountRepository: any AccountRepositoryProtocol
     let appCheckRepository: any AppCheckRepositoryProtocol
+    let authRepository: any AuthRepositoryProtocol
     let localRepository: any LocalRepositoryProtocol
-    let pushNotificationRepository: any PushNotificationRepositoryProtocol
+    let messagingRepository: any MessagingRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
     let storageRepository: any StorageRepositoryProtocol
 
     init(
-        accountRepository: any AccountRepositoryProtocol = AccountRepositoryImpl(),
         appCheckRepository: any AppCheckRepositoryProtocol = AppCheckRepositoryImpl(),
+        authRepository: any AuthRepositoryProtocol = AuthRepositoryImpl(),
         localRepository: any LocalRepositoryProtocol = LocalRepositoryImpl(),
-        pushNotificationRepository: any PushNotificationRepositoryProtocol =
-            PushNotificationRepositoryImpl(),
+        messagingRepository: any MessagingRepositoryProtocol = MessagingRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = RemoteConfigRepositoryImpl(),
         storageRepository: any StorageRepositoryProtocol = StorageRepositoryImpl()
     ) {
-        self.accountRepository = accountRepository
         self.appCheckRepository = appCheckRepository
+        self.authRepository = authRepository
         self.localRepository = localRepository
-        self.pushNotificationRepository = pushNotificationRepository
+        self.messagingRepository = messagingRepository
         self.remoteConfigRepository = remoteConfigRepository
         self.storageRepository = storageRepository
     }

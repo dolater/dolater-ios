@@ -1,5 +1,5 @@
 //
-//  PushNotificationRepository.swift
+//  MessagingRepository.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/8/24.
@@ -9,13 +9,13 @@ import FirebaseMessaging
 import Foundation
 import OpenAPIURLSession
 
-protocol PushNotificationRepositoryProtocol: Actor {
+protocol MessagingRepositoryProtocol: Actor {
     func getFCMToken() async throws -> String
 
     func postFCMToken(_ token: String, timestamp: Date) async throws
 }
 
-final actor PushNotificationRepositoryImpl: PushNotificationRepositoryProtocol {
+final actor MessagingRepositoryImpl: MessagingRepositoryProtocol {
     init() {}
 
     func getFCMToken() async throws -> String {

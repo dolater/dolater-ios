@@ -20,7 +20,7 @@ final actor AuthMiddleware: ClientMiddleware {
         next: @Sendable (HTTPRequest, HTTPBody?, URL) async throws -> (HTTPResponse, HTTPBody?)
     ) async throws -> (HTTPResponse, HTTPBody?) {
         let appCheckToken = try await AppCheckRepositoryImpl().getAppCheckToken()
-        let user = try await AccountRepositoryImpl().getCurrentUser()
+        let user = try await AuthRepositoryImpl().getCurrentUser()
         let idToken = try await user.getIDToken()
         var request = request
         request.headerFields.append(

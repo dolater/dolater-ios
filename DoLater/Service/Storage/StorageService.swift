@@ -28,7 +28,7 @@ final actor StorageService<Environment: EnvironmentProtocol> {
         guard let data = resizedImage.pngData() else {
             throw StorageServiceError.failedToConvertImageToData
         }
-        let user = try await Environment.shared.accountRepository.getCurrentUser()
+        let user = try await Environment.shared.authRepository.getCurrentUser()
         let path = "profile_images/\(user.uid)/\(UUID().uuidString.lowercased()).png"
         let metadata = try await Environment.shared.storageRepository.upload(data, to: path)
         let urlString = "https://storage.googleapis.com/\(metadata.bucket)/\(path)"

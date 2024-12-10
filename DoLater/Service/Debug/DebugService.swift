@@ -24,11 +24,11 @@ final actor DebugService<Environment: EnvironmentProtocol> {
     }
 
     func getFCMToken() async throws -> String {
-        try await Environment.shared.pushNotificationRepository.getFCMToken()
+        try await Environment.shared.messagingRepository.getFCMToken()
     }
 
     func getIdToken() async throws -> String {
-        let user = try await Environment.shared.accountRepository.getCurrentUser()
+        let user = try await Environment.shared.authRepository.getCurrentUser()
         return try await user.getIDToken(forcingRefresh: true)
     }
 }

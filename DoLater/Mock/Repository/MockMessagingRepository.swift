@@ -1,5 +1,5 @@
 //
-//  MockPushNotificationRepository.swift
+//  MockMessagingRepository.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/8/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-final actor MockPushNotificationRepository: PushNotificationRepositoryProtocol {
+final actor MockMessagingRepository: MessagingRepositoryProtocol {
     func getFCMToken() async throws -> String {
         ""
     }

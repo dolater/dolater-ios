@@ -1,5 +1,5 @@
 //
-//  AccountRepository.swift
+//  AuthRepository.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/5/24.
@@ -7,7 +7,7 @@
 
 import FirebaseAuth
 
-protocol AccountRepositoryProtocol: Actor {
+protocol AuthRepositoryProtocol: Actor {
     func getCurrentUser() async throws -> User
 
     func updateDisplayName(for user: User, displayName: String) async throws
@@ -15,10 +15,10 @@ protocol AccountRepositoryProtocol: Actor {
     func updatePhotoURL(for user: User, photoURL: URL) async throws
 }
 
-final actor AccountRepositoryImpl: AccountRepositoryProtocol {
+final actor AuthRepositoryImpl: AuthRepositoryProtocol {
     func getCurrentUser() async throws -> User {
         guard let user = Auth.auth().currentUser else {
-            throw AccountRepositoryError.unauthenticated
+            throw AuthRepositoryError.unauthenticated
         }
         return user
     }

@@ -10,26 +10,25 @@ import Foundation
 final actor MockEnvironment: EnvironmentProtocol {
     static let shared: MockEnvironment = .init()
 
-    let accountRepository: any AccountRepositoryProtocol
     let appCheckRepository: any AppCheckRepositoryProtocol
+    let authRepository: any AuthRepositoryProtocol
     let localRepository: any LocalRepositoryProtocol
-    let pushNotificationRepository: any PushNotificationRepositoryProtocol
+    let messagingRepository: any MessagingRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
     let storageRepository: any StorageRepositoryProtocol
 
     init(
-        accountRepository: any AccountRepositoryProtocol = MockAccountRepository(),
         appCheckRepository: any AppCheckRepositoryProtocol = MockAppCheckRepository(),
+        authRepository: any AuthRepositoryProtocol = MockAuthRepository(),
         localRepository: any LocalRepositoryProtocol = MockLocalRepository(),
-        pushNotificationRepository: any PushNotificationRepositoryProtocol =
-            MockPushNotificationRepository(),
+        messagingRepository: any MessagingRepositoryProtocol = MessagingRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = MockRemoteConfigRepository(),
         storageRepository: any StorageRepositoryProtocol = MockStorageRepository()
     ) {
-        self.accountRepository = accountRepository
         self.appCheckRepository = appCheckRepository
+        self.authRepository = authRepository
         self.localRepository = localRepository
-        self.pushNotificationRepository = pushNotificationRepository
+        self.messagingRepository = messagingRepository
         self.remoteConfigRepository = remoteConfigRepository
         self.storageRepository = storageRepository
     }

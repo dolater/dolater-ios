@@ -61,11 +61,11 @@ final actor AccountService<Environment: EnvironmentProtocol> {
 
     func updateProfile(for user: User, displayName: String?, photoURL: URL?) async throws {
         if let displayName {
-            try await Environment.shared.accountRepository.updateDisplayName(
+            try await Environment.shared.authRepository.updateDisplayName(
                 for: user, displayName: displayName)
         }
         if let photoURL {
-            try await Environment.shared.accountRepository.updatePhotoURL(
+            try await Environment.shared.authRepository.updatePhotoURL(
                 for: user, photoURL: photoURL)
         }
     }
@@ -83,7 +83,7 @@ extension AccountService {
             return
         }
         let displayName = ProfileUtility.buildFullName(fullName: fullName)
-        try await Environment.shared.accountRepository.updateDisplayName(
+        try await Environment.shared.authRepository.updateDisplayName(
             for: user, displayName: displayName)
     }
 }
