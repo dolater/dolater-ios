@@ -6,6 +6,8 @@
 //
 
 final actor MockUserRepository: UserRepositoryProtocol {
+    init() {}
+
     func getUsers() async throws -> [Components.Schemas.User] {
         [
             .mock1,

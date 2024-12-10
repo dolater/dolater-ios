@@ -8,6 +8,8 @@
 import Foundation
 
 final actor MockLocalRepository: LocalRepositoryProtocol {
+    init() {}
+
     func getBool(for key: UserDefaultsKey) async throws -> Bool {
         false
     }

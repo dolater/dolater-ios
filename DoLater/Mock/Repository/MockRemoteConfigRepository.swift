@@ -8,6 +8,8 @@
 import Foundation
 
 final actor MockRemoteConfigRepository: RemoteConfigRepositoryProtocol {
+    init() {}
+
     func fetchBool(for key: RemoteConfigKey) async throws -> Bool {
         false
     }

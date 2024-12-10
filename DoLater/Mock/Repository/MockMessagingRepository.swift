@@ -8,6 +8,8 @@
 import Foundation
 
 final actor MockMessagingRepository: MessagingRepositoryProtocol {
+    init() {}
+
     func getFCMToken() async throws -> String {
         ""
     }

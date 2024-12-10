@@ -1,31 +1,33 @@
 //
-//  TaskPoolRepository.swift
+//  TaskRepository.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/10/24.
 //
 
-protocol TaskPoolRepositoryProtocol: Actor {
-    func getPools() async throws -> [Components.Schemas.TaskPool]
+protocol TaskRepositoryProtocol: Actor {
+    func getTasks() async throws -> [Components.Schemas.Task]
 
-    func createPool() async throws -> Components.Schemas.TaskPool
+    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws -> Components.Schemas.Task
 
-    func getPool(id: Components.Parameters.id) async throws -> Components.Schemas.TaskPool
+    func getTask(id: Components.Parameters.id) async throws -> Components.Schemas.Task
 
-    func deletePool(id: Components.Parameters.id) async throws
+    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id) async throws -> Components.Schemas.Task
+
+    func deleteTask(id: Components.Parameters.id) async throws
 }
 
-final actor TaskPoolRepositoryImpl: TaskPoolRepositoryProtocol {
+final actor TaskRepositoryImpl: TaskRepositoryProtocol {
     init() {}
 
-    func getPools() async throws -> [Components.Schemas.TaskPool] {
+    func getTasks() async throws -> [Components.Schemas.Task] {
         do {
             let client = try await Client.build()
-            let response = try await client.getPools()
+            let response = try await client.getTasks()
             switch response {
             case .ok(let okResponse):
-                if case let .json(pools) = okResponse.body {
-                    return pools
+                if case let .json(tasks) = okResponse.body {
+                    return tasks
                 }
                 throw RepositoryError.invalidResponseBody(okResponse.body)
 
@@ -52,15 +54,15 @@ final actor TaskPoolRepositoryImpl: TaskPoolRepositoryProtocol {
             throw error
         }
     }
-
-    func createPool() async throws -> Components.Schemas.TaskPool {
+    
+    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws -> Components.Schemas.Task {
         do {
             let client = try await Client.build()
-            let response = try await client.createPool()
+            let response = try await client.createTask(body: .json(task))
             switch response {
             case .created(let okResponse):
-                if case let .json(pool) = okResponse.body {
-                    return pool
+                if case let .json(task) = okResponse.body {
+                    return task
                 }
                 throw RepositoryError.invalidResponseBody(okResponse.body)
 
@@ -87,15 +89,15 @@ final actor TaskPoolRepositoryImpl: TaskPoolRepositoryProtocol {
             throw error
         }
     }
-
-    func getPool(id: Components.Parameters.id) async throws -> Components.Schemas.TaskPool {
+    
+    func getTask(id: Components.Parameters.id) async throws -> Components.Schemas.Task {
         do {
             let client = try await Client.build()
-            let response = try await client.getPool(path: .init(id: id))
+            let response = try await client.getTask(path: .init(id: id))
             switch response {
             case .ok(let okResponse):
-                if case let .json(pool) = okResponse.body {
-                    return pool
+                if case let .json(task) = okResponse.body {
+                    return task
                 }
                 throw RepositoryError.invalidResponseBody(okResponse.body)
 
@@ -128,11 +130,55 @@ final actor TaskPoolRepositoryImpl: TaskPoolRepositoryProtocol {
             throw error
         }
     }
-
-    func deletePool(id: Components.Parameters.id) async throws {
+    
+    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id) async throws -> Components.Schemas.Task {
         do {
             let client = try await Client.build()
-            let response = try await client.deletePool(path: .init(id: id))
+            let response = try await client.updateTask(
+                path: .init(id: id),
+                body: .json(task)
+            )
+            switch response {
+            case .ok(let okResponse):
+                if case let .json(task) = okResponse.body {
+                    return task
+                }
+                throw RepositoryError.invalidResponseBody(okResponse.body)
+
+            case .unauthorized(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.unauthorized, error.message)
+                }
+                throw RepositoryError.server(.unauthorized, nil)
+
+            case .notFound(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.notFound, error.message)
+                }
+                throw RepositoryError.server(.notFound, nil)
+
+            case .internalServerError(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.internalServerError, error.message)
+                }
+                throw RepositoryError.server(.internalServerError, nil)
+
+            case .undocumented(let statusCode, let payload):
+                throw RepositoryError.server(.init(rawValue: statusCode), payload)
+            }
+        } catch let error as RepositoryError {
+            Logger.standard.error("RepositoryError: \(error.localizedDescription)")
+            throw error
+        } catch {
+            Logger.standard.error("RepositoryError: \(error)")
+            throw error
+        }
+    }
+    
+    func deleteTask(id: Components.Parameters.id) async throws {
+        do {
+            let client = try await Client.build()
+            let response = try await client.deleteTask(path: .init(id: id))
             switch response {
             case .noContent:
                 return

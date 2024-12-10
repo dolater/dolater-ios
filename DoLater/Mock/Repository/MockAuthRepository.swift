@@ -8,6 +8,8 @@
 import FirebaseAuth
 
 final actor MockAuthRepository: AuthRepositoryProtocol {
+    init() {}
+
     func getCurrentUser() async throws -> FirebaseAuth.User {
         return .mock
     }

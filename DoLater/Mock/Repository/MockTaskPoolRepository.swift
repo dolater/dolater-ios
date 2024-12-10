@@ -6,6 +6,8 @@
 //
 
 final actor MockTaskPoolRepository: TaskPoolRepositoryProtocol {
+    init() {}
+
     func getPools() async throws -> [Components.Schemas.TaskPool] {
         [
             .mock1,

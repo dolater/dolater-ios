@@ -8,6 +8,8 @@
 import FirebaseAuth
 
 final actor MockAppCheckRepository: AppCheckRepositoryProtocol {
+    init() {}
+
     func getAppCheckToken() async throws -> String {
         ""
     }
