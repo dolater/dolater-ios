@@ -16,6 +16,7 @@ final actor MockEnvironment: EnvironmentProtocol {
     let messagingRepository: any MessagingRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
     let storageRepository: any StorageRepositoryProtocol
+    let userRepository: any UserRepositoryProtocol
 
     init(
         appCheckRepository: any AppCheckRepositoryProtocol = MockAppCheckRepository(),
@@ -23,7 +24,8 @@ final actor MockEnvironment: EnvironmentProtocol {
         localRepository: any LocalRepositoryProtocol = MockLocalRepository(),
         messagingRepository: any MessagingRepositoryProtocol = MessagingRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = MockRemoteConfigRepository(),
-        storageRepository: any StorageRepositoryProtocol = MockStorageRepository()
+        storageRepository: any StorageRepositoryProtocol = MockStorageRepository(),
+        userRepository: any UserRepositoryProtocol = MockUserRepository()
     ) {
         self.appCheckRepository = appCheckRepository
         self.authRepository = authRepository
@@ -31,5 +33,6 @@ final actor MockEnvironment: EnvironmentProtocol {
         self.messagingRepository = messagingRepository
         self.remoteConfigRepository = remoteConfigRepository
         self.storageRepository = storageRepository
+        self.userRepository = userRepository
     }
 }

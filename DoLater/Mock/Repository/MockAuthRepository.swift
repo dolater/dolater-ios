@@ -9,10 +9,7 @@ import FirebaseAuth
 
 final actor MockAuthRepository: AuthRepositoryProtocol {
     func getCurrentUser() async throws -> FirebaseAuth.User {
-        guard let user = User.mock else {
-            throw AuthRepositoryError.unauthenticated
-        }
-        return user
+        return .mock
     }
 
     func updateDisplayName(for user: FirebaseAuth.User, displayName: String) async throws {
