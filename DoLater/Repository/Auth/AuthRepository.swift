@@ -13,6 +13,8 @@ protocol AuthRepositoryProtocol: Actor {
     func updateDisplayName(for user: User, displayName: String) async throws
 
     func updatePhotoURL(for user: User, photoURL: URL) async throws
+
+    func signOut() async throws
 }
 
 final actor AuthRepositoryImpl: AuthRepositoryProtocol {
@@ -33,5 +35,9 @@ final actor AuthRepositoryImpl: AuthRepositoryProtocol {
         let changeRequest = user.createProfileChangeRequest()
         changeRequest.photoURL = photoURL
         try await changeRequest.commitChanges()
+    }
+
+    func signOut() async throws {
+        try Auth.auth().signOut()
     }
 }

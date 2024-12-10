@@ -23,18 +23,22 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
         var idToken: String = ""
         var getIDTokenStatus: DataStatus = .default
 
+        var signOutStatus: DataStatus = .default
+
         var isLoading: Bool {
             getServerEnvironmentStatus.isLoading
                 || setServerEnvironmentStatus.isLoading
                 || getAppCheckTokenStatus.isLoading
                 || getFCMTokenStatus.isLoading
                 || getIDTokenStatus.isLoading
+                || signOutStatus.isLoading
         }
     }
 
     enum Action: Hashable, Sendable {
         case onAppear
         case onServerEnvironmentChanged
+        case onSignOutButtonTapped
     }
 
     var state: State = .init()
@@ -54,6 +58,9 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
 
         case .onServerEnvironmentChanged:
             await onServerEnvironmentChanged()
+
+        case .onSignOutButtonTapped:
+            await onSignOutButtonTapped()
         }
     }
 }
@@ -96,6 +103,16 @@ extension DebugPresenter {
             state.setServerEnvironmentStatus = .loaded
         } catch {
             state.setServerEnvironmentStatus = .failed(.init(error))
+        }
+    }
+
+    fileprivate func onSignOutButtonTapped() async {
+        state.signOutStatus = .loading
+        do {
+            try await debugService.signOut()
+            state.signOutStatus = .loaded
+        } catch {
+            state.signOutStatus = .failed(.init(error))
         }
     }
 }

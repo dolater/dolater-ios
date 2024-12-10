@@ -20,7 +20,7 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                 Text("Authenticated.")
 
             case .unauthenticated:
-                Text("Unauthenticated.")
+                SignInView<Environment>()
             }
         }
         #if DEBUG

@@ -19,4 +19,7 @@ final actor MockAuthRepository: AuthRepositoryProtocol {
 
     func updatePhotoURL(for user: FirebaseAuth.User, photoURL: URL) async throws {
     }
+
+    func signOut() async throws {
+    }
 }

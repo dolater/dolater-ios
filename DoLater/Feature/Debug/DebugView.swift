@@ -73,6 +73,12 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                 } header: {
                     Text("ID Token")
                 }
+
+                Section {
+                    Button("Sign Out", role: .destructive) {
+                        presenter.dispatch(.onSignOutButtonTapped)
+                    }
+                }
             }
             .navigationTitle("Debug")
             .disabled(presenter.state.isLoading)
