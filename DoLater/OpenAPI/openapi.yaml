@@ -32,8 +32,6 @@ paths:
                   $ref: "#/components/schemas/User"
         401:
           $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
     post:
@@ -52,8 +50,6 @@ paths:
                 $ref: "#/components/schemas/User"
         401:
           $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
   /users/{id}:
@@ -136,8 +132,6 @@ paths:
                   $ref: "#/components/schemas/TaskPool"
         401:
           $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
     post:
@@ -156,8 +150,6 @@ paths:
                 $ref: "#/components/schemas/TaskPool"
         401:
           $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
   /pools/{id}:
@@ -216,8 +208,6 @@ paths:
                   $ref: "#/components/schemas/Task"
         401:
           $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
     post:
@@ -242,8 +232,6 @@ paths:
                 $ref: "#/components/schemas/Task"
         401:
           $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
         500:
           $ref: "#/components/responses/InternalServerError"
   /tasks/{id}:
