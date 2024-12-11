@@ -38,13 +38,13 @@ struct TabBarIconView: View {
         VStack(spacing: 4) {
             Image(systemName: type.systemName)
                 .foregroundStyle(
-                    isFocused ? Color.Semantic.Text.primary.color : Color.Semantic.Text.secondary.color
+                    isFocused ? Color.Semantic.Text.primary : Color.Semantic.Text.secondary
                 )
                 .font(.DL.navigationBarIcon)
 
             Circle()
                 .fill(
-                    isFocused ? Color.Semantic.Text.primary.color : Color.clear
+                    isFocused ? Color.Semantic.Text.primary : Color.clear
                 )
                 .frame(width: 4, height: 4)
         }

@@ -39,7 +39,7 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.Semantic.Background.primary.color)
+        .background(Color.Semantic.Background.primary)
 #if DEBUG
         .sheet(isPresented: $presenter.state.isDebugScreenPresented) {
             DebugView<Environment>()

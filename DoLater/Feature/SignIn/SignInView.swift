@@ -19,7 +19,7 @@ struct SignInView<Environment: EnvironmentProtocol>: View {
             } onCompletion: { result in
                 presenter.dispatch(.onSignInWithAppleCompleted(result))
             }
-            .signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
+            //.signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
             .frame(height: 48)
 
 #if DEBUG

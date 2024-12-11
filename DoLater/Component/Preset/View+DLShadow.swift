@@ -10,7 +10,7 @@ import SwiftUI
 extension View {
     func shadow() -> some View {
         shadow(
-            color: .Semantic.Shadow.primary.color.opacity(0.2),
+            color: .Semantic.Shadow.primary.opacity(0.2),
             radius: 16,
             x: 2,
             y: 2

@@ -50,7 +50,7 @@ struct TabBarView: View {
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 80)
-        .background(Color.Semantic.Background.secondary.color)
+        .background(Color.Semantic.Background.secondary)
     }
 }
 
@@ -61,5 +61,5 @@ struct TabBarView: View {
         Spacer()
         TabBarView(selection: $selection) {}
     }
-    .background(Color.Semantic.Background.primary.color)
+    .background(Color.Semantic.Background.primary)
 }

@@ -10,41 +10,19 @@ import SwiftUI
 extension Color {
     enum Semantic {
         enum Background {
-            case primary
-            case secondary
-            case tertiary
-
-            var color: Color {
-                switch self {
-                case .primary: .init(.Primitive.gray2)
-                case .secondary: .init(.Primitive.white)
-                case .tertiary: .init(.Primitive.black)
-                }
-            }
+            static let primary = Color(.Primitive.gray2)
+            static let secondary = Color(.Primitive.white)
+            static let tertiary = Color(.Primitive.black)
         }
 
         enum Shadow {
-            case primary
-
-            var color: Color {
-                switch self {
-                case .primary: .init(.Primitive.gray3)
-                }
-            }
+            static let primary = Color(.Primitive.gray3)
         }
 
         enum Text {
-            case primary
-            case secondary
-            case inversePrimary
-
-            var color: Color {
-                switch self {
-                case .primary: .init(.Primitive.black)
-                case .secondary: .init(.Primitive.gray)
-                case .inversePrimary: .init(.Primitive.white)
-                }
-            }
+            static let primary = Color(.Primitive.black)
+            static let secondary = Color(.Primitive.gray)
+            static let inversePrimary = Color(.Primitive.white)
         }
     }
 }

@@ -32,7 +32,7 @@ struct DLButtonView: View {
                     Image(systemName: systemName)
                         .font(.DL.button)
                         .frame(width: 44, height: 44)
-                        .background(Color.Semantic.Background.tertiary.color)
+                        .background(Color.Semantic.Background.tertiary)
                         .clipShape(Circle())
 
                 case .text(let label):
@@ -40,11 +40,11 @@ struct DLButtonView: View {
                         .font(.DL.button)
                         .padding(.horizontal, 18)
                         .frame(height: 44)
-                        .background(Color.Semantic.Background.tertiary.color)
+                        .background(Color.Semantic.Background.tertiary)
                         .clipShape(Capsule())
                 }
             }
-            .foregroundStyle(Color.Semantic.Text.inversePrimary.color)
+            .foregroundStyle(Color.Semantic.Text.inversePrimary)
             .shadow()
         }
     }
