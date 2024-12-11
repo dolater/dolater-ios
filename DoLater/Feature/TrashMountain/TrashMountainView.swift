@@ -38,11 +38,11 @@ struct TrashMountainView: View {
                 let position = scene.trashPositions[task.id.uuidString]
                 let rotation = scene.trashRotations[task.id.uuidString]
                 TrashView(task: task)
-                    .rotationEffect(.radians(rotation ?? 0))
+                    .rotationEffect(.radians(-(rotation ?? 0)))
                     .position(scene.convertPoint(toView: position ?? .init()))
                     .draggable(task) {
                         TrashView(task: task)
-                            .rotationEffect(.radians(rotation ?? 0))
+                            .rotationEffect(.radians(-(rotation ?? 0)))
                     }
             }
         }
