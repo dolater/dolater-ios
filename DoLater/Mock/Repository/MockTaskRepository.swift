@@ -30,9 +30,6 @@ final actor MockTaskRepository: TaskRepositoryProtocol {
         async throws -> Components.Schemas.Task
     {
         var updatedTask = Components.Schemas.Task.mock1
-        if let title = task.title {
-            updatedTask.title = title
-        }
         if let url = task.url {
             updatedTask.url = url
         }
@@ -41,6 +38,9 @@ final actor MockTaskRepository: TaskRepositoryProtocol {
         }
         if let completedAt = task.completedAt {
             updatedTask.completedAt = completedAt
+        }
+        if let pool = task.pool {
+            updatedTask.pool = pool
         }
         return updatedTask
     }

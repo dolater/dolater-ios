@@ -9,17 +9,14 @@ import Foundation
 
 extension Components.Schemas.TaskPool {
     static let mock1 = Components.Schemas.TaskPool(
-        id: UUID().uuidString,
-        tasks: []
+        id: UUID().uuidString
     )
 
     static let mock2 = Components.Schemas.TaskPool(
-        id: UUID().uuidString,
-        tasks: []
+        id: UUID().uuidString
     )
 
     static let mock3 = Components.Schemas.TaskPool(
-        id: UUID().uuidString,
-        tasks: []
+        id: UUID().uuidString
     )
 }

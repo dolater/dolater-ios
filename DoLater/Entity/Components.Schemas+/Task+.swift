@@ -10,35 +10,28 @@ import Foundation
 extension Components.Schemas.Task {
     static let mock1 = Components.Schemas.Task(
         id: UUID().uuidString,
-        title: "",
         url: "https://kantacky.com",
-        createdAt: .now
+        createdAt: .now,
+        owner: .mock1,
+        pool: .mock1
     )
 
     static let mock2 = Components.Schemas.Task(
         id: UUID().uuidString,
-        title: "",
         url: "https://kantacky.com",
         createdAt: .now,
-        completedAt: .now
+        completedAt: .now,
+        owner: .mock1,
+        pool: .mock1
     )
 
     static let mock3 = Components.Schemas.Task(
         id: UUID().uuidString,
-        title: "",
-        url: "https://kantacky.com",
-        createdAt: .now,
-        completedAt: .now,
-        archivedAt: .now
-    )
-
-    static let mock4 = Components.Schemas.Task(
-        id: UUID().uuidString,
-        title: "",
         url: "https://kantacky.com",
         createdAt: .now,
         completedAt: .now,
         archivedAt: .now,
-        deletedAt: .now
+        owner: .mock1,
+        pool: .mock1
     )
 }

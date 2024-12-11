@@ -94,7 +94,7 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
     func getUser(id: Components.Parameters.id) async throws -> Components.Schemas.User {
         do {
             let client = try await Client.build()
-            let response = try await client.getUser(path: .init(id: id))
+            let response = try await client.getUser(path: .init(uid: id))
             switch response {
             case .ok(let okResponse):
                 if case let .json(users) = okResponse.body {
@@ -138,7 +138,7 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
         do {
             let client = try await Client.build()
             let response = try await client.updateUser(
-                path: .init(id: id),
+                path: .init(uid: id),
                 body: .json(user)
             )
             switch response {
@@ -181,7 +181,7 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
     func deleteUser(id: Components.Parameters.id) async throws {
         do {
             let client = try await Client.build()
-            let response = try await client.deleteUser(path: .init(id: id))
+            let response = try await client.deleteUser(path: .init(uid: id))
             switch response {
             case .noContent:
                 return
