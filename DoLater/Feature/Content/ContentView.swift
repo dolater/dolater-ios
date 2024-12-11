@@ -17,13 +17,30 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                 ProgressView()
 
             case .authenticated:
-                Text("Authenticated.")
+                VStack(spacing: 0) {
+                    Group {
+                        switch presenter.state.selection {
+                        case .home:
+                            HomeView<Environment>()
+                        case .account:
+                            AccountView<Environment>()
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    TabBarView(selection: $presenter.state.selection) {
+                        withAnimation {
+                            presenter.dispatch(.onPlusButtonTapped)
+                        }
+                    }
+                }
 
             case .unauthenticated:
                 SignInView<Environment>()
             }
         }
-        #if DEBUG
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.Semantic.Background.primary.color)
+#if DEBUG
         .sheet(isPresented: $presenter.state.isDebugScreenPresented) {
             DebugView<Environment>()
         }
@@ -32,7 +49,7 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
         ) { _ in
             presenter.state.isDebugScreenPresented = true
         }
-        #endif
+#endif
     }
 }
 

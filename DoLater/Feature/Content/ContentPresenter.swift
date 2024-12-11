@@ -13,6 +13,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
     struct State: Hashable, Sendable {
         var authStatus: AuthStatus = .unchecked
         var isDebugScreenPresented: Bool = false
+        var selection: TabBarItem = .home
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -23,6 +24,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     enum Action: Sendable {
         case onAppear
+        case onPlusButtonTapped
     }
 
     var state: State = .init()
@@ -57,6 +59,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         switch action {
         case .onAppear:
             await onAppear()
+
+        case .onPlusButtonTapped:
+            await onPlusButtonTapped()
         }
     }
 }
@@ -68,5 +73,8 @@ extension ContentPresenter {
             return
         }
         state.authStatus = .authenticated(user)
+    }
+
+    fileprivate func onPlusButtonTapped() async {
     }
 }
