@@ -8,21 +8,24 @@
 import SwiftUI
 
 struct TrashView: View {
-    var body: some View {
-        Circle()
-            .fill(.blue)
-            .frame(width: 64, height: 64)
-            .overlay {
-                Text("Trash")
-                    .foregroundStyle(.white)
-            }
+    private let status: TrashStatus
+    private let size: CGFloat
+
+    init(status: TrashStatus, size: CGFloat) {
+        self.status = status
+        self.size = size
     }
 
-    static var uiView: UIView {
-        UIHostingController(rootView: TrashView()).view
+    var body: some View {
+        status.image
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
     }
 }
 
 #Preview {
-    TrashView()
+    TrashView(status: .opened, size: 120)
+    TrashView(status: .half, size: 120)
+    TrashView(status: .closed, size: 120)
 }

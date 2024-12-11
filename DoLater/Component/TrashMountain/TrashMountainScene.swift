@@ -10,6 +10,7 @@ import SpriteKit
 
 @Observable
 final class TrashMountainScene: SKScene {
+    var binPosition: CGPoint = .init(x: 0, y: 0)
     var trashPositions: [CGPoint] = (0..<10).map { _ in .init(x: 0, y: 0) }
 
     override func didMove(to view: SKView) {
@@ -19,6 +20,9 @@ final class TrashMountainScene: SKScene {
 
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
+        if let node = childNode(withName: "Bin") {
+            binPosition = node.position
+        }
         for i in (0..<10) {
             guard
                 let node = childNode(withName: "Trash \(i)"),

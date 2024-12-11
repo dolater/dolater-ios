@@ -11,7 +11,7 @@ struct HomeView<Environment: EnvironmentProtocol>: View {
     @State private var presenter: HomePresenter<Environment> = .init()
 
     var body: some View {
-        Text("Home")
+        TrashMountainView()
     }
 }
 
