@@ -15,14 +15,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios distribute_firebase
-
-```sh
-[bundle exec] fastlane ios distribute_firebase
-```
-
-Distribute the app to Firebase App Distribution
-
 ### ios gym_development
 
 ```sh
@@ -54,6 +46,30 @@ Gym AppStore
 ```
 
 Scan Development
+
+### ios distribute_firebase
+
+```sh
+[bundle exec] fastlane ios distribute_firebase
+```
+
+Distribute the app to Firebase App Distribution
+
+### ios pilot_appstore
+
+```sh
+[bundle exec] fastlane ios pilot_appstore
+```
+
+Pilot App Store
+
+### ios deliver_appstore
+
+```sh
+[bundle exec] fastlane ios deliver_appstore
+```
+
+Deliver App Store
 
 ### ios reset_build_number
 

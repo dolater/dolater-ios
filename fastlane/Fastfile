@@ -18,6 +18,51 @@ platform :ios do
     reset_build_number
   end
 
+  desc "Gym Development"
+  lane :gym_development do
+    match_fetch_development
+    gym(
+      export_options: {
+        method: "development",
+        provisioningProfiles: {
+          "com.kantacky.DoLater": "match Development com.kantacky.DoLater"
+        },
+      },
+    )
+  end
+
+  desc "Gym AdHoc"
+  lane :gym_adhoc do
+    match_fetch_adhoc
+    gym(
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "com.kantacky.DoLater": "match AdHoc com.kantacky.DoLater"
+        },
+      },
+    )
+  end
+
+  desc "Gym AppStore"
+  lane :gym_appstore do
+    match_fetch_appstore
+    gym(
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: {
+          "com.kantacky.DoLater": "match AppStore com.kantacky.DoLater"
+        },
+      },
+    )
+  end
+
+  desc "Scan Development"
+  lane :scan_development do
+    match_fetch_development
+    scan
+  end
+
   desc "Distribute the app to Firebase App Distribution"
   lane :distribute_firebase do
     latest_release = firebase_app_distribution_get_latest_release(
@@ -26,8 +71,6 @@ platform :ios do
     increment_build_number(
       build_number: latest_release[:buildVersion].to_i + 1
     )
-    match_fetch_development
-    match_fetch_adhoc
     gym_adhoc
     release = firebase_app_distribution(
       app: ENV["FIREBASE_APP_ID"],
@@ -54,49 +97,28 @@ platform :ios do
     )
   end
 
-  desc "Gym Development"
-  lane :gym_development do
-    match_fetch_development
-    gym(
-      export_options: {
-        method: "development",
-        provisioningProfiles: {
-          "com.kantacky.DoLater": "match Development com.kantacky.DoLater"
-        }
-      },
+  desc "Pilot App Store"
+  lane :pilot_appstore do
+    gym_appstore
+    pilot(
+      api_key: get_app_store_connect_api_key,
+    )
+    slack(
+      message: "Do Later App Distributed to TestFlight:",
+      slack_url: ENV["SLACK_URL"],
     )
   end
 
-  desc "Gym AdHoc"
-  lane :gym_adhoc do
-    match_fetch_adhoc
-    gym(
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "com.kantacky.DoLater": "match AdHoc com.kantacky.DoLater"
-        }
-      },
+  desc "Deliver App Store"
+  lane :deliver_appstore do
+    gym_appstore
+    deliver(
+      api_key: get_app_store_connect_api_key,
     )
-  end
-
-  desc "Gym AppStore"
-  lane :gym_appstore do
-    match_fetch_appstore
-    gym(
-      export_options: {
-        method: "app-store",
-        provisioningProfiles: {
-          "com.kantacky.DoLater": "match AppStore com.kantacky.DoLater"
-        }
-      },
+    slack(
+      message: "Do Later App Uploaded to AppStore:",
+      slack_url: ENV["SLACK_URL"],
     )
-  end
-
-  desc "Scan Development"
-  lane :scan_development do
-    match_fetch_development
-    scan
   end
 
   desc "Reset Build Number"

@@ -11,6 +11,12 @@ test: scan_development
 distribute_firebase:
 	$(FASTLANE) distribute_firebase
 
+.PHONY: distribute_testflight
+distribute_testflight: pilot_appstore
+
+.PHONY: submit_appstore
+submit_appstore: deliver_appstore
+
 .PHONY: gym_development
 gym_development:
 	$(FASTLANE) gym_development
@@ -26,6 +32,14 @@ gym_appstore:
 .PHONY: scan_development
 scan_development:
 	$(FASTLANE) scan_development
+
+.PHONY: pilot_appstore
+pilot_appstore:
+	$(FASTLANE) pilot_appstore
+
+.PHONY: deliver_appstore
+deliver_appstore:
+	$(FASTLANE) deliver_appstore
 
 .PHONY: bump_patch_version
 bump_patch_version:
