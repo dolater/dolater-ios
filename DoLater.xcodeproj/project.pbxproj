@@ -21,6 +21,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		F16673492D0A0AB200673DE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1773F392D04753600F162C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1F5AE052D09DF4500E7E9D0;
+			remoteInfo = ShareExtension;
+		};
 		F1773F522D04753800F162C4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F1773F392D04753600F162C4 /* Project object */;
@@ -34,20 +41,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F1773F402D04753600F162C4;
 			remoteInfo = DoLater;
-		};
-		F1F5AE0E2D09DF4500E7E9D0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F1773F392D04753600F162C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F1F5AE052D09DF4500E7E9D0;
-			remoteInfo = ShareExtension;
-		};
-		F1F5B2E62D09E1ED00E7E9D0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F1773F392D04753600F162C4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F1F5AE052D09DF4500E7E9D0;
-			remoteInfo = ShareExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -83,9 +76,7 @@
 		F14B6FDA2D09FB2100180CBF /* Exceptions for "DoLater" folder in "ShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				InfoPlist.xcstrings,
 				Localizable.xcstrings,
-				Utility/Logger.swift,
 			);
 			target = F1F5AE052D09DF4500E7E9D0 /* ShareExtension */;
 		};
@@ -210,15 +201,14 @@
 				F1773F3D2D04753600F162C4 /* Sources */,
 				F1773F3E2D04753600F162C4 /* Frameworks */,
 				F1773F3F2D04753600F162C4 /* Resources */,
-				F1750B562D07DFD90012002B /* Crashlytics */,
 				F1F5AE112D09DF4500E7E9D0 /* Embed Foundation Extensions */,
+				F1750B562D07DFD90012002B /* Crashlytics */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F166734A2D0A0AB200673DE1 /* PBXTargetDependency */,
 				F1D38CF42D05610A00B12A9C /* PBXTargetDependency */,
-				F1F5AE0F2D09DF4500E7E9D0 /* PBXTargetDependency */,
-				F1F5B2E72D09E1ED00E7E9D0 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F1773F432D04753600F162C4 /* DoLater */,
@@ -454,6 +444,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		F166734A2D0A0AB200673DE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1F5AE052D09DF4500E7E9D0 /* ShareExtension */;
+			targetProxy = F16673492D0A0AB200673DE1 /* PBXContainerItemProxy */;
+		};
 		F1773F532D04753800F162C4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F1773F402D04753600F162C4 /* DoLater */;
@@ -467,16 +462,6 @@
 		F1D38CF42D05610A00B12A9C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = F1D38CF32D05610A00B12A9C /* OpenAPIGenerator */;
-		};
-		F1F5AE0F2D09DF4500E7E9D0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F1F5AE052D09DF4500E7E9D0 /* ShareExtension */;
-			targetProxy = F1F5AE0E2D09DF4500E7E9D0 /* PBXContainerItemProxy */;
-		};
-		F1F5B2E72D09E1ED00E7E9D0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F1F5AE052D09DF4500E7E9D0 /* ShareExtension */;
-			targetProxy = F1F5B2E62D09E1ED00E7E9D0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -608,7 +593,7 @@
 				CODE_SIGN_ENTITLEMENTS = DoLater/DoLater.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DoLater/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4YP7SQBLYV;
@@ -649,7 +634,7 @@
 				CODE_SIGN_ENTITLEMENTS = DoLater/DoLater.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DoLater/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4YP7SQBLYV;
@@ -688,7 +673,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
@@ -708,7 +693,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
@@ -726,7 +711,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -742,7 +727,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4YP7SQBLYV;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -760,8 +745,7 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4YP7SQBLYV;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -792,8 +776,7 @@
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 4YP7SQBLYV;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
