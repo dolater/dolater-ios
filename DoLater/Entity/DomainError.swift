@@ -18,6 +18,8 @@ enum DomainError: LocalizedError {
             switch error {
             case .account:
                 "Something went wrong with account"
+            case .task:
+                "Something went wrong with task"
             }
         case .repository(let error):
             switch error {
@@ -27,6 +29,8 @@ enum DomainError: LocalizedError {
                 "Something went wrong with the server"
             case .account:
                 "Something went wrong with the account"
+            case .http:
+                "Something went wrong with the HTTP request"
             case .local:
                 "Something went wrong with the User Defaults"
             case .unknown:
@@ -42,6 +46,8 @@ enum DomainError: LocalizedError {
         case .service(let error):
             switch error {
             case .account(let error):
+                error.localizedDescription
+            case .task(let error):
                 error.localizedDescription
             }
         case .repository(let error):
@@ -72,6 +78,8 @@ enum DomainError: LocalizedError {
                     "Unexpected error has occurred."
                 }
             case .account(let error):
+                error.localizedDescription
+            case .http(let error):
                 error.localizedDescription
             case .local(let error):
                 error.localizedDescription

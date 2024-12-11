@@ -90,6 +90,7 @@ enum RepositoryError: LocalizedError {
     case invalidResponseBody((any Sendable & Hashable)?)
     case server(HTTPStatus, (any Sendable & Hashable)?)
     case account(AuthRepositoryError)
+    case http(HTTPRepositoryError)
     case local(LocalRepositoryError)
     case unknown(Error?)
 
@@ -101,6 +102,8 @@ enum RepositoryError: LocalizedError {
             "Invalid response: \(body ?? "")"
         case .account(let error):
             "Account Repository error: \(error.localizedDescription)"
+        case .http(let error):
+            "HTTP Repository error: \(error.localizedDescription)"
         case .local(let error):
             "Local Repository error: \(error.localizedDescription)"
         case .unknown(let error):

@@ -9,11 +9,15 @@ import Foundation
 
 enum ServiceError: LocalizedError {
     case account(AccountServiceError)
+    case task(TaskServiceError)
 
     var errorDescription: String? {
         switch self {
         case .account(let error):
-            return "Account Service Error: \(error.localizedDescription)"
+            "Account Service Error: \(error.localizedDescription)"
+
+        case .task(let error):
+            "Task Service Error: \(error.localizedDescription)"
         }
     }
 }

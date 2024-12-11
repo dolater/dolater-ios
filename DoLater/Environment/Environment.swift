@@ -10,6 +10,7 @@ protocol EnvironmentProtocol: Actor {
 
     var appCheckRepository: AppCheckRepositoryProtocol { get }
     var authRepository: AuthRepositoryProtocol { get }
+    var httpRepository: HTTPRepositoryProtocol { get }
     var localRepository: LocalRepositoryProtocol { get }
     var messagingRepository: MessagingRepositoryProtocol { get }
     var remoteConfigRepository: RemoteConfigRepositoryProtocol { get }
@@ -23,6 +24,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
 
     let appCheckRepository: any AppCheckRepositoryProtocol
     let authRepository: any AuthRepositoryProtocol
+    let httpRepository: any HTTPRepositoryProtocol
     let localRepository: any LocalRepositoryProtocol
     let messagingRepository: any MessagingRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
@@ -33,6 +35,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
     init(
         appCheckRepository: any AppCheckRepositoryProtocol = AppCheckRepositoryImpl(),
         authRepository: any AuthRepositoryProtocol = AuthRepositoryImpl(),
+        httpRepository: any HTTPRepositoryProtocol = HTTPRepositoryImpl(),
         localRepository: any LocalRepositoryProtocol = LocalRepositoryImpl(),
         messagingRepository: any MessagingRepositoryProtocol = MessagingRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = RemoteConfigRepositoryImpl(),
@@ -42,6 +45,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
     ) {
         self.appCheckRepository = appCheckRepository
         self.authRepository = authRepository
+        self.httpRepository = httpRepository
         self.localRepository = localRepository
         self.messagingRepository = messagingRepository
         self.remoteConfigRepository = remoteConfigRepository
