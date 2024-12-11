@@ -428,6 +428,7 @@ components:
         - archivedTaskPool
         - pendingTaskPool
         - followings
+        - followers
     UpdateUserInput:
       type: object
       properties:
@@ -451,7 +452,8 @@ components:
           type: string
           format: date-time
       required:
-        - user
+        - from
+        - to
         - requestedAt
     TaskPool:
       type: object

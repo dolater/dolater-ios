@@ -15,6 +15,7 @@ extension Components.Schemas.User {
         activeTaskPool: .mock1,
         archivedTaskPool: .mock2,
         pendingTaskPool: .mock3,
-        followings: []
+        followings: [],
+        followers: []
     )
 }

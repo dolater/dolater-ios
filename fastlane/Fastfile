@@ -25,7 +25,8 @@ platform :ios do
       export_options: {
         method: "development",
         provisioningProfiles: {
-          "com.kantacky.DoLater": "match Development com.kantacky.DoLater"
+          "com.kantacky.DoLater": "match Development com.kantacky.DoLater",
+          "com.kantacky.DoLater.ShareExtension": "match Development com.kantacky.DoLater.ShareExtension",
         },
       },
     )
@@ -38,7 +39,8 @@ platform :ios do
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "com.kantacky.DoLater": "match AdHoc com.kantacky.DoLater"
+          "com.kantacky.DoLater": "match AdHoc com.kantacky.DoLater",
+          "com.kantacky.DoLater.ShareExtension": "match AdHoc com.kantacky.DoLater.ShareExtension",
         },
       },
     )
@@ -51,7 +53,8 @@ platform :ios do
       export_options: {
         method: "app-store",
         provisioningProfiles: {
-          "com.kantacky.DoLater": "match AppStore com.kantacky.DoLater"
+          "com.kantacky.DoLater": "match AppStore com.kantacky.DoLater",
+          "com.kantacky.DoLater.ShareExtension": "match AppStore com.kantacky.DoLater.ShareExtension",
         },
       },
     )

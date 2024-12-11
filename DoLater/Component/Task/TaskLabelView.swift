@@ -29,7 +29,7 @@ struct TaskLabelView: View {
                         .scaledToFit()
                         .frame(width: 16, height: 16)
 
-                case .failure(let error):
+                case .failure:
                     globe
 
                 @unknown default:
