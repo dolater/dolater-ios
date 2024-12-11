@@ -16,7 +16,7 @@ struct TaskLabelView: View {
         if let image {
             self.image = image
         } else {
-            self.image = Image(systemName: "questionmark.circle")
+            self.image = Image(systemName: "globe")
         }
     }
 
