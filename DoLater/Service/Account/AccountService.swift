@@ -7,6 +7,7 @@
 
 import AuthenticationServices
 import FirebaseAuth
+import SwiftUI
 
 final actor AccountService<Environment: EnvironmentProtocol> {
     init() {}
@@ -60,19 +61,41 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         return result.user
     }
 
-    func updateProfile(for user: User, displayName: String?, photoURL: URL?) async throws {
-        if let displayName {
-            try await Environment.shared.authRepository.updateDisplayName(
-                for: user,
-                displayName: displayName
-            )
+    func updateProfile(for user: User, displayName: String) async throws {
+        try await Environment.shared.authRepository.updateDisplayName(
+            for: user,
+            displayName: displayName
+        )
+    }
+
+    @MainActor
+    func uploadProfile(for user: User, image: Image) async throws {
+        let resizedImage = image
+            .resizable()
+            .scaledToFill()
+            .frame(width: 512, height: 512)
+        let renderer = ImageRenderer(content: resizedImage)
+        guard
+            let uiImage = renderer.uiImage,
+            let data = uiImage.pngData()
+        else {
+            throw AccountServiceError.failedToConvertImageToData
         }
-        if let photoURL {
-            try await Environment.shared.authRepository.updatePhotoURL(
-                for: user,
-                photoURL: photoURL
-            )
+        let user = try await Environment.shared.authRepository.getCurrentUser()
+        let path = "profile_images/\(user.uid)/\(UUID().uuidString.lowercased()).png"
+        let metadata = try await Environment.shared.storageRepository.upload(data, to: path)
+        let urlString = "https://storage.googleapis.com/\(metadata.bucket)/\(path)"
+        guard let url = URL(string: urlString) else {
+            throw AccountServiceError.failedToGetURL
         }
+        try await Environment.shared.authRepository.updatePhotoURL(
+            for: user,
+            photoURL: url
+        )
+    }
+
+    func signOut() async throws {
+        try await Environment.shared.authRepository.signOut()
     }
 }
 

@@ -31,8 +31,4 @@ final actor DebugService<Environment: EnvironmentProtocol> {
         let user = try await Environment.shared.authRepository.getCurrentUser()
         return try await user.getIDToken(forcingRefresh: true)
     }
-
-    func signOut() async throws {
-        try await Environment.shared.authRepository.signOut()
-    }
 }

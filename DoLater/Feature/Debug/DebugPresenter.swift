@@ -43,6 +43,7 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
 
     var state: State = .init()
 
+    private let accountService: AccountService<Environment> = .init()
     private let debugService: DebugService<Environment> = .init()
 
     func dispatch(_ action: Action) {
@@ -109,7 +110,7 @@ extension DebugPresenter {
     fileprivate func onSignOutButtonTapped() async {
         state.signOutStatus = .loading
         do {
-            try await debugService.signOut()
+            try await accountService.signOut()
             state.signOutStatus = .loaded
         } catch {
             state.signOutStatus = .failed(.init(error))
