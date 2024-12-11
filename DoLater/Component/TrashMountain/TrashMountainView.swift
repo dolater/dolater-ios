@@ -12,7 +12,7 @@ struct TrashMountainView: View {
     @State private var scene: TrashMountainScene = .init()
     private let debugOptions: SpriteView.DebugOptions
     private let size: CGFloat = 120
-    private let tasks: [DLTask] = DLTask.mocks
+    @State private var tasks: [DLTask] = DLTask.mocks
 
     init(isDebugEnabled: Bool = false) {
         debugOptions = isDebugEnabled ? [
@@ -41,6 +41,19 @@ struct TrashMountainView: View {
                         x: scene.binPosition.x,
                         y: -scene.binPosition.y + proxy.size.height
                     )
+                    .dropDestination(for: DLTask.self) { droppedTasks, _ in
+                        let nodes = droppedTasks.compactMap { task in
+                            scene.childNode(withName: task.id.uuidString)
+                        }
+                        scene.removeChildren(in: nodes)
+                        tasks.removeAll(where: { task in
+                            droppedTasks.contains { droppedTask in
+                                droppedTask.id == task.id
+                            }
+                        })
+                        return true
+                    } isTargeted: { task in
+                    }
                 ForEach(tasks) { task in
                     if let position = scene.trashPositions[task.id.uuidString],
                        let rotation = scene.trashRotations[task.id.uuidString] {
@@ -50,6 +63,10 @@ struct TrashMountainView: View {
                                 x: position.x,
                                 y: -position.y + proxy.size.height
                             )
+                            .draggable(task) {
+                                TrashView(task: task, size: size)
+                                    .rotationEffect(.radians(rotation))
+                            }
                     }
                 }
             }

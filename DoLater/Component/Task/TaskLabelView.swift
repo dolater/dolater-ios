@@ -9,19 +9,33 @@ import SwiftUI
 
 struct TaskLabelView: View {
     private let title: String
-    private let image: Image
+    private let imageURL: URL?
 
-    init(title: String, image: Image) {
+    init(title: String, imageURL: URL?) {
         self.title = title
-        self.image = image
+        self.imageURL = imageURL
     }
 
     var body: some View {
         HStack(spacing: 4) {
-            image
-                .resizable()
-                .scaledToFit()
-                .frame(width: 16, height: 16)
+            AsyncImage(url: imageURL) { phase in
+                switch phase {
+                case .empty:
+                    globe
+
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+
+                case .failure(let error):
+                    globe
+
+                @unknown default:
+                    globe
+                }
+            }
 
             Text(title)
                 .lineLimit(2)
@@ -35,11 +49,18 @@ struct TaskLabelView: View {
         .clipShape(Capsule())
         .shadow()
     }
+
+    private var globe: some View {
+        Image(systemName: "globe")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 16, height: 16)
+    }
 }
 
 #Preview {
     TaskLabelView(
         title: DLTask.mock1.title,
-        image: DLTask.mock1.image
+        imageURL: DLTask.mock1.faviconURL
     )
 }

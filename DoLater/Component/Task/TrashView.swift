@@ -22,7 +22,7 @@ struct TrashView: View {
             .scaledToFit()
             .frame(width: size, height: size)
             .overlay {
-                TaskLabelView(title: task.title, image: task.image)
+                TaskLabelView(title: task.title, imageURL: task.faviconURL)
                     .frame(width: size * 1.2)
             }
     }

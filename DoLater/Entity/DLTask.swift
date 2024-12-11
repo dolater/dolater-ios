@@ -7,18 +7,35 @@
 
 import SwiftUI
 
-struct DLTask: Equatable, Identifiable, Sendable {
+struct DLTask: Codable, Equatable, Identifiable, Sendable, Transferable {
     var id: UUID
     var status: Status
     var url: URL
     var title: String
-    var image: Image
     var createdAt: Date
 
-    enum Status {
+    var faviconURL: URL? {
+        let urlString = url.absoluteString
+        guard let urlComponents = URLComponents(string: urlString) else {
+            return nil
+        }
+        let faviconURLString = urlComponents.scheme?.appending("://").appending(urlComponents.host ?? "").appending("/favicon.ico") ?? ""
+        guard let faviconURL = URL(string: faviconURLString) else {
+            return nil
+        }
+        return faviconURL
+    }
+
+    static var transferRepresentation: some TransferRepresentation {
+        CodableRepresentation(for: DLTask.self, contentType: .data)
+    }
+
+    enum Status: Codable, Equatable, Identifiable, Sendable {
         case opened
         case half
         case closed
+
+        var id: Self { self }
 
         var image: Image {
             switch self {
@@ -36,7 +53,6 @@ extension DLTask {
         status: .closed,
         url: .init(string: "https://developer.apple.com/design/human-interface-guidelines")!,
         title: "Apple Developer Documentation Human Interface Guidelines | Apple Developer Documentation",
-        image: Image(systemName: "globe"),
         createdAt: .now
     )
     static let mock2 = DLTask(
@@ -44,7 +60,6 @@ extension DLTask {
         status: .half,
         url: .init(string: "https://developer.apple.com/documentation/swiftui")!,
         title: "SwiftUI | Apple Developer Documentation",
-        image: Image(systemName: "globe"),
         createdAt: .now
     )
     static let mock3 = DLTask(
@@ -52,7 +67,6 @@ extension DLTask {
         status: .opened,
         url: .init(string: "https://developer.apple.com/documentation/spritekit")!,
         title: "SpriteKit | Apple Developer Documentation",
-        image: Image(systemName: "globe"),
         createdAt: .now
     )
     static let mock4 = DLTask(
@@ -60,7 +74,6 @@ extension DLTask {
         status: .opened,
         url: .init(string: "https://developer.apple.com/documentation/scenekit")!,
         title: "SceneKit | Apple Developer Documentation",
-        image: Image(systemName: "globe"),
         createdAt: .now
     )
     static let mock5 = DLTask(
@@ -68,7 +81,6 @@ extension DLTask {
         status: .opened,
         url: .init(string: "https://developer.apple.com/documentation/realitykit")!,
         title: "RealityKit | Apple Developer Documentation",
-        image: Image(systemName: "globe"),
         createdAt: .now
     )
 
