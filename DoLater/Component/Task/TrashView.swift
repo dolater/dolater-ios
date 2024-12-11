@@ -9,27 +9,25 @@ import SwiftUI
 
 struct TrashView: View {
     private let task: DLTask
-    private let size: CGFloat
 
-    init(task: DLTask, size: CGFloat) {
+    init(task: DLTask) {
         self.task = task
-        self.size = size
     }
 
     var body: some View {
         task.status.image
             .resizable()
             .scaledToFit()
-            .frame(width: size, height: size)
+            .frame(width: task.size, height: task.size)
             .overlay {
                 TaskLabelView(title: task.title, imageURL: task.faviconURL)
-                    .frame(width: size * 1.2)
+                    .frame(width: task.size * 1.2)
             }
     }
 }
 
 #Preview {
-    TrashView(task: .mock1, size: 50)
-    TrashView(task: .mock2, size: 100)
-    TrashView(task: .mock3, size: 172)
+    TrashView(task: .mock1)
+    TrashView(task: .mock2)
+    TrashView(task: .mock3)
 }

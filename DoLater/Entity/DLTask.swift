@@ -26,6 +26,10 @@ struct DLTask: Codable, Equatable, Identifiable, Sendable, Transferable {
         return faviconURL
     }
 
+    var size: CGFloat {
+        120
+    }
+
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(for: DLTask.self, contentType: .data)
     }
