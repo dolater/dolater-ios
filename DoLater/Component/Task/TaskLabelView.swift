@@ -11,13 +11,9 @@ struct TaskLabelView: View {
     private let title: String
     private let image: Image
 
-    init(title: String, image: Image?) {
+    init(title: String, image: Image) {
         self.title = title
-        if let image {
-            self.image = image
-        } else {
-            self.image = Image(systemName: "globe")
-        }
+        self.image = image
     }
 
     var body: some View {
@@ -43,7 +39,7 @@ struct TaskLabelView: View {
 
 #Preview {
     TaskLabelView(
-        title: "Apple Developer Documentation Human Interface Guidelines | Apple Developer Documentation",
-        image: nil
+        title: DLTask.mock1.title,
+        image: DLTask.mock1.image
     )
 }

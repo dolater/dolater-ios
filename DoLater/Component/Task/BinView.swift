@@ -9,22 +9,20 @@ import SwiftUI
 
 struct BinView: View {
     private let isFull: Bool
-    private let size: CGFloat
 
-    init(isFull: Bool, size: CGFloat) {
+    init(isFull: Bool) {
         self.isFull = isFull
-        self.size = size
     }
 
     var body: some View {
         (isFull ? Image.binFull : Image.binEmpty)
             .resizable()
             .scaledToFit()
-            .frame(width: size, height: size)
+            .frame(width: 172, height: 172)
     }
 }
 
 #Preview {
-    BinView(isFull: false, size: 120)
-    BinView(isFull: true, size: 120)
+    BinView(isFull: false)
+    BinView(isFull: true)
 }

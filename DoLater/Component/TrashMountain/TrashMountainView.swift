@@ -12,6 +12,7 @@ struct TrashMountainView: View {
     @State private var scene: TrashMountainScene = .init()
     private let debugOptions: SpriteView.DebugOptions
     private let size: CGFloat = 120
+    private let tasks: [DLTask] = DLTask.mocks
 
     init(isDebugEnabled: Bool = false) {
         debugOptions = isDebugEnabled ? [
@@ -35,14 +36,16 @@ struct TrashMountainView: View {
             )
 
             GeometryReader { proxy in
-                BinView(isFull: false, size: 172)
+                BinView(isFull: false)
                     .position(
                         x: scene.binPosition.x,
                         y: -scene.binPosition.y + proxy.size.height
                     )
-                ForEach(0..<10) { i in
-                    if let position = scene.trashPositions[safe: i] {
-                        TrashView(status: .closed, size: size)
+                ForEach(tasks) { task in
+                    if let position = scene.trashPositions[task.id.uuidString],
+                       let rotation = scene.trashRotations[task.id.uuidString] {
+                        TrashView(task: task, size: size)
+                            .rotationEffect(.radians(rotation))
                             .position(
                                 x: position.x,
                                 y: -position.y + proxy.size.height
@@ -60,26 +63,24 @@ struct TrashMountainView: View {
             node.physicsBody = SKPhysicsBody(circleOfRadius: 172 / 2)
             node.physicsBody?.affectedByGravity = false
             node.physicsBody?.isDynamic = false
-            node.name = "Bin"
+            node.name = "bin"
             node.strokeColor = .clear
             scene.addChild(node)
             scene.binPosition = node.position
 
-            let width = Int(UIScreen.main.bounds.width * 0.9)
-            let height = Int(UIScreen.main.bounds.height * 0.9)
+            let width = Int(UIScreen.main.bounds.width * 0.8)
+            let height = Int(UIScreen.main.bounds.height * 0.8)
 
-            for i in (0..<10) {
+            tasks.forEach { task in
                 let position = CGPoint(x: Int.random(in: 0..<width), y: Int.random(in: 0..<height))
                 let node = SKShapeNode(circleOfRadius: size / 2)
                 node.position = position
                 node.physicsBody = SKPhysicsBody(circleOfRadius: size / 2)
-                node.name = "Trash \(i)"
+                node.name = task.id.uuidString
                 node.strokeColor = .clear
                 scene.addChild(node)
-                guard let _ = scene.trashPositions[safe: i] else {
-                    continue
-                }
-                scene.trashPositions[i] = position
+                scene.trashPositions[task.id.uuidString] = position
+                scene.trashRotations[task.id.uuidString] = 0
             }
         }
     }
