@@ -6,16 +6,25 @@
 //
 
 import Observation
+import SwiftUI
 
 @Observable
 final class HomePresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
-    struct State: Hashable, Sendable {
+    struct State: Equatable {
+        var path: NavigationPath
+
+        enum Path: Hashable {
+        }
     }
 
-    enum Action: Hashable, Sendable {
+    enum Action {
     }
 
-    var state: State = .init()
+    var state: State
+
+    init(path: NavigationPath) {
+        state = .init(path: path)
+    }
 
     func dispatch(_ action: Action) {
         Task {

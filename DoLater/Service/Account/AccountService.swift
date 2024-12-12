@@ -62,9 +62,9 @@ final actor AccountService<Environment: EnvironmentProtocol> {
     }
 
     func updateProfile(for user: User, displayName: String) async throws {
-        try await Environment.shared.authRepository.updateDisplayName(
-            for: user,
-            displayName: displayName
+        try await Environment.shared.authRepository.update(
+            displayName: displayName,
+            for: user
         )
     }
 
@@ -88,9 +88,9 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         guard let url = URL(string: urlString) else {
             throw AccountServiceError.failedToGetURL
         }
-        try await Environment.shared.authRepository.updatePhotoURL(
-            for: user,
-            photoURL: url
+        try await Environment.shared.authRepository.update(
+            photoURL: url,
+            for: user
         )
     }
 
@@ -105,16 +105,33 @@ extension AccountService {
         with appleIDCredential: ASAuthorizationAppleIDCredential,
         force: Bool = false
     ) async throws {
-        if !force && !(user.displayName ?? "").isEmpty {
-            return
+        if force || (!force && !(user.displayName ?? "").isEmpty) {
+            guard let fullName = appleIDCredential.fullName else {
+                return
+            }
+            let displayName = ProfileUtility.buildFullName(fullName: fullName)
+            do {
+                try await Environment.shared.authRepository.update(
+                    displayName: displayName,
+                    for: user
+                )
+            } catch {
+                Logger.standard.error("\(error)")
+            }
         }
-        guard let fullName = appleIDCredential.fullName else {
-            return
+
+        if force || (!force && !(user.email ?? "").isEmpty) {
+            guard let email = appleIDCredential.email else {
+                return
+            }
+            do {
+                try await Environment.shared.authRepository.update(
+                    email: email,
+                    for: user
+                )
+            } catch {
+                Logger.standard.error("\(error)")
+            }
         }
-        let displayName = ProfileUtility.buildFullName(fullName: fullName)
-        try await Environment.shared.authRepository.updateDisplayName(
-            for: user,
-            displayName: displayName
-        )
     }
 }

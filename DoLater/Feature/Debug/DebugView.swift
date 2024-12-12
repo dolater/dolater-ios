@@ -62,6 +62,19 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                 }
 
                 Section {
+                    Text(presenter.state.uid)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .contextMenu {
+                            Button("Copy", systemImage: "document.on.document") {
+                                UIPasteboard.general.string = presenter.state.uid
+                            }
+                        }
+                } header: {
+                    Text("UID")
+                }
+
+                Section {
                     Text(presenter.state.idToken)
                         .font(.caption)
                         .foregroundStyle(.secondary)

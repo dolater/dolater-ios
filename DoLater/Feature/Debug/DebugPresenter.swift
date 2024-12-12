@@ -20,6 +20,9 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
         var fcmToken: String = ""
         var getFCMTokenStatus: DataStatus = .default
 
+        var uid: String = ""
+        var getUIDStatus: DataStatus = .default
+
         var idToken: String = ""
         var getIDTokenStatus: DataStatus = .default
 
@@ -86,6 +89,14 @@ extension DebugPresenter {
             state.getFCMTokenStatus = .loaded
         } catch {
             state.getFCMTokenStatus = .failed(.init(error))
+        }
+
+        state.getUIDStatus = .loading
+        do {
+            state.uid = try await debugService.getUID()
+            state.getIDTokenStatus = .loaded
+        } catch {
+            state.getIDTokenStatus = .failed(.init(error))
         }
 
         state.getIDTokenStatus = .loading

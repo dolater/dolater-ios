@@ -27,6 +27,11 @@ final actor DebugService<Environment: EnvironmentProtocol> {
         try await Environment.shared.messagingRepository.getFCMToken()
     }
 
+    func getUID() async throws -> String {
+        let user = try await Environment.shared.authRepository.getCurrentUser()
+        return user.uid
+    }
+
     func getIdToken() async throws -> String {
         let user = try await Environment.shared.authRepository.getCurrentUser()
         return try await user.getIDToken(forcingRefresh: true)

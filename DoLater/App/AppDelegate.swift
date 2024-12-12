@@ -21,19 +21,19 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         // AppCheck
         let providerFactory: AppCheckProviderFactory
-        #if DEBUG
+#if DEBUG
         providerFactory = AppCheckDebugProviderFactory()
-        #else
+#else
         providerFactory = MyAppCheckProviderFactory()
-        #endif
+#endif
         AppCheck.setAppCheckProviderFactory(providerFactory)
 
         // Firebase
         FirebaseApp.configure()
 
-        #if targetEnvironment(simulator)
+#if targetEnvironment(simulator)
         //Auth.auth().useEmulator(withHost: "localhost", port: 9099)
-        #endif
+#endif
 
         // Push Notification
         UNUserNotificationCenter.current().delegate = self
@@ -51,8 +51,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         open url: URL,
-        options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
     ) -> Bool {
+        Logger.standard.debug("AppDelegate OpenURL: \(url.absoluteString)")
+
+        let sendingAppID = options[.sourceApplication]
+        Logger.standard.debug("Source Application: \(sendingAppID.debugDescription)")
+
+        guard let _ = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            return false
+        }
+
         return false
     }
 
@@ -74,11 +83,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     ) {
         Messaging.messaging().apnsToken = deviceToken
         let type: AuthAPNSTokenType
-        #if DEBUG
+#if DEBUG
         type = .sandbox
-        #else
+#else
         type = .prod
-        #endif
+#endif
         Auth.auth().setAPNSToken(deviceToken, type: type)
     }
 
@@ -111,7 +120,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         Logger.standard.debug("\(userInfo)")
         Messaging.messaging().appDidReceiveMessage(userInfo)
         if let string = userInfo[fcmURLKey] as? String,
-            let url = URL(string: string)
+           let url = URL(string: string)
         {
             await UIApplication.shared.open(url)
         }
@@ -123,7 +132,7 @@ extension AppDelegate: MessagingDelegate {
         _ messaging: Messaging,
         didReceiveRegistrationToken fcmToken: String?
     ) {
-        Logger.standard.debug("Firebase registration token: \(String(describing: fcmToken))")
+        Logger.standard.debug("Firebase registration token: \(fcmToken ?? "")")
         let dataDict: [String: String] = ["token": fcmToken ?? ""]
         NotificationCenter.default.post(
             name: Notification.Name("FCMToken"),

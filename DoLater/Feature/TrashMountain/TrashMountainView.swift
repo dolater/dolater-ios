@@ -19,7 +19,6 @@ struct TrashMountainView: View {
         )
         .overlay {
             BinView(isFull: false)
-                .position(scene.convertPoint(toView: scene.binPosition))
                 .dropDestination(for: DLTask.self) { droppedTasks, _ in
                     let nodes = droppedTasks.compactMap { task in
                         scene.childNode(withName: task.id.uuidString)
@@ -31,8 +30,8 @@ struct TrashMountainView: View {
                         }
                     })
                     return true
-                } isTargeted: { task in
                 }
+                .position(scene.convertPoint(toView: scene.binPosition))
 
             ForEach(tasks) { task in
                 let position = scene.trashPositions[task.id.uuidString]

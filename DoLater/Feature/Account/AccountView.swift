@@ -8,15 +8,24 @@
 import SwiftUI
 
 struct AccountView<Environment: EnvironmentProtocol>: View {
-    @State private var presenter: AccountPresenter<Environment> = .init()
+    @State private var presenter: AccountPresenter<Environment>
+    @Binding private var path: NavigationPath
+
+    init(path: Binding<NavigationPath>) {
+        presenter = .init(path: path.wrappedValue)
+        _path = path
+    }
 
     var body: some View {
         DLButtonView(.text("Sign Out")) {
             presenter.dispatch(.onSignOutButtonTapped)
         }
+        .sync($path, $presenter.state.path)
     }
 }
 
 #Preview {
-    AccountView<MockEnvironment>()
+    @Previewable @State var path: NavigationPath = .init()
+
+    AccountView<MockEnvironment>(path: $path)
 }

@@ -7,13 +7,16 @@
 
 @preconcurrency import FirebaseAuth
 import Observation
+import SwiftUI
 
 @Observable
 final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
-    struct State: Hashable, Sendable {
+    struct State: Equatable {
         var authStatus: AuthStatus = .unchecked
         var isDebugScreenPresented: Bool = false
         var selection: TabBarItem = .home
+        var homeNavigationPath: NavigationPath = .init()
+        var accountNavigationPath: NavigationPath = .init()
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -24,6 +27,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     enum Action: Sendable {
         case onAppear
+        case onOpenURL(URL)
         case onPlusButtonTapped
     }
 
@@ -60,6 +64,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case .onAppear:
             await onAppear()
 
+        case .onOpenURL(let url):
+            await onOpenURL(url)
+
         case .onPlusButtonTapped:
             await onPlusButtonTapped()
         }
@@ -73,6 +80,23 @@ extension ContentPresenter {
             return
         }
         state.authStatus = .authenticated(user)
+    }
+
+    fileprivate func onOpenURL(_ url: URL) async {
+        Logger.standard.debug("Open URL: \(url.absoluteString)")
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            Logger.standard.error("Invalid URL: \(url.absoluteString)")
+            return
+        }
+        let pathComponents = components.path.split(separator: "/")
+        let quetyItems = components.queryItems
+        switch pathComponents.first {
+        case "users":
+            state.selection = .account
+
+        default:
+            return
+        }
     }
 
     fileprivate func onPlusButtonTapped() async {

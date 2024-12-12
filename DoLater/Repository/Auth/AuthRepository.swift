@@ -10,9 +10,11 @@ import FirebaseAuth
 protocol AuthRepositoryProtocol: Actor {
     func getCurrentUser() async throws -> User
 
-    func updateDisplayName(for user: User, displayName: String) async throws
+    func update(displayName: String, for user: User) async throws
 
-    func updatePhotoURL(for user: User, photoURL: URL) async throws
+    func update(photoURL: URL, for user: User) async throws
+
+    func update(email: String, for user: User) async throws
 
     func signOut() async throws
 }
@@ -25,16 +27,20 @@ final actor AuthRepositoryImpl: AuthRepositoryProtocol {
         return user
     }
 
-    func updateDisplayName(for user: User, displayName: String) async throws {
+    func update(displayName: String, for user: User) async throws {
         let changeRequest = user.createProfileChangeRequest()
         changeRequest.displayName = displayName
         try await changeRequest.commitChanges()
     }
 
-    func updatePhotoURL(for user: User, photoURL: URL) async throws {
+    func update(photoURL: URL, for user: User) async throws {
         let changeRequest = user.createProfileChangeRequest()
         changeRequest.photoURL = photoURL
         try await changeRequest.commitChanges()
+    }
+
+    func update(email: String, for user: User) async throws {
+        // TODO: -
     }
 
     func signOut() async throws {

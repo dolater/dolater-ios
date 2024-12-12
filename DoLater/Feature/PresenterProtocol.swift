@@ -7,9 +7,9 @@
 
 @MainActor
 protocol PresenterProtocol: Sendable {
-    associatedtype State: Equatable, Sendable
+    associatedtype State: Equatable
 
-    associatedtype Action: Sendable
+    associatedtype Action
 
     var state: State { get set }
 

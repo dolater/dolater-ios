@@ -14,10 +14,13 @@ final actor MockAuthRepository: AuthRepositoryProtocol {
         return .mock
     }
 
-    func updateDisplayName(for user: FirebaseAuth.User, displayName: String) async throws {
+    func update(displayName: String, for user: FirebaseAuth.User) async throws {
     }
 
-    func updatePhotoURL(for user: FirebaseAuth.User, photoURL: URL) async throws {
+    func update(photoURL: URL, for user: FirebaseAuth.User) async throws {
+    }
+
+    func update(email: String, for user: FirebaseAuth.User) async throws {
     }
 
     func signOut() async throws {

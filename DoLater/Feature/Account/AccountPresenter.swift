@@ -6,20 +6,29 @@
 //
 
 import Observation
+import SwiftUI
 
 @Observable
 final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
-    struct State: Hashable, Sendable {
+    struct State: Equatable {
+        var path: NavigationPath
         var signOutStatus: DataStatus = .default
+
+        enum Path: Hashable {
+        }
     }
 
-    enum Action: Hashable, Sendable {
+    enum Action {
         case onSignOutButtonTapped
     }
 
-    var state: State = .init()
+    var state: State
 
     private let accountService: AccountService<Environment> = .init()
+
+    init(path: NavigationPath) {
+        state = .init(path: path)
+    }
 
     func dispatch(_ action: Action) {
         Task {

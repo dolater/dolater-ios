@@ -463,8 +463,15 @@ components:
           format: uuid
         owner:
           $ref: "#/components/schemas/User"
+        type:
+          type: string
+          enum:
+            - active
+            - archived
+            - pending
       required:
         - id
+        - type
     Task:
       type: object
       properties:
@@ -504,8 +511,6 @@ components:
     UpdateTaskInput:
       type: object
       properties:
-        title:
-          type: string
         url:
           type: string
           format: uri

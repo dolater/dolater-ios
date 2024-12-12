@@ -21,9 +21,10 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                     Group {
                         switch presenter.state.selection {
                         case .home:
-                            HomeView<Environment>()
+                            HomeView<Environment>(path: $presenter.state.homeNavigationPath)
+
                         case .account:
-                            AccountView<Environment>()
+                            AccountView<Environment>(path: $presenter.state.accountNavigationPath)
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -40,6 +41,9 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.Semantic.Background.primary)
+        .onOpenURL { url in
+            presenter.dispatch(.onOpenURL(url))
+        }
 #if DEBUG
         .sheet(isPresented: $presenter.state.isDebugScreenPresented) {
             DebugView<Environment>()
