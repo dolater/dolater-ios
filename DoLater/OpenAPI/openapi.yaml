@@ -520,8 +520,9 @@ components:
         archivedAt:
           type: string
           format: date-time
-        pool:
-          $ref: "#/components/schemas/TaskPool"
+        poolId:
+          type: string
+          format: uuid
       required: []
     Notification:
       type: object
