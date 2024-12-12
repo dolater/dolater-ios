@@ -19,6 +19,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var accountNavigationPath: NavigationPath = .init()
         var isAddTaskDialogPresented: Bool = false
         var addingURLString: String = ""
+        var addingURLAlert: String?
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -94,11 +95,11 @@ extension ContentPresenter {
 
     fileprivate func onOpenURL(_ url: URL) async {
         Logger.standard.debug("Open URL: \(url.absoluteString)")
+        let pathComponents = url.pathComponents
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             Logger.standard.error("Invalid URL: \(url.absoluteString)")
             return
         }
-        let pathComponents = components.path.split(separator: "/")
         let _ = components.queryItems
         switch pathComponents.first {
         case "users":
@@ -119,7 +120,12 @@ extension ContentPresenter {
     }
 
     fileprivate func onAddTaskButtonTapped() async {
-        guard let url = URL(string: state.addingURLString) else {
+        guard
+            let url = URL(string: state.addingURLString),
+            UIApplication.shared.canOpenURL(url),
+            !(url.host()?.isEmpty ?? true)
+        else {
+            state.addingURLAlert = "有効なURLを入力してください"
             return
         }
         state.isAddTaskDialogPresented = false

@@ -46,11 +46,21 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                                 presenter.dispatch(.onAddTaskButtonTapped)
                             }
                         ) {
-                            DLTextField(
-                                "https://",
-                                text: $presenter.state.addingURLString,
-                                isFocused: .constant(true)
-                            )
+                            VStack(alignment: .leading, spacing: 4) {
+                                DLTextField(
+                                    "https://",
+                                    text: $presenter.state.addingURLString,
+                                    isFocused: .constant(true)
+                                )
+                                .keyboardType(.URL)
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                                if let errorText = presenter.state.addingURLAlert {
+                                    Text(errorText)
+                                        .font(.DL.note1)
+                                        .foregroundStyle(Color.Semantic.Text.alert)
+                                }
+                            }
                         }
                         .padding(24)
                     }

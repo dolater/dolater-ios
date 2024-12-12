@@ -1,5 +1,5 @@
 //
-//  URL+Favicon.swift
+//  URL+.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/12/24.

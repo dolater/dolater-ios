@@ -23,6 +23,7 @@ extension Color {
             static let primary = Color(.Primitive.black)
             static let secondary = Color(.Primitive.gray)
             static let inversePrimary = Color(.Primitive.white)
+            static let alert = Color(.Primitive.red)
         }
     }
 }
