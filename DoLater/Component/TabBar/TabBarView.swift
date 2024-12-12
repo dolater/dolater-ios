@@ -32,7 +32,7 @@ struct TabBarView: View {
 
             Spacer()
 
-            DLButtonView(
+            DLButton(
                 .icon("plus"),
                 action: onPlusButtonTappedAction
             )

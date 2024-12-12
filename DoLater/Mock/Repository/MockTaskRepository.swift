@@ -39,8 +39,8 @@ final actor MockTaskRepository: TaskRepositoryProtocol {
         if let completedAt = task.completedAt {
             updatedTask.completedAt = completedAt
         }
-        if let pool = task.pool {
-            updatedTask.pool = pool
+        if let poolId = task.poolId {
+            updatedTask.pool.id = poolId
         }
         return updatedTask
     }

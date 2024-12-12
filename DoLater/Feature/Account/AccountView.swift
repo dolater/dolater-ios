@@ -17,7 +17,7 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
     }
 
     var body: some View {
-        DLButtonView(.text("Sign Out")) {
+        DLButton(.text("Sign Out")) {
             presenter.dispatch(.onSignOutButtonTapped)
         }
         .sync($path, $presenter.state.path)
