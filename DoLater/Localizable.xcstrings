@@ -142,10 +142,26 @@
       }
     },
     "UID" : {
-
+      "shouldTranslate" : false
     },
     "URL" : {
       "shouldTranslate" : false
+    },
+    "あとまわしリンクがありません" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Do Later Link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あとまわしリンクがありません"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

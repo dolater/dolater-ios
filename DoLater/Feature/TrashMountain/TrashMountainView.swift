@@ -10,12 +10,8 @@ import SwiftUI
 
 struct TrashMountainView: View {
     @State private var scene: TrashMountainScene = .init()
-    @State private var tasks: [DLTask] = DLTask.mocks.filter { task in
-        !task.isArchived
-    }
-    @State private var archivedTasks: [DLTask] = DLTask.mocks.filter { task in
-        task.isArchived
-    }
+    @State private var tasks: [DLTask] = DLTask.mocks.filter { !$0.isArchived }
+    @State private var archivedTasks: [DLTask] = DLTask.mocks.filter { $0.isArchived }
 
     var body: some View {
         SpriteView(
@@ -39,22 +35,26 @@ struct TrashMountainView: View {
                 }
                 .position(scene.convertPoint(toView: scene.binPosition))
 
-            ForEach(tasks) { task in
-                if let position = scene.trashPositions[task.id.uuidString],
-                   let rotation = scene.trashRotations[task.id.uuidString] {
-                    TrashView(task: task)
-                        .rotationEffect(.radians(-rotation))
-                        .draggable(task)
-                        .position(scene.convertPoint(toView: position))
+            if tasks.isEmpty {
+                Text("あとまわしリンクがありません")
+                    .font(.DL.title1)
+                    .foregroundStyle(Color.Semantic.Text.secondary)
+            } else {
+                ForEach(tasks) { task in
+                    if let position = scene.trashPositions[task.id.uuidString],
+                       let rotation = scene.trashRotations[task.id.uuidString] {
+                        TrashView(task: task)
+                            .rotationEffect(.radians(-rotation))
+                            .draggable(task)
+                            .position(scene.convertPoint(toView: position))
+                    }
                 }
             }
         }
         .onAppear {
             scene.scaleMode = .resizeFill
             scene.backgroundColor = .clear
-
             scene.addBinNode(radius: 172 / 2)
-
             tasks.forEach { task in
                 Task {
                     scene.addTrashNode(task: task)
