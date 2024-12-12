@@ -19,39 +19,13 @@ struct TrashMountainView: View {
             options: [.allowsTransparency]
         )
         .overlay {
-            BinView(isFull: !archivedTasks.isEmpty)
-                .dropDestination(for: DLTask.self) { droppedTasks, _ in
-                    let nodes = droppedTasks.compactMap { task in
-                        scene.childNode(withName: task.id.uuidString)
-                    }
-                    scene.removeChildren(in: nodes)
-                    tasks.removeAll(where: { task in
-                        droppedTasks.contains { droppedTask in
-                            droppedTask.id == task.id
-                        }
-                    })
-                    archivedTasks.append(contentsOf: droppedTasks)
-                    return true
-                }
-                .position(scene.convertPoint(toView: scene.binPosition))
-
+            binView
+        }
+        .overlay {
             if tasks.isEmpty {
-                Text("あとまわしリンクがありません")
-                    .font(.DL.title1)
-                    .foregroundStyle(Color.Semantic.Text.secondary)
+                noTaskMessageView
             } else {
-                ForEach(tasks) { task in
-                    if let position = scene.trashPositions[task.id.uuidString],
-                       let rotation = scene.trashRotations[task.id.uuidString] {
-                        TrashView(task: task)
-                            .rotationEffect(.radians(-rotation))
-                            .draggable(task)
-                            .contextMenu {
-                                Button("Mark as Complete", systemImage: "checkmark.square") {}
-                            }
-                            .position(scene.convertPoint(toView: position))
-                    }
-                }
+                tasksView
             }
         }
         .onAppear {
@@ -64,6 +38,63 @@ struct TrashMountainView: View {
                 }
             }
         }
+    }
+
+    private var binView: some View {
+        BinView(isFull: !archivedTasks.isEmpty)
+            .dropDestination(for: DLTask.self) { droppedTasks, _ in
+                let nodes = droppedTasks.compactMap { task in
+                    scene.childNode(withName: task.id.uuidString)
+                }
+                scene.removeChildren(in: nodes)
+                tasks.removeAll(where: { task in
+                    droppedTasks.contains { droppedTask in
+                        droppedTask.id == task.id
+                    }
+                })
+                archivedTasks.append(contentsOf: droppedTasks)
+                return true
+            }
+            .position(scene.convertPoint(toView: scene.binPosition))
+    }
+
+    private var noTaskMessageView: some View {
+        Text("あとまわしリンクがありません")
+            .font(.DL.title1)
+            .foregroundStyle(Color.Semantic.Text.secondary)
+    }
+
+    private var tasksView: some View {
+        ForEach(tasks) { task in
+            if let position = scene.trashPositions[task.id.uuidString],
+               let rotation = scene.trashRotations[task.id.uuidString] {
+                taskView(
+                    task,
+                    position: scene.convertPoint(toView: position),
+                    rotation: -rotation
+                )
+            }
+        }
+    }
+
+    private func taskView(_ task: DLTask, position: CGPoint, rotation: CGFloat) -> some View {
+        TrashView(task: task)
+            .rotationEffect(.radians(rotation))
+            .draggable(task)
+            .contextMenu {
+                if task.isCompleted || task.isArchived {
+                    Button("未完了にする", systemImage: "square") {
+                    }
+                } else {
+                    Button("完了にする", systemImage: "checkmark.square") {
+                    }
+                }
+                Button("削除する", systemImage: "trash", role: .destructive) {
+                }
+            }
+            .onTapGesture {
+            }
+            .position(position)
     }
 }
 
