@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct DLTask: Codable, Equatable, Identifiable, Sendable, Transferable {
+struct DLTask: Codable, Hashable, Identifiable, Sendable, Transferable {
     let id: UUID
     let url: URL
     let createdAt: Date

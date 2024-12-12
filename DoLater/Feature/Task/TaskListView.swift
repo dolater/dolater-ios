@@ -1,5 +1,5 @@
 //
-//  TrashMountainView.swift
+//  TaskListView.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/11/24.
@@ -8,54 +8,46 @@
 import SpriteKit
 import SwiftUI
 
-struct TrashMountainView: View {
-    @State private var scene: TrashMountainScene = .init()
-    @State private var tasks: [DLTask] = DLTask.mocks.filter { !$0.isArchived }
-    @State private var archivedTasks: [DLTask] = DLTask.mocks.filter { $0.isArchived }
+struct TaskListView<Environment: EnvironmentProtocol>: View {
+    @State private var presenter: TaskListPresenter<Environment>
+    @Binding private var path: NavigationPath
+
+    init(path: Binding<NavigationPath>) {
+        _path = path
+        presenter = .init(path: path.wrappedValue)
+    }
 
     var body: some View {
         SpriteView(
-            scene: scene,
+            scene: presenter.state.scene,
             options: [.allowsTransparency]
         )
         .overlay {
             binView
         }
         .overlay {
-            if tasks.isEmpty {
+            if presenter.state.tasks.isEmpty {
                 noTaskMessageView
             } else {
                 tasksView
             }
         }
-        .onAppear {
-            scene.scaleMode = .resizeFill
-            scene.backgroundColor = .clear
-            scene.addBinNode(radius: 172 / 2)
-            tasks.forEach { task in
-                Task {
-                    scene.addTrashNode(task: task)
-                }
-            }
+        .task {
+            await presenter.dispatch(.onAppear)
         }
+        .sync($path, $presenter.state.path)
     }
 
     private var binView: some View {
-        BinView(isFull: !archivedTasks.isEmpty)
-            .dropDestination(for: DLTask.self) { droppedTasks, _ in
-                let nodes = droppedTasks.compactMap { task in
-                    scene.childNode(withName: task.id.uuidString)
-                }
-                scene.removeChildren(in: nodes)
-                tasks.removeAll(where: { task in
-                    droppedTasks.contains { droppedTask in
-                        droppedTask.id == task.id
-                    }
-                })
-                archivedTasks.append(contentsOf: droppedTasks)
+        BinView(isFull: !presenter.state.archivedTasks.isEmpty)
+            .dropDestination(for: DLTask.self) { droppedTasks, droppedPoint in
+                presenter.dispatch(.onTasksDropped(droppedTasks, droppedPoint))
                 return true
             }
-            .position(scene.convertPoint(toView: scene.binPosition))
+            .onTapGesture {
+                presenter.dispatch(.onBinTapped)
+            }
+            .position(presenter.state.scene.convertPoint(toView: presenter.state.scene.binPosition))
     }
 
     private var noTaskMessageView: some View {
@@ -65,12 +57,12 @@ struct TrashMountainView: View {
     }
 
     private var tasksView: some View {
-        ForEach(tasks) { task in
-            if let position = scene.trashPositions[task.id.uuidString],
-               let rotation = scene.trashRotations[task.id.uuidString] {
+        ForEach(presenter.state.tasks) { task in
+            if let position = presenter.state.scene.trashPositions["trash_\(task.id.uuidString)"],
+               let rotation = presenter.state.scene.trashRotations["trash_\(task.id.uuidString)"] {
                 taskView(
                     task,
-                    position: scene.convertPoint(toView: position),
+                    position: presenter.state.scene.convertPoint(toView: position),
                     rotation: -rotation
                 )
             }
@@ -93,11 +85,16 @@ struct TrashMountainView: View {
                 }
             }
             .onTapGesture {
+                presenter.dispatch(.onTrashTapped(task))
             }
             .position(position)
     }
 }
 
 #Preview {
-    TrashMountainView()
+    @Previewable @State var path: NavigationPath = .init()
+
+    NavigationStack {
+        TaskListView<MockEnvironment>(path: $path)
+    }
 }

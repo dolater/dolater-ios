@@ -9,7 +9,7 @@ import Observation
 import SpriteKit
 
 @Observable
-final class TrashMountainScene: SKScene {
+final class TrashMountainScene: SKScene, Sendable {
     var binPosition: CGPoint = .init(x: 0, y: 0)
     var trashPositions: [String:CGPoint] = [:]
     var trashRotations: [String:CGFloat] = [:]
@@ -46,12 +46,27 @@ final class TrashMountainScene: SKScene {
 
     func addTrashNode(task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
-        node.name = task.id.uuidString
+        node.name = "trash_\(task.id.uuidString)"
         node.position = CGPoint(x: frame.midX, y: frame.maxY - task.size - 40)
         node.physicsBody = SKPhysicsBody(circleOfRadius: task.radius)
         node.strokeColor = .clear
         addChild(node)
-        trashPositions[task.id.uuidString] = node.position
-        trashRotations[task.id.uuidString] = node.zRotation
+        trashPositions[node.name ?? ""] = node.position
+        trashRotations[node.name ?? ""] = node.zRotation
+    }
+
+    func removeBinNode() {
+        childNode(withName: "bin")?.removeFromParent()
+    }
+
+    func removeTrashNodes() {
+        for child in children {
+            guard child.name?.hasPrefix("trash_") ?? false else {
+                continue
+            }
+            child.removeFromParent()
+            trashPositions.removeValue(forKey: child.name ?? "")
+            trashRotations.removeValue(forKey: child.name ?? "")
+        }
     }
 }

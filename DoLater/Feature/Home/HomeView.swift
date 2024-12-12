@@ -18,9 +18,23 @@ struct HomeView<Environment: EnvironmentProtocol>: View {
 
     var body: some View {
         NavigationStack(path: $presenter.state.path) {
-            TrashMountainView()
+            TaskListView<Environment>(path: $presenter.state.path)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 .background(Color.Semantic.Background.primary)
+                .navigationDestination(for: HomePresenter<Environment>.State.Path.self) { _ in
+                }
+                .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
+                    switch destination {
+                    case .detail(let task):
+                        TaskDetailView(task: task)
+
+                    case .bin:
+                        Image.binFull
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300)
+                    }
+                }
         }
         .sync($path, $presenter.state.path)
     }

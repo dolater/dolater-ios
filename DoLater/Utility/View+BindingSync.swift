@@ -10,10 +10,10 @@ import SwiftUI
 extension View {
     func sync<T: Equatable>(_ lhs: Binding<T>, _ rhs: Binding<T>) -> some View {
         onChange(of: lhs.wrappedValue) { _, newValue in
-            lhs.wrappedValue = newValue
+            rhs.wrappedValue = newValue
         }
         .onChange(of: rhs.wrappedValue) { _, newValue in
-            rhs.wrappedValue = newValue
+            lhs.wrappedValue = newValue
         }
     }
 
