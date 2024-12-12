@@ -22,6 +22,56 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                         switch presenter.state.selection {
                         case .home:
                             HomeView<Environment>(path: $presenter.state.homeNavigationPath)
+                                .overlay {
+                                    if presenter.state.isAddTaskDialogPresented {
+                                        Color.clear
+                                            .contentShape(Rectangle())
+                                            .onTapGesture {
+                                                withAnimation(.easeInOut(duration: 0.1)) {
+                                                    presenter.state.isAddTaskDialogPresented = false
+                                                    presenter.dispatch(.onAreaAroundAddTaskDialogTapped)
+                                                }
+                                            }
+                                            .overlay {
+                                                DLDialog(
+                                                    title: "あとまわしリンクを追加",
+                                                    button: DLButton(.text("追加する"), isFullWidth: true) {
+                                                        withAnimation(.easeInOut(duration: 0.1)) {
+                                                            presenter.state.isAddTaskDialogPresented = false
+                                                            presenter.dispatch(.onAddTaskButtonTapped)
+                                                        }
+                                                    }
+                                                ) {
+                                                    VStack(alignment: .leading, spacing: 4) {
+                                                        DLTextField(
+                                                            "https://",
+                                                            text: $presenter.state.addingURLString,
+                                                            isFocused: $presenter.state.isAddingURLFocused
+                                                        )
+                                                        .keyboardType(.URL)
+                                                        .autocorrectionDisabled()
+                                                        .textInputAutocapitalization(.never)
+                                                        if let errorText = presenter.state.addingURLAlert {
+                                                            Text(errorText)
+                                                                .font(.DL.note1)
+                                                                .foregroundStyle(Color.Semantic.Text.alert)
+                                                        }
+                                                    }
+                                                }
+                                                .padding(24)
+                                            }
+                                            .overlay(alignment: .topTrailing) {
+                                                DLButton(.icon("xmark"), style: .secondary) {
+                                                    withAnimation(.easeInOut(duration: 0.1)) {
+                                                        presenter.state.isAddTaskDialogPresented = false
+                                                        presenter.dispatch(.onAreaAroundAddTaskDialogTapped)
+                                                    }
+                                                }
+                                                .padding(.vertical, 16)
+                                                .padding(.horizontal, 24)
+                                            }
+                                    }
+                                }
 
                         case .account:
                             AccountView<Environment>(path: $presenter.state.accountNavigationPath)
@@ -29,7 +79,8 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     TabBarView(selection: $presenter.state.selection) {
-                        withAnimation {
+                        withAnimation(.easeInOut(duration: 0.1)) {
+                            presenter.state.isAddTaskDialogPresented = true
                             presenter.dispatch(.onPlusButtonTapped)
                         }
                     }
@@ -38,33 +89,6 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
-                .overlay {
-                    if presenter.state.isAddTaskDialogPresented {
-                        DLDialog(
-                            title: "あとまわしリンクを追加",
-                            button: DLButton(.text("追加する"), isFullWidth: true) {
-                                presenter.dispatch(.onAddTaskButtonTapped)
-                            }
-                        ) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                DLTextField(
-                                    "https://",
-                                    text: $presenter.state.addingURLString,
-                                    isFocused: .constant(true)
-                                )
-                                .keyboardType(.URL)
-                                .autocorrectionDisabled()
-                                .textInputAutocapitalization(.never)
-                                if let errorText = presenter.state.addingURLAlert {
-                                    Text(errorText)
-                                        .font(.DL.note1)
-                                        .foregroundStyle(Color.Semantic.Text.alert)
-                                }
-                            }
-                        }
-                        .padding(24)
-                    }
-                }
 
             case .unauthenticated:
                 SignInView<Environment>()

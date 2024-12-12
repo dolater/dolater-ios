@@ -18,6 +18,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var homeNavigationPath: NavigationPath = .init()
         var accountNavigationPath: NavigationPath = .init()
         var isAddTaskDialogPresented: Bool = false
+        var isAddingURLFocused: Bool = false
         var addingURLString: String = ""
         var addingURLAlert: String?
 
@@ -34,6 +35,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case onSelectedTabChanged
         case onPlusButtonTapped
         case onAddTaskButtonTapped
+        case onAreaAroundAddTaskDialogTapped
     }
 
     var state: State = .init()
@@ -80,6 +82,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
         case .onAddTaskButtonTapped:
             await onAddTaskButtonTapped()
+
+        case .onAreaAroundAddTaskDialogTapped:
+            await onAreaAroundAddTaskDialogTapped()
         }
     }
 }
@@ -117,6 +122,7 @@ extension ContentPresenter {
     fileprivate func onPlusButtonTapped() async {
         state.selection = .home
         state.isAddTaskDialogPresented = true
+        state.isAddingURLFocused = true
     }
 
     fileprivate func onAddTaskButtonTapped() async {
@@ -129,5 +135,15 @@ extension ContentPresenter {
             return
         }
         state.isAddTaskDialogPresented = false
+        state.isAddingURLFocused = false
+        state.addingURLString = ""
+        state.addingURLAlert = nil
+    }
+
+    fileprivate func onAreaAroundAddTaskDialogTapped() async {
+        state.isAddTaskDialogPresented = false
+        state.isAddingURLFocused = false
+        state.addingURLString = ""
+        state.addingURLAlert = nil
     }
 }

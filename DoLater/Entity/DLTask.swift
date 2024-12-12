@@ -53,30 +53,53 @@ extension DLTask {
     static let mock1 = DLTask(
         id: .init(),
         url: .init(string: "https://developer.apple.com/design/human-interface-guidelines")!,
-        createdAt: .now.addingTimeInterval(-60 * 60 * 24 * 7 * 4)
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4)),
+        completedAt: .now,
+        archivedAt: .now
     )
     static let mock2 = DLTask(
         id: .init(),
         url: .init(string: "https://developer.apple.com/documentation/swiftui")!,
-        createdAt: .now.addingTimeInterval(-60 * 60 * 24 * 7 * 1)
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4)),
+        completedAt: .now
     )
     static let mock3 = DLTask(
         id: .init(),
         url: .init(string: "https://developer.apple.com/documentation/spritekit")!,
-        createdAt: .now
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4)),
+        completedAt: .now
     )
     static let mock4 = DLTask(
         id: .init(),
         url: .init(string: "https://developer.apple.com/documentation/scenekit")!,
-        createdAt: .now,
-        completedAt: .now
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4))
     )
     static let mock5 = DLTask(
         id: .init(),
         url: .init(string: "https://developer.apple.com/documentation/realitykit")!,
-        createdAt: .now,
-        completedAt: .now,
-        archivedAt: .now
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4))
+    )
+    static let mock6 = DLTask(
+        id: .init(),
+        url: .init(string: "https://developer.apple.com/documentation/ActivityKit")!,
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4)),
+        completedAt: .now
+    )
+    static let mock7 = DLTask(
+        id: .init(),
+        url: .init(string: "https://developer.apple.com/documentation/AppClip")!,
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4))
+    )
+    static let mock8 = DLTask(
+        id: .init(),
+        url: .init(string: "https://developer.apple.com/documentation/AppIntents")!,
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4)),
+        completedAt: .now
+    )
+    static let mock9 = DLTask(
+        id: .init(),
+        url: .init(string: "https://note.com/solodoldrums/n/naaa56fe66cad?sub_rt=share_pb")!,
+        createdAt: .now.addingTimeInterval(-TimeInterval.random(in: 0...60 * 60 * 24 * 7 * 4))
     )
 
     static let mocks: [DLTask] = [
@@ -85,5 +108,9 @@ extension DLTask {
         .mock3,
         .mock4,
         .mock5,
+        .mock6,
+        .mock7,
+        .mock8,
+        .mock9,
     ]
 }

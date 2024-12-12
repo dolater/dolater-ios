@@ -25,7 +25,7 @@ struct TabBarView: View {
                 .home,
                 isFocused: selection == .home
             ) {
-                withAnimation {
+                withAnimation(.easeInOut(duration: 0.1)) {
                     selection = .home
                 }
             }
@@ -43,7 +43,7 @@ struct TabBarView: View {
                 .account,
                 isFocused: selection == .account
             ) {
-                withAnimation {
+                withAnimation(.easeInOut(duration: 0.1)) {
                     selection = .account
                 }
             }

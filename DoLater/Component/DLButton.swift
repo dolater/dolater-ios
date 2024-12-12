@@ -13,16 +13,44 @@ struct DLButton: View {
         case text(_ label: String)
     }
 
+    enum ButtonStyle {
+        case primary
+        case secondary
+
+        var background: Color {
+            switch self {
+            case .primary:
+                Color.Semantic.Background.tertiary
+
+            case .secondary:
+                Color.Semantic.Background.secondary
+            }
+        }
+
+        var foreground: Color {
+            switch self {
+            case .primary:
+                Color.Semantic.Text.inversePrimary
+
+            case .secondary:
+                Color.Semantic.Text.primary
+            }
+        }
+    }
+
     private let type: ButtonType
+    private let style: ButtonStyle
     private let isFullWidth: Bool
     private let action: () -> Void
 
     init(
         _ type: ButtonType,
+        style: ButtonStyle = .primary,
         isFullWidth: Bool = false,
         action: @escaping () -> Void
     ) {
         self.type = type
+        self.style = style
         self.isFullWidth = isFullWidth
         self.action = action
     }
@@ -43,9 +71,9 @@ struct DLButton: View {
             }
             .frame(maxWidth: isFullWidth ? .infinity : nil)
             .font(.DL.button)
-            .background(Color.Semantic.Background.tertiary)
+            .background(style.background)
             .clipShape(Capsule())
-            .foregroundStyle(Color.Semantic.Text.inversePrimary)
+            .foregroundStyle(style.foreground)
             .shadow()
         }
     }

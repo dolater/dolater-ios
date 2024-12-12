@@ -47,7 +47,7 @@ final class TrashMountainScene: SKScene, Sendable {
     func addTrashNode(task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
         node.name = "trash_\(task.id.uuidString)"
-        node.position = CGPoint(x: frame.midX, y: frame.maxY - task.size - 40)
+        node.position = CGPoint(x: frame.midX + CGFloat.random(in: -50...50), y: frame.midY + CGFloat.random(in: -50...50))
         node.physicsBody = SKPhysicsBody(circleOfRadius: task.radius)
         node.strokeColor = .clear
         addChild(node)

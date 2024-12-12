@@ -17,7 +17,7 @@ extension View {
         }
     }
 
-    func sync<T: Equatable>(_ binding: Binding<T>, _ focusState: FocusState<T>) -> some View {
+    func sync<T: Equatable>(_ binding: Binding<T>, _ focusState: FocusState<T>.Binding) -> some View {
         onChange(of: binding.wrappedValue) { _, newValue in
             focusState.wrappedValue = newValue
         }
