@@ -33,20 +33,18 @@ struct DLButton: View {
                 switch type {
                 case .icon(let systemName):
                     Image(systemName: systemName)
-                        .font(.DL.button)
                         .frame(width: 44, height: 44)
-                        .background(Color.Semantic.Background.tertiary)
-                        .clipShape(Circle())
 
                 case .text(let label):
                     Text(label)
-                        .font(.DL.button)
                         .padding(.horizontal, 18)
                         .frame(height: 44)
-                        .background(Color.Semantic.Background.tertiary)
-                        .clipShape(Capsule())
                 }
             }
+            .frame(maxWidth: isFullWidth ? .infinity : nil)
+            .font(.DL.button)
+            .background(Color.Semantic.Background.tertiary)
+            .clipShape(Capsule())
             .foregroundStyle(Color.Semantic.Text.inversePrimary)
             .shadow()
         }
@@ -58,5 +56,10 @@ struct DLButton: View {
         DLButton(.icon("plus")) {}
 
         DLButton(.text("追加する")) {}
+
+        DLButton(.icon("plus"), isFullWidth: true) {}
+
+        DLButton(.text("追加する"), isFullWidth: true) {}
     }
+    .padding()
 }
