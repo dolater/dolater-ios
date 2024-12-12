@@ -71,6 +71,16 @@
         }
       }
     },
+    "Mark as Complete" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了としてマークする"
+          }
+        }
+      }
+    },
     "OR" : {
       "localizations" : {
         "ja" : {

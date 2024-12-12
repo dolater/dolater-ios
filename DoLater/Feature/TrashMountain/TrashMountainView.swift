@@ -46,6 +46,9 @@ struct TrashMountainView: View {
                         TrashView(task: task)
                             .rotationEffect(.radians(-rotation))
                             .draggable(task)
+                            .contextMenu {
+                                Button("Mark as Complete", systemImage: "checkmark.square") {}
+                            }
                             .position(scene.convertPoint(toView: position))
                     }
                 }

@@ -39,13 +39,14 @@ struct DLDialog<Content>: View where Content : View {
 }
 
 #Preview {
-    @Previewable @State var text = ""
+    @Previewable @State var text: String = ""
+    @Previewable @State var isFocused: Bool = false
 
     DLDialog(
         title: "あとまわしリンクを追加",
         button: DLButton(.text("追加する"), isFullWidth: true) {}
     ) {
-        DLTextField("https://", text: $text)
+        DLTextField("https://", text: $text, isFocused: $isFocused)
     }
     .padding()
 }

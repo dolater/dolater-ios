@@ -33,7 +33,7 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                             presenter.dispatch(.onPlusButtonTapped)
                         }
                     }
-                    .onChange(of: presenter.state.selection) { oldValue, newValue in
+                    .onChange(of: presenter.state.selection) { _, _ in
                         presenter.dispatch(.onSelectedTabChanged)
                     }
                 }
@@ -46,7 +46,11 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                                 presenter.dispatch(.onAddTaskButtonTapped)
                             }
                         ) {
-                            DLTextField("https://", text: $presenter.state.addingURLString)
+                            DLTextField(
+                                "https://",
+                                text: $presenter.state.addingURLString,
+                                isFocused: .constant(true)
+                            )
                         }
                         .padding(24)
                     }
