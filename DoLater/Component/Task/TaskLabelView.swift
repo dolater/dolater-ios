@@ -8,10 +8,19 @@
 import SwiftUI
 
 struct TaskLabelView: View {
-    private let title: String
-    private let imageURL: URL?
+    private let url: URL?
+    @State private var title: String
+    @State private var imageURL: URL?
+    @State private var isTitleLoading: Bool = false
+
+    init(url: URL) {
+        self.url = url
+        self.title = ""
+        self.imageURL = nil
+    }
 
     init(title: String, imageURL: URL?) {
+        self.url = nil
         self.title = title
         self.imageURL = imageURL
     }
@@ -21,7 +30,9 @@ struct TaskLabelView: View {
             AsyncImage(url: imageURL) { phase in
                 switch phase {
                 case .empty:
-                    globe
+                    Circle()
+                        .fill(Color.Semantic.Text.secondary)
+                        .frame(width: 16, height: 16)
 
                 case .success(let image):
                     image
@@ -37,10 +48,24 @@ struct TaskLabelView: View {
                 }
             }
 
-            Text(title)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-                .font(.DL.note1)
+            if isTitleLoading {
+                VStack(spacing: 2) {
+                    Rectangle()
+                        .fill(Color.Semantic.Text.secondary)
+                        .padding(1)
+                    Rectangle()
+                        .fill(Color.Semantic.Text.secondary)
+                        .padding(1)
+                }
+                .frame(maxWidth: .infinity, maxHeight: 26)
+            } else {
+                Text(title)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .font(.DL.note1)
+                    .lineSpacing(2)
+                    .frame(height: 26, alignment: .leading)
+            }
         }
         .foregroundStyle(Color.Semantic.Text.primary)
         .padding(.vertical, 4)
@@ -48,6 +73,19 @@ struct TaskLabelView: View {
         .background(Color.Semantic.Background.secondary)
         .clipShape(Capsule())
         .shadow()
+        .task {
+            guard let url else {
+                return
+            }
+            imageURL = url.favicon
+            isTitleLoading = true
+            defer { isTitleLoading = false }
+            do {
+                title = try await HTTPMetadata.getPageTitle(for: url)
+            } catch {
+                title = ""
+            }
+        }
     }
 
     private var globe: some View {
@@ -60,7 +98,6 @@ struct TaskLabelView: View {
 
 #Preview {
     TaskLabelView(
-        title: DLTask.mock1.title,
-        imageURL: DLTask.mock1.faviconURL
+        url: DLTask.mock1.url
     )
 }

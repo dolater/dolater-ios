@@ -31,4 +31,27 @@ final class TrashMountainScene: SKScene {
             }
         }
     }
+
+    func addBinNode(radius: CGFloat) {
+        let node = SKShapeNode(circleOfRadius: radius)
+        node.name = "bin"
+        node.position = CGPoint(x: frame.minX + 80, y: frame.minY)
+        node.physicsBody = SKPhysicsBody(circleOfRadius: radius)
+        node.strokeColor = .clear
+        node.physicsBody?.affectedByGravity = false
+        node.physicsBody?.isDynamic = false
+        addChild(node)
+        binPosition = node.position
+    }
+
+    func addTrashNode(task: DLTask) {
+        let node = SKShapeNode(circleOfRadius: task.radius)
+        node.name = task.id.uuidString
+        node.position = CGPoint(x: frame.midX, y: frame.maxY - task.size - 20)
+        node.physicsBody = SKPhysicsBody(circleOfRadius: task.radius)
+        node.strokeColor = .clear
+        addChild(node)
+        trashPositions[task.id.uuidString] = node.position
+        trashRotations[task.id.uuidString] = node.zRotation
+    }
 }

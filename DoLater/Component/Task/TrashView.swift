@@ -15,12 +15,12 @@ struct TrashView: View {
     }
 
     var body: some View {
-        task.status.image
+        task.trashImage
             .resizable()
             .scaledToFit()
             .frame(width: task.size, height: task.size)
             .overlay {
-                TaskLabelView(title: task.title, imageURL: task.faviconURL)
+                TaskLabelView(url: task.url)
                     .frame(width: task.size * 1.2)
             }
     }
