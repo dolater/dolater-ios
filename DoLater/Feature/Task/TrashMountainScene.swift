@@ -55,6 +55,16 @@ final class TrashMountainScene: SKScene, Sendable {
         trashRotations[node.name ?? ""] = node.zRotation
     }
 
+    func addShakeAction() {
+        enumerateChildNodes(withName: "trash_[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}") { node, _ in
+            let clockwiseAction = SKAction.rotate(byAngle: .pi / 180, duration: 0.1)
+            let counterClockwiseAction = SKAction.rotate(byAngle: -.pi / 180, duration: 0.1)
+            let allAction = SKAction.sequence([clockwiseAction, counterClockwiseAction])
+            let actionLoop = SKAction.repeatForever(allAction)
+            node.run(actionLoop)
+        }
+    }
+
     func removeBinNode() {
         childNode(withName: "bin")?.removeFromParent()
     }

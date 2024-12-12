@@ -100,5 +100,6 @@ private extension TaskListPresenter {
         state.tasks.forEach { task in
             state.scene.addTrashNode(task: task)
         }
+        state.scene.addShakeAction()
     }
 }
