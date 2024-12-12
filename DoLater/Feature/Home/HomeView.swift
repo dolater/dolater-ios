@@ -17,8 +17,12 @@ struct HomeView<Environment: EnvironmentProtocol>: View {
     }
 
     var body: some View {
-        TrashMountainView()
-            .sync($path, $presenter.state.path)
+        NavigationStack(path: $presenter.state.path) {
+            TrashMountainView()
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .background(Color.Semantic.Background.primary)
+        }
+        .sync($path, $presenter.state.path)
     }
 }
 

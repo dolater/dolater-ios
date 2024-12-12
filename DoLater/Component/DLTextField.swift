@@ -19,6 +19,7 @@ struct DLTextField: View {
     var body: some View {
         TextField(label, text: $text)
             .textFieldStyle(.roundedBorder)
+            .colorScheme(.light)
     }
 }
 

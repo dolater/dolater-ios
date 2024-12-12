@@ -17,6 +17,8 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var selection: TabBarItem = .home
         var homeNavigationPath: NavigationPath = .init()
         var accountNavigationPath: NavigationPath = .init()
+        var isAddTaskDialogPresented: Bool = false
+        var addingURLString: String = ""
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -28,7 +30,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
     enum Action: Sendable {
         case onAppear
         case onOpenURL(URL)
+        case onSelectedTabChanged
         case onPlusButtonTapped
+        case onAddTaskButtonTapped
     }
 
     var state: State = .init()
@@ -67,8 +71,14 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case .onOpenURL(let url):
             await onOpenURL(url)
 
+        case .onSelectedTabChanged:
+            await onSelectedTabChanged()
+
         case .onPlusButtonTapped:
             await onPlusButtonTapped()
+
+        case .onAddTaskButtonTapped:
+            await onAddTaskButtonTapped()
         }
     }
 }
@@ -89,7 +99,7 @@ extension ContentPresenter {
             return
         }
         let pathComponents = components.path.split(separator: "/")
-        let quetyItems = components.queryItems
+        let _ = components.queryItems
         switch pathComponents.first {
         case "users":
             state.selection = .account
@@ -99,6 +109,19 @@ extension ContentPresenter {
         }
     }
 
+    fileprivate func onSelectedTabChanged() async {
+        state.isAddTaskDialogPresented = false
+    }
+
     fileprivate func onPlusButtonTapped() async {
+        state.selection = .home
+        state.isAddTaskDialogPresented = true
+    }
+
+    fileprivate func onAddTaskButtonTapped() async {
+        guard let url = URL(string: state.addingURLString) else {
+            return
+        }
+        state.isAddTaskDialogPresented = false
     }
 }

@@ -17,8 +17,12 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
     }
 
     var body: some View {
-        DLButton(.text("Sign Out")) {
-            presenter.dispatch(.onSignOutButtonTapped)
+        NavigationStack(path: $presenter.state.path) {
+            DLButton(.text("Sign Out")) {
+                presenter.dispatch(.onSignOutButtonTapped)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.Semantic.Background.primary)
         }
         .sync($path, $presenter.state.path)
     }

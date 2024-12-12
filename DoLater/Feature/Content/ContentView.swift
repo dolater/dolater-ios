@@ -33,6 +33,23 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                             presenter.dispatch(.onPlusButtonTapped)
                         }
                     }
+                    .onChange(of: presenter.state.selection) { oldValue, newValue in
+                        presenter.dispatch(.onSelectedTabChanged)
+                    }
+                }
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .overlay {
+                    if presenter.state.isAddTaskDialogPresented {
+                        DLDialog(
+                            title: "あとまわしリンクを追加",
+                            button: DLButton(.text("追加する"), isFullWidth: true) {
+                                presenter.dispatch(.onAddTaskButtonTapped)
+                            }
+                        ) {
+                            DLTextField("https://", text: $presenter.state.addingURLString)
+                        }
+                        .padding(24)
+                    }
                 }
 
             case .unauthenticated:
