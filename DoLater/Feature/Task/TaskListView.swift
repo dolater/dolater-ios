@@ -27,23 +27,28 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     }
 
     var body: some View {
-        SpriteView(
-            scene: presenter.state.scene,
-            options: [.allowsTransparency],
-            debugOptions: debugOptions
-        )
-        .overlay {
-            binView
-        }
-        .overlay {
-            if presenter.state.activeTasks.isEmpty {
-                noTaskMessageView
+        Group {
+            if presenter.state.getActiveTasksStatus == .loading {
+                ProgressView()
             } else {
-                tasksView
+                SpriteView(
+                    scene: presenter.state.scene,
+                    options: [.allowsTransparency],
+                    debugOptions: debugOptions
+                )
+                .overlay {
+                    binView
+                }
+                .overlay {
+                    if presenter.state.activeTasks.isEmpty {
+                        noTaskMessageView
+                    } else {
+                        tasksView
+                    }
+                }
+                .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
             }
         }
-        .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
-        .errorAlert(dataStatus: presenter.state.getRemovedTasksStatus)
         .task {
             await presenter.dispatch(.onAppear)
         }
