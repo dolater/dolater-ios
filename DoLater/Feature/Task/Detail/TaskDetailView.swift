@@ -33,16 +33,9 @@ struct TaskDetailView: View {
                     title = task.url.host() ?? ""
                 }
             }
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color.Semantic.Background.primary, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(title)
-                        .font(.DL.body1)
-                        .foregroundStyle(Color.Semantic.Text.primary)
-                        .lineLimit(1)
-                }
                 ToolbarItem(placement: .confirmationAction) {
                     if task.isCompleted || task.isArchived {
                         Button("未完了にする") {
