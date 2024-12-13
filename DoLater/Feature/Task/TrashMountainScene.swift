@@ -35,7 +35,7 @@ final class TrashMountainScene: SKScene, Sendable {
     func addBinNode(radius: CGFloat) {
         let node = SKShapeNode(circleOfRadius: radius)
         node.name = "bin"
-        node.position = CGPoint(x: frame.minX + 80, y: frame.minY)
+        node.position = CGPoint(x: frame.minX + radius, y: frame.minY)
         node.physicsBody = SKPhysicsBody(circleOfRadius: radius)
         node.strokeColor = .clear
         node.physicsBody?.affectedByGravity = false
@@ -44,7 +44,7 @@ final class TrashMountainScene: SKScene, Sendable {
         binPosition = node.position
     }
 
-    func addTrashNode(task: DLTask) {
+    func addTrashNode(for task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
         node.name = task.displayName
         node.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -56,7 +56,7 @@ final class TrashMountainScene: SKScene, Sendable {
     }
 
     func addShakeAction() {
-        enumerateChildNodes(withName: "trash_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}") { node, _ in
+        enumerateChildNodes(withName: "\(DLTask.namePrefix)\(String.uuidRegex)") { node, _ in
             let clockwiseAction = SKAction.rotate(byAngle: .pi / 180, duration: 0.1)
             let counterClockwiseAction = SKAction.rotate(byAngle: -.pi / 180, duration: 0.1)
             let allAction = SKAction.sequence([clockwiseAction, counterClockwiseAction])
@@ -69,9 +69,18 @@ final class TrashMountainScene: SKScene, Sendable {
         childNode(withName: "bin")?.removeFromParent()
     }
 
+    func removeTrashNode(for task: DLTask) {
+        guard let node = childNode(withName: task.displayName) else {
+            return
+        }
+        trashPositions.removeValue(forKey: node.name ?? "")
+        trashRotations.removeValue(forKey: node.name ?? "")
+        node.removeFromParent()
+    }
+
     func removeTrashNodes() {
         for child in children {
-            guard child.name?.hasPrefix("task_") ?? false else {
+            guard child.name?.hasPrefix(DLTask.namePrefix) ?? false else {
                 continue
             }
             child.removeFromParent()

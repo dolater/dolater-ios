@@ -7,24 +7,33 @@
 
 import Foundation
 
+typealias DLTask = Components.Schemas.Task
+
 extension Components.Schemas.TaskPool {
-    static let mock1 = Components.Schemas.TaskPool(
+    static let mockActive = Components.Schemas.TaskPool(
         id: UUID().uuidString,
         _type: .active
     )
 
-    static let mock2 = Components.Schemas.TaskPool(
+    static let mockArchived = Components.Schemas.TaskPool(
         id: UUID().uuidString,
         _type: .archived
     )
 
-    static let mock3 = Components.Schemas.TaskPool(
+    static let mockBin = Components.Schemas.TaskPool(
         id: UUID().uuidString,
         _type: .bin
     )
 
-    static let mock4 = Components.Schemas.TaskPool(
+    static let mockPending = Components.Schemas.TaskPool(
         id: UUID().uuidString,
         _type: .pending
     )
+
+    static let mocks: [Components.Schemas.TaskPool] = [
+        .mockActive,
+        .mockArchived,
+        .mockBin,
+        .mockPending,
+    ]
 }

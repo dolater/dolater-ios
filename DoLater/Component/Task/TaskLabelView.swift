@@ -13,6 +13,12 @@ struct TaskLabelView: View {
     @State private var imageURL: URL?
     @State private var isTitleLoading: Bool = false
 
+    init(url: String) {
+        self.url = URL(string: url)
+        self.title = ""
+        self.imageURL = nil
+    }
+
     init(url: URL) {
         self.url = url
         self.title = ""
@@ -97,7 +103,5 @@ struct TaskLabelView: View {
 }
 
 #Preview {
-    TaskLabelView(
-        url: DLTask.mock1.url
-    )
+    TaskLabelView(url: DLTask.mock1.url)
 }

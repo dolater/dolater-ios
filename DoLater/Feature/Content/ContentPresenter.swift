@@ -98,7 +98,6 @@ extension ContentPresenter {
             state.authStatus = .unauthenticated
             return
         }
-        state.authStatus = .authenticated(user)
         do {
             state.registerMeStatus = .default
             try await accountService.registerMe()
@@ -106,6 +105,7 @@ extension ContentPresenter {
         } catch {
             state.registerMeStatus = .failed(.init(error))
         }
+        state.authStatus = .authenticated(user)
     }
 
     fileprivate func onOpenURL(_ url: URL) async {

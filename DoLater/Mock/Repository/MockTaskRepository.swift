@@ -8,12 +8,13 @@
 final actor MockTaskRepository: TaskRepositoryProtocol {
     init() {}
 
-    func getTasks() async throws -> [Components.Schemas.Task] {
-        [
-            .mock1,
-            .mock2,
-            .mock3,
-        ]
+    func getTasks(poolId: Components.Parameters.poolId?) async throws -> [Components.Schemas.Task] {
+        if let poolId {
+            return Components.Schemas.Task.mocks.filter { task in
+                task.pool.id == poolId
+            }
+        }
+        return Components.Schemas.Task.mocks
     }
 
     func createTask(_ task: Components.Schemas.CreateTaskInput) async throws

@@ -23,20 +23,6 @@ struct HomeView<Environment: EnvironmentProtocol>: View {
                 .background(Color.Semantic.Background.primary)
                 .navigationDestination(for: HomePresenter<Environment>.State.Path.self) { _ in
                 }
-                .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
-                    switch destination {
-                    case .detail(let task):
-                        TaskDetailView(task: task) {
-                        } onMarkAsToDo: {
-                        }
-
-                    case .bin:
-                        Image.binFull
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300)
-                    }
-                }
         }
         .sync($path, $presenter.state.path)
     }

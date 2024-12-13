@@ -6,7 +6,7 @@
 //
 
 protocol TaskRepositoryProtocol: Actor {
-    func getTasks() async throws -> [Components.Schemas.Task]
+    func getTasks(poolId: Components.Parameters.poolId?) async throws -> [Components.Schemas.Task]
 
     func createTask(_ task: Components.Schemas.CreateTaskInput) async throws
         -> Components.Schemas.Task
@@ -22,10 +22,10 @@ protocol TaskRepositoryProtocol: Actor {
 final actor TaskRepositoryImpl: TaskRepositoryProtocol {
     init() {}
 
-    func getTasks() async throws -> [Components.Schemas.Task] {
+    func getTasks(poolId: Components.Parameters.poolId?) async throws -> [Components.Schemas.Task] {
         do {
             let client = try await Client.build()
-            let response = try await client.getTasks()
+            let response = try await client.getTasks(query: .init(poolId: poolId))
             switch response {
             case .ok(let okResponse):
                 if case let .json(tasks) = okResponse.body {

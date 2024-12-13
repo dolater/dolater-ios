@@ -9,21 +9,10 @@ final actor MockTaskPoolRepository: TaskPoolRepositoryProtocol {
     init() {}
 
     func getPools() async throws -> [Components.Schemas.TaskPool] {
-        [
-            .mock1,
-            .mock2,
-            .mock3,
-        ]
-    }
-
-    func createPool() async throws -> Components.Schemas.TaskPool {
-        .mock1
+        Components.Schemas.TaskPool.mocks
     }
 
     func getPool(id: Components.Parameters.id) async throws -> Components.Schemas.TaskPool {
-        .mock1
-    }
-
-    func deletePool(id: Components.Parameters.id) async throws {
+        .mockActive
     }
 }

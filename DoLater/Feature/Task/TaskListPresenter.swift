@@ -13,8 +13,11 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
     struct State: Equatable {
         var path: NavigationPath
         var scene: TrashMountainScene
-        var tasks: [DLTask] = DLTask.mocks.filter { !$0.isArchived }.sorted { $0.createdAt < $1.createdAt }
-        var archivedTasks: [DLTask] = DLTask.mocks.filter { $0.isArchived }
+        var activeTasks: [DLTask] = []
+        var renderedTasks: [DLTask] = []
+        var removedTasks: [DLTask] = []
+        var getActiveTasksStatus: DataStatus = .default
+        var getRemovedTasksStatus: DataStatus = .default
 
         enum Path: Hashable {
             case detail(DLTask)
@@ -33,6 +36,8 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
     }
 
     var state: State
+
+    private let taskService: TaskService<Environment> = .init()
 
     init(path: NavigationPath) {
         let scene = TrashMountainScene()
@@ -75,9 +80,23 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
 
 private extension TaskListPresenter {
     func onAppear() async {
-        if state.scene.children.filter({ child in
-            child.name?.hasPrefix("trash_") ?? false
-        }).count != state.tasks.count {
+        do {
+            state.getActiveTasksStatus = .loading
+            state.activeTasks = try await taskService.getActiveTasks()
+            state.getActiveTasksStatus = .loaded
+        } catch {
+            state.getActiveTasksStatus = .failed(.init(error))
+        }
+
+        do {
+            state.getRemovedTasksStatus = .loading
+            state.removedTasks = try await taskService.getActiveTasks()
+            state.getRemovedTasksStatus = .loaded
+        } catch {
+            state.getRemovedTasksStatus = .failed(.init(error))
+        }
+
+        if state.activeTasks != state.renderedTasks {
             await refreshNodes()
         }
     }
@@ -87,12 +106,12 @@ private extension TaskListPresenter {
             state.scene.childNode(withName: task.displayName)
         }
         state.scene.removeChildren(in: nodes)
-        state.tasks.removeAll(where: { task in
+        state.activeTasks.removeAll(where: { task in
             droppedTasks.contains { droppedTask in
                 droppedTask.id == task.id
             }
         })
-        state.archivedTasks.append(contentsOf: droppedTasks)
+        state.removedTasks.append(contentsOf: droppedTasks)
     }
 
     func onBinTapped() async {
@@ -104,27 +123,28 @@ private extension TaskListPresenter {
     }
 
     func onMarkAsCompletedButtonTapped(_ task: DLTask) async {
-        guard var updatedTask = state.tasks.first(where: { $0.id == task.id }) else {
+        guard var updatedTask = state.activeTasks.first(where: { $0.id == task.id }) else {
             return
         }
         updatedTask.completedAt = .now
-        state.tasks.removeAll(where: { $0.id == task.id })
-        state.tasks.append(updatedTask)
-        state.tasks.sort { $0.createdAt < $1.createdAt }
+        state.activeTasks.removeAll(where: { $0.id == task.id })
+        state.activeTasks.append(updatedTask)
+        state.activeTasks.sort { $0.createdAt < $1.createdAt }
     }
 
     func onMarkAsToDoButtonTapped(_ task: DLTask) async {
-        guard var updatedTask = state.tasks.first(where: { $0.id == task.id }) else {
+        guard var updatedTask = state.activeTasks.first(where: { $0.id == task.id }) else {
             return
         }
         updatedTask.completedAt = nil
-        state.tasks.removeAll(where: { $0.id == task.id })
-        state.tasks.append(updatedTask)
-        state.tasks.sort { $0.createdAt < $1.createdAt }
+        state.activeTasks.removeAll(where: { $0.id == task.id })
+        state.activeTasks.append(updatedTask)
+        state.activeTasks.sort { $0.createdAt < $1.createdAt }
     }
 
     func onDeleteButtonTapped(_ task: DLTask) async {
-        state.tasks.removeAll(where: { $0.id == task.id })
+        state.activeTasks.removeAll(where: { $0.id == task.id })
+        state.scene.removeTrashNode(for: task)
     }
 }
 
@@ -133,8 +153,10 @@ private extension TaskListPresenter {
         state.scene.removeBinNode()
         state.scene.removeTrashNodes()
         state.scene.addBinNode(radius: 172 / 2)
-        state.tasks.forEach { task in
-            state.scene.addTrashNode(task: task)
+        state.renderedTasks = []
+        state.activeTasks.forEach { task in
+            state.scene.addTrashNode(for: task)
+            state.renderedTasks.append(task)
         }
         state.scene.addShakeAction()
     }

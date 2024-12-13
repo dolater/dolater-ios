@@ -36,20 +36,36 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
             binView
         }
         .overlay {
-            if presenter.state.tasks.isEmpty {
+            if presenter.state.activeTasks.isEmpty {
                 noTaskMessageView
             } else {
                 tasksView
             }
         }
+        .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
+        .errorAlert(dataStatus: presenter.state.getRemovedTasksStatus)
         .task {
             await presenter.dispatch(.onAppear)
         }
         .sync($path, $presenter.state.path)
+        .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
+            switch destination {
+            case .detail(let task):
+                TaskDetailView(task: task) {
+                } onMarkAsToDo: {
+                }
+
+            case .bin:
+                Image.binFull
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300)
+            }
+        }
     }
 
     private var binView: some View {
-        BinView(isFull: !presenter.state.archivedTasks.isEmpty)
+        BinView(isFull: !presenter.state.removedTasks.isEmpty)
             .dropDestination(for: DLTask.self) { droppedTasks, droppedPoint in
                 for task in droppedTasks {
                     if !task.isCompleted {
@@ -72,7 +88,7 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     }
 
     private var tasksView: some View {
-        ForEach(presenter.state.tasks) { task in
+        ForEach(presenter.state.activeTasks) { task in
             if let position = presenter.state.scene.trashPositions[task.displayName],
                let rotation = presenter.state.scene.trashRotations[task.displayName] {
                 taskView(

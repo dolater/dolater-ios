@@ -9,45 +9,47 @@ import SwiftUI
 
 struct TaskDetailView: View {
     private let task: DLTask
-    private let onMarkAsDoneAction: () -> Void
+    private let onMarkAsCompletedAction: () -> Void
     private let onMarkAsToDoAction: () -> Void
     @State private var title: String
 
     init(
         task: DLTask,
-        onMarkAsDone onMarkAsDoneAction: @escaping () -> Void,
+        onMarkAsCompleted onMarkAsCompletedAction: @escaping () -> Void,
         onMarkAsToDo onMarkAsToDoAction: @escaping () -> Void
     ) {
         self.task = task
-        self.onMarkAsDoneAction = onMarkAsDoneAction
+        self.onMarkAsCompletedAction = onMarkAsCompletedAction
         self.onMarkAsToDoAction = onMarkAsToDoAction
-        title = task.url.host() ?? ""
+        title = URL(string: task.url)?.host() ?? ""
     }
 
     var body: some View {
-        WebView(url: task.url)
-            .task {
-                do {
-                    title = try await HTTPMetadata.getPageTitle(for: task.url)
-                } catch {
-                    title = task.url.host() ?? ""
+        if let url = URL(string: task.url) {
+            WebView(url: url)
+                .task {
+                    do {
+                        title = try await HTTPMetadata.getPageTitle(for: url)
+                    } catch {
+                        title = url.host() ?? ""
+                    }
                 }
-            }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    if task.isCompleted || task.isArchived {
-                        Button("未完了にする") {
-                            onMarkAsToDoAction()
-                        }
-                    } else {
-                        Button("完了にする") {
-                            onMarkAsDoneAction()
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        if task.isCompleted || task.isArchived {
+                            Button("未完了にする") {
+                                onMarkAsToDoAction()
+                            }
+                        } else {
+                            Button("完了にする") {
+                                onMarkAsCompletedAction()
+                            }
                         }
                     }
                 }
-            }
+        }
     }
 }
 
