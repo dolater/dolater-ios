@@ -9,10 +9,18 @@ import SwiftUI
 
 struct TaskDetailView: View {
     private let task: DLTask
+    private let onMarkAsDoneAction: () -> Void
+    private let onMarkAsToDoAction: () -> Void
     @State private var title: String
 
-    init(task: DLTask) {
+    init(
+        task: DLTask,
+        onMarkAsDone onMarkAsDoneAction: @escaping () -> Void,
+        onMarkAsToDo onMarkAsToDoAction: @escaping () -> Void
+    ) {
         self.task = task
+        self.onMarkAsDoneAction = onMarkAsDoneAction
+        self.onMarkAsToDoAction = onMarkAsToDoAction
         title = task.url.host() ?? ""
     }
 
@@ -25,12 +33,26 @@ struct TaskDetailView: View {
                     title = task.url.host() ?? ""
                 }
             }
-            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.Semantic.Background.primary, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(title)
+                        .font(.DL.body1)
+                        .foregroundStyle(Color.Semantic.Text.primary)
+                        .lineLimit(1)
+                }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("完了にする") {}
+                    if task.isCompleted || task.isArchived {
+                        Button("未完了にする") {
+                            onMarkAsToDoAction()
+                        }
+                    } else {
+                        Button("完了にする") {
+                            onMarkAsDoneAction()
+                        }
+                    }
                 }
             }
     }
@@ -38,6 +60,8 @@ struct TaskDetailView: View {
 
 #Preview {
     NavigationStack {
-        TaskDetailView(task: .mock1)
+        TaskDetailView(task: .mock1) {
+        } onMarkAsToDo: {
+        }
     }
 }

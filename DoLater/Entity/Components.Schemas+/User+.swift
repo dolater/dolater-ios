@@ -9,13 +9,20 @@ import FirebaseAuth
 
 extension Components.Schemas.User {
     static let mock1 = Components.Schemas.User(
-        id: FirebaseAuth.User.mock.uid,
-        displayName: FirebaseAuth.User.mock.displayName ?? "",
-        photoURL: FirebaseAuth.User.mock.photoURL?.absoluteString ?? "",
+        id: FirebaseAuth.User.mock1.uid,
+        displayName: FirebaseAuth.User.mock1.displayName ?? "",
+        photoURL: FirebaseAuth.User.mock1.photoURL?.absoluteString ?? "",
         activeTaskPool: .mock1,
         archivedTaskPool: .mock2,
-        pendingTaskPool: .mock3,
-        followings: [],
-        followers: []
+        pendingTaskPool: .mock3
+    )
+
+    static let mock2 = Components.Schemas.User(
+        id: FirebaseAuth.User.mock2.uid,
+        displayName: FirebaseAuth.User.mock2.displayName ?? "",
+        photoURL: FirebaseAuth.User.mock2.photoURL?.absoluteString ?? "",
+        activeTaskPool: .mock1,
+        archivedTaskPool: .mock2,
+        pendingTaskPool: .mock3
     )
 }

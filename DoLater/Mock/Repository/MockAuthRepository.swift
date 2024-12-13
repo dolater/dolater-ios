@@ -11,7 +11,7 @@ final actor MockAuthRepository: AuthRepositoryProtocol {
     init() {}
 
     func getCurrentUser() async throws -> FirebaseAuth.User {
-        return .mock
+        .mock1
     }
 
     func update(displayName: String, for user: FirebaseAuth.User) async throws {

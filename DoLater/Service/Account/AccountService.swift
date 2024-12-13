@@ -12,6 +12,15 @@ import SwiftUI
 final actor AccountService<Environment: EnvironmentProtocol> {
     init() {}
 
+    func registerMe() async throws {
+        _ = try await Environment.shared.userRepository.createUser()
+    }
+
+    func getMe() async throws -> Components.Schemas.User {
+        let user = try await Environment.shared.authRepository.getCurrentUser()
+        return try await Environment.shared.userRepository.getUser(id: user.uid)
+    }
+
     /// Make Sign in with Apple Request
     /// - Parameter request: Sign in with Apple Request
     /// - Returns: Nonce
@@ -66,6 +75,10 @@ final actor AccountService<Environment: EnvironmentProtocol> {
             displayName: displayName,
             for: user
         )
+        _ = try await Environment.shared.userRepository.updateUser(
+            .init(displayName: displayName),
+            id: user.uid
+        )
     }
 
     @MainActor
@@ -91,6 +104,10 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         try await Environment.shared.authRepository.update(
             photoURL: url,
             for: user
+        )
+        _ = try await Environment.shared.userRepository.updateUser(
+            .init(photoURL: url.absoluteString),
+            id: user.uid
         )
     }
 

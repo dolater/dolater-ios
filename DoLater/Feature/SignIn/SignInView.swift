@@ -28,7 +28,7 @@ struct SignInView<Environment: EnvironmentProtocol>: View {
                     Divider()
                 }
                 Text("OR")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.Semantic.Text.secondary)
                     .font(.caption)
                 VStack {
                     Divider()
@@ -44,6 +44,7 @@ struct SignInView<Environment: EnvironmentProtocol>: View {
                     SecureField("Password", text: $presenter.state.password)
                 }
                 .textFieldStyle(.roundedBorder)
+                .colorScheme(.light)
                 Button("Sign In") {
                     presenter.dispatch(.onSignInButtonTapped)
                 }

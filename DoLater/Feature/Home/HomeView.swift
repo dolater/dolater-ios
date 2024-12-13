@@ -26,7 +26,9 @@ struct HomeView<Environment: EnvironmentProtocol>: View {
                 .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
                     switch destination {
                     case .detail(let task):
-                        TaskDetailView(task: task)
+                        TaskDetailView(task: task) {
+                        } onMarkAsToDo: {
+                        }
 
                     case .bin:
                         Image.binFull

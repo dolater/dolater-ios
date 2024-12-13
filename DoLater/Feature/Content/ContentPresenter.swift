@@ -13,6 +13,7 @@ import SwiftUI
 final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
     struct State: Equatable {
         var authStatus: AuthStatus = .unchecked
+        var registerMeStatus: DataStatus = .default
         var isDebugScreenPresented: Bool = false
         var selection: TabBarItem = .home
         var homeNavigationPath: NavigationPath = .init()
@@ -34,11 +35,13 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case onOpenURL(URL)
         case onSelectedTabChanged
         case onPlusButtonTapped
-        case onAddTaskButtonTapped
-        case onAreaAroundAddTaskDialogTapped
+        case onAddingTaskDismissed
+        case onAddingTaskConfirmed
     }
 
     var state: State = .init()
+
+    private let accountService: AccountService<Environment> = .init()
 
     private var authListener: NSObjectProtocol?
 
@@ -80,11 +83,11 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case .onPlusButtonTapped:
             await onPlusButtonTapped()
 
-        case .onAddTaskButtonTapped:
-            await onAddTaskButtonTapped()
+        case .onAddingTaskDismissed:
+            await onAddingTaskDismissed()
 
-        case .onAreaAroundAddTaskDialogTapped:
-            await onAreaAroundAddTaskDialogTapped()
+        case .onAddingTaskConfirmed:
+            await onAddingTaskConfirmed()
         }
     }
 }
@@ -96,6 +99,13 @@ extension ContentPresenter {
             return
         }
         state.authStatus = .authenticated(user)
+        do {
+            state.registerMeStatus = .default
+            try await accountService.registerMe()
+            state.registerMeStatus = .loaded
+        } catch {
+            state.registerMeStatus = .failed(.init(error))
+        }
     }
 
     fileprivate func onOpenURL(_ url: URL) async {
@@ -125,7 +135,14 @@ extension ContentPresenter {
         state.isAddingURLFocused = true
     }
 
-    fileprivate func onAddTaskButtonTapped() async {
+    fileprivate func onAddingTaskDismissed() async {
+        state.isAddTaskDialogPresented = false
+        state.isAddingURLFocused = false
+        state.addingURLString = ""
+        state.addingURLAlert = nil
+    }
+
+    fileprivate func onAddingTaskConfirmed() async {
         guard
             let url = URL(string: state.addingURLString),
             UIApplication.shared.canOpenURL(url),
@@ -134,13 +151,6 @@ extension ContentPresenter {
             state.addingURLAlert = "有効なURLを入力してください"
             return
         }
-        state.isAddTaskDialogPresented = false
-        state.isAddingURLFocused = false
-        state.addingURLString = ""
-        state.addingURLAlert = nil
-    }
-
-    fileprivate func onAreaAroundAddTaskDialogTapped() async {
         state.isAddTaskDialogPresented = false
         state.isAddingURLFocused = false
         state.addingURLString = ""

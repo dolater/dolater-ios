@@ -11,7 +11,7 @@ import FirebaseCore
 import FirebaseMessaging
 import SwiftUI
 
-final class AppDelegate: NSObject, UIApplicationDelegate {
+final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     private let gcmMessageIDKey = "gcm.message_id"
     private let fcmURLKey = "url"
 
@@ -99,9 +99,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             "Unable to register for remote notifications: \(error.localizedDescription)"
         )
     }
-}
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
+    // MARK: - UNUserNotificationCenterDelegate
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
@@ -125,9 +124,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             await UIApplication.shared.open(url)
         }
     }
-}
 
-extension AppDelegate: MessagingDelegate {
+    // MARK: - MessagingDelegate
     nonisolated func messaging(
         _ messaging: Messaging,
         didReceiveRegistrationToken fcmToken: String?
@@ -143,7 +141,7 @@ extension AppDelegate: MessagingDelegate {
             guard let fcmToken else {
                 return
             }
-            try await EnvironmentImpl.shared.messagingRepository.postFCMToken(
+            try await Environment.shared.messagingRepository.postFCMToken(
                 fcmToken,
                 timestamp: .now
             )
