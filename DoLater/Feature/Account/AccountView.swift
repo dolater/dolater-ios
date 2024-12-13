@@ -18,8 +18,13 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
 
     var body: some View {
         NavigationStack(path: $presenter.state.path) {
-            DLButton(.text("Sign Out")) {
-                presenter.dispatch(.onSignOutButtonTapped)
+            ScrollView {
+                LazyVStack {
+                    DLButton(.text("Sign Out")) {
+                        presenter.dispatch(.onSignOutButtonTapped)
+                    }
+                }
+                .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.Semantic.Background.primary)

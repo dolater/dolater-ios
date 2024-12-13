@@ -13,6 +13,8 @@ final class ShareModel: @unchecked Sendable {
     var extensionContext: NSExtensionContext?
     var url: URL?
 
+    //private let taskService: TaskService<EnvironmentImpl> = .init()
+
     func configure(context: NSExtensionContext?) {
         extensionContext = context
 
@@ -37,7 +39,17 @@ final class ShareModel: @unchecked Sendable {
     }
 
     func onSave() {
-        extensionContext?.completeRequest(returningItems: nil)
+        Task {
+            //guard let string = url?.absoluteString else {
+                //extensionContext?.cancelRequest(withError: ShareError.failedToGetURL)
+            //}
+            //do {
+                //try await taskService.addTask(.init(url: string))
+                extensionContext?.completeRequest(returningItems: nil)
+            //} catch {
+                //extensionContext?.cancelRequest(withError: error)
+            //}
+        }
     }
 
     func onCancel() {
