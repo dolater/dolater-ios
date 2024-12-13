@@ -11,10 +11,16 @@ import SwiftUI
 struct TaskListView<Environment: EnvironmentProtocol>: View {
     @State private var presenter: TaskListPresenter<Environment>
     @Binding private var path: NavigationPath
+    @Binding private var isAddTaskDialogPresented: Bool
     private let debugOptions: SpriteView.DebugOptions
 
-    init(path: Binding<NavigationPath>, isDebugMode: Bool = false) {
+    init(
+        path: Binding<NavigationPath>,
+        isAddTaskDialogPresented: Binding<Bool>,
+        isDebugMode: Bool = false
+    ) {
         _path = path
+        _isAddTaskDialogPresented = isAddTaskDialogPresented
         presenter = .init(path: path.wrappedValue)
         debugOptions = isDebugMode ? [
             .showsDrawCount,
@@ -47,12 +53,29 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                     }
                 }
                 .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
+                .errorAlert(dataStatus: presenter.state.updateTaskStatus)
+            }
+        }
+        .overlay {
+            if presenter.state.isAddTaskDialogPresented {
+                AddTaskView(
+                    status: presenter.state.addTaskStatus
+                ) {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        presenter.state.isAddTaskDialogPresented = false
+                    }
+                } onConfirm: { text in
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        presenter.dispatch(.onAddingTaskConfirmed(text))
+                    }
+                }
             }
         }
         .task {
             await presenter.dispatch(.onAppear)
         }
         .sync($path, $presenter.state.path)
+        .sync($isAddTaskDialogPresented, $presenter.state.isAddTaskDialogPresented)
         .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
             switch destination {
             case .detail(let task):
@@ -127,8 +150,13 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
 
 #Preview {
     @Previewable @State var path: NavigationPath = .init()
+    @Previewable @State var isAddTaskDialogPresented: Bool = false
 
     NavigationStack {
-        TaskListView<MockEnvironment>(path: $path, isDebugMode: true)
+        TaskListView<MockEnvironment>(
+            path: $path,
+            isAddTaskDialogPresented: $isAddTaskDialogPresented,
+            isDebugMode: true
+        )
     }
 }

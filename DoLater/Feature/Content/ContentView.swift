@@ -21,26 +21,10 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                     Group {
                         switch presenter.state.selection {
                         case .home:
-                            HomeView<Environment>(path: $presenter.state.homeNavigationPath)
-                                .overlay {
-                                    if presenter.state.isAddTaskDialogPresented {
-                                        AddTaskView(
-                                            text: $presenter.state.addingURLString,
-                                            isTextFieldFocused: $presenter.state.isAddingURLFocused,
-                                            errorText: presenter.state.addingURLAlert
-                                        ) {
-                                            withAnimation(.easeInOut(duration: 0.1)) {
-                                                presenter.state.isAddTaskDialogPresented = false
-                                                presenter.dispatch(.onAddingTaskDismissed)
-                                            }
-                                        } onConfirm: {
-                                            withAnimation(.easeInOut(duration: 0.1)) {
-                                                presenter.state.isAddTaskDialogPresented = false
-                                                presenter.dispatch(.onAddingTaskConfirmed)
-                                            }
-                                        }
-                                    }
-                                }
+                            HomeView<Environment>(
+                                path: $presenter.state.homeNavigationPath,
+                                isAddTaskDialogPresented: $presenter.state.isAddTaskDialogPresented
+                            )
 
                         case .account:
                             AccountView<Environment>(path: $presenter.state.accountNavigationPath)

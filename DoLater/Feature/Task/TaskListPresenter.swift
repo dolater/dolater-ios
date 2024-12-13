@@ -19,6 +19,8 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         var getActiveTasksStatus: DataStatus = .default
         var getRemovedTasksStatus: DataStatus = .default
         var updateTaskStatus: DataStatus = .default
+        var isAddTaskDialogPresented: Bool = false
+        var addTaskStatus: DataStatus = .default
 
         enum Path: Hashable {
             case detail(DLTask)
@@ -34,6 +36,7 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         case onMarkAsCompletedButtonTapped(DLTask)
         case onMarkAsToDoButtonTapped(DLTask)
         case onDeleteButtonTapped(DLTask)
+        case onAddingTaskConfirmed(String)
     }
 
     var state: State
@@ -75,6 +78,9 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
 
         case .onDeleteButtonTapped(let task):
             await onDeleteButtonTapped(task)
+
+        case .onAddingTaskConfirmed(let text):
+            await onAddingTaskConfirmed(text: text)
         }
     }
 }
@@ -103,23 +109,24 @@ private extension TaskListPresenter {
     }
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {
+        var successfullyDroppedTasks: [DLTask] = []
         for task in droppedTasks {
             do {
                 state.updateTaskStatus = .loading
                 let updatedTask = try await taskService.remove(taskId: task.id)
+                successfullyDroppedTasks.append(updatedTask)
                 state.updateTaskStatus = .loaded
             } catch {
                 state.updateTaskStatus = .failed(.init(error))
             }
         }
-        let nodes = droppedTasks.compactMap { task in
+        let nodes = successfullyDroppedTasks.compactMap { task in
             state.scene.childNode(withName: task.displayName)
         }
         state.scene.removeChildren(in: nodes)
+        let successfullyDroppedTaskIds = successfullyDroppedTasks.map(\.id)
         state.activeTasks.removeAll(where: { task in
-            droppedTasks.contains { droppedTask in
-                droppedTask.id == task.id
-            }
+            successfullyDroppedTaskIds.contains(task.id)
         })
         state.removedTasks.append(contentsOf: droppedTasks)
     }
@@ -168,6 +175,29 @@ private extension TaskListPresenter {
         } catch {
             state.updateTaskStatus = .failed(.init(error))
         }
+    }
+
+    func onAddingTaskConfirmed(text: String) async {
+        guard
+            let url = URL(string: text),
+            UIApplication.shared.canOpenURL(url),
+            !(url.host()?.isEmpty ?? true)
+        else {
+            state.addTaskStatus = .failed(.presenter(.task(.invalidURL)))
+            return
+        }
+        do {
+            state.addTaskStatus = .loading
+            let task = try await taskService.addTask(task: .init(url: url.absoluteString))
+            if task.isToDo {
+                state.activeTasks.append(task)
+                state.scene.addTrashNode(for: task)
+            }
+            state.addTaskStatus = .loaded
+        } catch {
+            state.addTaskStatus = .failed(.init(error))
+        }
+        state.isAddTaskDialogPresented = false
     }
 }
 

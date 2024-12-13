@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+typealias DLTask = Components.Schemas.Task
+
 extension Components.Schemas.Task: Identifiable, Transferable {
     var isPending: Bool {
         pool._type == .pending

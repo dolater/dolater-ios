@@ -7,8 +7,6 @@
 
 import Foundation
 
-typealias DLTask = Components.Schemas.Task
-
 extension Components.Schemas.TaskPool {
     static let mockActive = Components.Schemas.TaskPool(
         id: UUID().uuidString,

@@ -19,10 +19,6 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var homeNavigationPath: NavigationPath = .init()
         var accountNavigationPath: NavigationPath = .init()
         var isAddTaskDialogPresented: Bool = false
-        var isAddingURLFocused: Bool = false
-        var addingURLString: String = ""
-        var addingURLAlert: String?
-        var addTaskStatus: DataStatus = .default
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -36,8 +32,6 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case onOpenURL(URL)
         case onSelectedTabChanged
         case onPlusButtonTapped
-        case onAddingTaskDismissed
-        case onAddingTaskConfirmed
     }
 
     var state: State = .init()
@@ -84,12 +78,6 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
         case .onPlusButtonTapped:
             await onPlusButtonTapped()
-
-        case .onAddingTaskDismissed:
-            await onAddingTaskDismissed()
-
-        case .onAddingTaskConfirmed:
-            await onAddingTaskConfirmed()
         }
     }
 }
@@ -134,35 +122,5 @@ extension ContentPresenter {
     fileprivate func onPlusButtonTapped() async {
         state.selection = .home
         state.isAddTaskDialogPresented = true
-        state.isAddingURLFocused = true
-    }
-
-    fileprivate func onAddingTaskDismissed() async {
-        state.isAddTaskDialogPresented = false
-        state.isAddingURLFocused = false
-        state.addingURLString = ""
-        state.addingURLAlert = nil
-    }
-
-    fileprivate func onAddingTaskConfirmed() async {
-        guard
-            let url = URL(string: state.addingURLString),
-            UIApplication.shared.canOpenURL(url),
-            !(url.host()?.isEmpty ?? true)
-        else {
-            state.addingURLAlert = "有効なURLを入力してください"
-            return
-        }
-        do {
-            state.addTaskStatus = .loading
-            let task = try await taskService.addTask(task: .init(url: url.absoluteString))
-            state.addTaskStatus = .loaded
-        } catch {
-            state.addTaskStatus = .failed(.init(error))
-        }
-        state.isAddTaskDialogPresented = false
-        state.isAddingURLFocused = false
-        state.addingURLString = ""
-        state.addingURLAlert = nil
     }
 }

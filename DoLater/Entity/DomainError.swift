@@ -8,12 +8,16 @@
 import Foundation
 
 enum DomainError: LocalizedError {
+    case presenter(PresenterError)
     case service(ServiceError)
     case repository(RepositoryError)
     case unknown(Error?)
 
     var errorDescription: String? {
         switch self {
+        case .presenter(let error):
+            error.errorDescription
+
         case .service(let error):
             switch error {
             case .account:
@@ -43,13 +47,10 @@ enum DomainError: LocalizedError {
 
     var detail: String {
         switch self {
+        case .presenter(let error):
+            error.localizedDescription
         case .service(let error):
-            switch error {
-            case .account(let error):
-                error.localizedDescription
-            case .task(let error):
-                error.localizedDescription
-            }
+            error.localizedDescription
         case .repository(let error):
             switch error {
             case .invalidResponseBody:

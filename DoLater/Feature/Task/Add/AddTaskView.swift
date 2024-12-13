@@ -8,22 +8,17 @@
 import SwiftUI
 
 struct AddTaskView: View {
-    @Binding private var text: String
-    @Binding private var isTextFieldFocused: Bool
-    private let errorText: String?
+    private let status: DataStatus
     private let onDismissAction: () -> Void
-    private let onConfirmAction: () -> Void
+    private let onConfirmAction: (String) -> Void
+    @State private var text: String = ""
 
     init(
-        text: Binding<String>,
-        isTextFieldFocused: Binding<Bool>,
-        errorText: String?,
+        status: DataStatus,
         onDismiss onDismissAction: @escaping () -> Void,
-        onConfirm onConfirmAction: @escaping () -> Void
+        onConfirm onConfirmAction: @escaping (String) -> Void
     ) {
-        _text = text
-        _isTextFieldFocused = isTextFieldFocused
-        self.errorText = errorText
+        self.status = status
         self.onDismissAction = onDismissAction
         self.onConfirmAction = onConfirmAction
     }
@@ -38,25 +33,26 @@ struct AddTaskView: View {
                 DLDialog(
                     title: "あとまわしリンクを追加",
                     button: DLButton(.text("追加する"), isFullWidth: true) {
-                        onConfirmAction()
+                        onConfirmAction(text)
                     }
                 ) {
                     VStack(alignment: .leading, spacing: 4) {
                         DLTextField(
                             "https://",
                             text: $text,
-                            isFocused: $isTextFieldFocused
+                            isFocused: .constant(true)
                         )
                         .keyboardType(.URL)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
-                        if let errorText {
-                            Text(errorText)
+                        if case let .failed(error) = status {
+                            Text(error.localizedDescription)
                                 .font(.DL.note1)
                                 .foregroundStyle(Color.Semantic.Text.alert)
                         }
                     }
                 }
+                .disabled(status.isLoading)
                 .padding(24)
             }
             .overlay(alignment: .topTrailing) {
@@ -70,10 +66,7 @@ struct AddTaskView: View {
 }
 
 #Preview {
-    @Previewable @State var text: String = ""
-    @Previewable @State var isTextFieldFocused: Bool = false
-
-    AddTaskView(text: $text, isTextFieldFocused: $isTextFieldFocused,errorText: nil) {
-    } onConfirm: {
+    AddTaskView(status: .default) {
+    } onConfirm: { _ in
     }
 }

@@ -14,7 +14,7 @@ struct TaskItemView: View {
     private let onMarkAsToDoAction: () -> Void
     private let onDeleteAction: () -> Void
     @State private var status: Status
-    
+
     init(
         task: DLTask,
         rotationAngle: Angle,
@@ -29,7 +29,7 @@ struct TaskItemView: View {
         self.onDeleteAction = onDeleteAction
         self.status = task.isCompleted ? .closed : .opened
     }
-    
+
     var body: some View {
         status.image
             .resizable()
@@ -74,7 +74,7 @@ extension TaskItemView {
         case opened
         case closing
         case closed
-        
+
         var image: Image {
             switch self {
             case .opened: Image.trashOpened
