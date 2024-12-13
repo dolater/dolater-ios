@@ -13,7 +13,7 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
     struct State: Equatable {
         var path: NavigationPath
         var scene: TrashMountainScene
-        var tasks: [DLTask] = DLTask.mocks.filter { !$0.isArchived }
+        var tasks: [DLTask] = DLTask.mocks.filter { !$0.isArchived }.sorted { $0.createdAt < $1.createdAt }
         var archivedTasks: [DLTask] = DLTask.mocks.filter { $0.isArchived }
 
         enum Path: Hashable {
@@ -72,7 +72,7 @@ private extension TaskListPresenter {
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {
         let nodes = droppedTasks.compactMap { task in
-            state.scene.childNode(withName: task.id.uuidString)
+            state.scene.childNode(withName: task.nodeName)
         }
         state.scene.removeChildren(in: nodes)
         state.tasks.removeAll(where: { task in

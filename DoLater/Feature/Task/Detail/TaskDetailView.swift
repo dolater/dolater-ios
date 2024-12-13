@@ -27,6 +27,7 @@ struct TaskDetailView: View {
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.Semantic.Background.primary, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("完了にする") {}

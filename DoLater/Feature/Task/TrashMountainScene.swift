@@ -46,8 +46,8 @@ final class TrashMountainScene: SKScene, Sendable {
 
     func addTrashNode(task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
-        node.name = "trash_\(task.id.uuidString)"
-        node.position = CGPoint(x: frame.midX + CGFloat.random(in: -50...50), y: frame.midY + CGFloat.random(in: -50...50))
+        node.name = task.nodeName
+        node.position = CGPoint(x: frame.midX, y: frame.midY)
         node.physicsBody = SKPhysicsBody(circleOfRadius: task.radius)
         node.strokeColor = .clear
         addChild(node)
@@ -56,7 +56,7 @@ final class TrashMountainScene: SKScene, Sendable {
     }
 
     func addShakeAction() {
-        enumerateChildNodes(withName: "trash_[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}") { node, _ in
+        enumerateChildNodes(withName: "trash_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}") { node, _ in
             let clockwiseAction = SKAction.rotate(byAngle: .pi / 180, duration: 0.1)
             let counterClockwiseAction = SKAction.rotate(byAngle: -.pi / 180, duration: 0.1)
             let allAction = SKAction.sequence([clockwiseAction, counterClockwiseAction])

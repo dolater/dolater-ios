@@ -44,6 +44,11 @@ struct DLTask: Codable, Hashable, Identifiable, Sendable, Transferable {
         radius * 2
     }
 
+    var nodeName: String {
+        let prefix = "trash_"
+        return"\(prefix)\(id.uuidString.lowercased())"
+    }
+
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(for: DLTask.self, contentType: .data)
     }

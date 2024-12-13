@@ -11,16 +11,26 @@ import SwiftUI
 struct TaskListView<Environment: EnvironmentProtocol>: View {
     @State private var presenter: TaskListPresenter<Environment>
     @Binding private var path: NavigationPath
+    private let debugOptions: SpriteView.DebugOptions
 
-    init(path: Binding<NavigationPath>) {
+    init(path: Binding<NavigationPath>, isDebugMode: Bool = false) {
         _path = path
         presenter = .init(path: path.wrappedValue)
+        debugOptions = isDebugMode ? [
+            .showsDrawCount,
+            .showsFields,
+            .showsFPS,
+            .showsNodeCount,
+            .showsPhysics,
+            .showsQuadCount,
+        ] : []
     }
 
     var body: some View {
         SpriteView(
             scene: presenter.state.scene,
-            options: [.allowsTransparency]
+            options: [.allowsTransparency],
+            debugOptions: debugOptions
         )
         .overlay {
             binView
@@ -58,8 +68,8 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
 
     private var tasksView: some View {
         ForEach(presenter.state.tasks) { task in
-            if let position = presenter.state.scene.trashPositions["trash_\(task.id.uuidString)"],
-               let rotation = presenter.state.scene.trashRotations["trash_\(task.id.uuidString)"] {
+            if let position = presenter.state.scene.trashPositions[task.nodeName],
+               let rotation = presenter.state.scene.trashRotations[task.nodeName] {
                 taskView(
                     task,
                     position: presenter.state.scene.convertPoint(toView: position),
@@ -95,6 +105,6 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     @Previewable @State var path: NavigationPath = .init()
 
     NavigationStack {
-        TaskListView<MockEnvironment>(path: $path)
+        TaskListView<MockEnvironment>(path: $path, isDebugMode: true)
     }
 }
