@@ -18,6 +18,7 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         var removedTasks: [DLTask] = []
         var getActiveTasksStatus: DataStatus = .default
         var getRemovedTasksStatus: DataStatus = .default
+        var updateTaskStatus: DataStatus = .default
 
         enum Path: Hashable {
             case detail(DLTask)
@@ -102,6 +103,15 @@ private extension TaskListPresenter {
     }
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {
+        for task in droppedTasks {
+            do {
+                state.updateTaskStatus = .loading
+                let updatedTask = try await taskService.remove(taskId: task.id)
+                state.updateTaskStatus = .loaded
+            } catch {
+                state.updateTaskStatus = .failed(.init(error))
+            }
+        }
         let nodes = droppedTasks.compactMap { task in
             state.scene.childNode(withName: task.displayName)
         }
@@ -123,28 +133,41 @@ private extension TaskListPresenter {
     }
 
     func onMarkAsCompletedButtonTapped(_ task: DLTask) async {
-        guard var updatedTask = state.activeTasks.first(where: { $0.id == task.id }) else {
-            return
+        do {
+            state.updateTaskStatus = .loading
+            let updatedTask = try await taskService.markAsCompleted(taskId: task.id)
+            state.activeTasks.removeAll(where: { $0.id == task.id })
+            state.activeTasks.append(updatedTask)
+            state.activeTasks.sort { $0.createdAt < $1.createdAt }
+            state.updateTaskStatus = .loaded
+        } catch {
+            state.updateTaskStatus = .failed(.init(error))
         }
-        updatedTask.completedAt = .now
-        state.activeTasks.removeAll(where: { $0.id == task.id })
-        state.activeTasks.append(updatedTask)
-        state.activeTasks.sort { $0.createdAt < $1.createdAt }
     }
 
     func onMarkAsToDoButtonTapped(_ task: DLTask) async {
-        guard var updatedTask = state.activeTasks.first(where: { $0.id == task.id }) else {
-            return
+        do {
+            state.updateTaskStatus = .loading
+            let updatedTask = try await taskService.markAsToDo(taskId: task.id)
+            state.activeTasks.removeAll(where: { $0.id == task.id })
+            state.activeTasks.append(updatedTask)
+            state.activeTasks.sort { $0.createdAt < $1.createdAt }
+            state.updateTaskStatus = .loaded
+        } catch {
+            state.updateTaskStatus = .failed(.init(error))
         }
-        updatedTask.completedAt = nil
-        state.activeTasks.removeAll(where: { $0.id == task.id })
-        state.activeTasks.append(updatedTask)
-        state.activeTasks.sort { $0.createdAt < $1.createdAt }
     }
 
     func onDeleteButtonTapped(_ task: DLTask) async {
-        state.activeTasks.removeAll(where: { $0.id == task.id })
-        state.scene.removeTrashNode(for: task)
+        do {
+            state.updateTaskStatus = .loading
+            try await taskService.delete(taskId: task.id)
+            state.activeTasks.removeAll(where: { $0.id == task.id })
+            state.scene.removeTrashNode(for: task)
+            state.updateTaskStatus = .loaded
+        } catch {
+            state.updateTaskStatus = .failed(.init(error))
+        }
     }
 }
 

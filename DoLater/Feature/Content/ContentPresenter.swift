@@ -22,6 +22,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var isAddingURLFocused: Bool = false
         var addingURLString: String = ""
         var addingURLAlert: String?
+        var addTaskStatus: DataStatus = .default
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -42,6 +43,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
     var state: State = .init()
 
     private let accountService: AccountService<Environment> = .init()
+    private let taskService: TaskService<Environment> = .init()
 
     private var authListener: NSObjectProtocol?
 
@@ -150,6 +152,13 @@ extension ContentPresenter {
         else {
             state.addingURLAlert = "有効なURLを入力してください"
             return
+        }
+        do {
+            state.addTaskStatus = .loading
+            let task = try await taskService.addTask(task: .init(url: url.absoluteString))
+            state.addTaskStatus = .loaded
+        } catch {
+            state.addTaskStatus = .failed(.init(error))
         }
         state.isAddTaskDialogPresented = false
         state.isAddingURLFocused = false

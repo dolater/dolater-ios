@@ -57,7 +57,11 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
             switch destination {
             case .detail(let task):
                 TaskDetailView(task: task) {
+                    presenter.dispatch(.onMarkAsCompletedButtonTapped(task))
+                    presenter.state.path.removeLast()
                 } onMarkAsToDo: {
+                    presenter.dispatch(.onMarkAsToDoButtonTapped(task))
+                    presenter.state.path.removeLast()
                 }
 
             case .bin:

@@ -64,7 +64,6 @@ final actor TaskService<Environment: EnvironmentProtocol> {
                     )
                 }
             }
-
             var result: [DLTask?] = []
             for await task in group {
                 result.append(task)
