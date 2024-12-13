@@ -11,10 +11,12 @@ import OpenAPIURLSession
 extension Client {
     static func build() async throws -> Client {
         let string = try? await EnvironmentImpl.shared.localRepository.getString(
-            for: .serverEnvironment)
+            for: .serverEnvironment
+        )
         let environment = ServerEnvironment(rawValue: string ?? "") ?? .production
         return Client(
             serverURL: environment.apiServerURL,
+            configuration: .init(dateTranscoder: .iso8601WithFractionalSeconds),
             transport: URLSessionTransport(),
             middlewares: [AuthMiddleware()]
         )
