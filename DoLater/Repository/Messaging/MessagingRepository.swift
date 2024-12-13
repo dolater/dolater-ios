@@ -26,7 +26,7 @@ final actor MessagingRepositoryImpl: MessagingRepositoryProtocol {
         do {
             let client = try await Client.build()
             let response = try await client.upsertFCMToken(
-                .init(body: .json(.init(token: token, timestamp: timestamp))))
+                .init(body: .json(.init(token: token))))
             switch response {
             case .noContent:
                 return

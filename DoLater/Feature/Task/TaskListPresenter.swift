@@ -188,7 +188,7 @@ private extension TaskListPresenter {
         }
         do {
             state.addTaskStatus = .loading
-            let task = try await taskService.addTask(task: .init(url: url.absoluteString))
+            let task = try await taskService.addTask(url: url)
             if task.isToDo {
                 state.activeTasks.append(task)
                 state.scene.addTrashNode(for: task)

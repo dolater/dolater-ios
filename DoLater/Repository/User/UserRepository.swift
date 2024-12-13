@@ -17,11 +17,7 @@ protocol UserRepositoryProtocol: Actor {
 
     func deleteUser(id: Components.Parameters.uid) async throws
 
-    func getFollowRequest(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus
-
     func followUser(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus
-
-    func approveFollowRequest(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus
 
     func unfollowUser(id: Components.Parameters.uid) async throws
 }
@@ -224,92 +220,10 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
         }
     }
 
-    func getFollowRequest(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus {
-        do {
-            let client = try await Client.build()
-            let response = try await client.getFollowRequest(path: .init(uid: id))
-            switch response {
-            case .ok(let okResponse):
-                if case let .json(followStatus) = okResponse.body {
-                    return followStatus
-                }
-                throw RepositoryError.invalidResponseBody(okResponse.body)
-
-            case .unauthorized(let errorResponse):
-                if case let .json(error) = errorResponse.body {
-                    throw RepositoryError.server(.unauthorized, error.message)
-                }
-                throw RepositoryError.server(.unauthorized, nil)
-
-            case .notFound(let errorResponse):
-                if case let .json(error) = errorResponse.body {
-                    throw RepositoryError.server(.notFound, error.message)
-                }
-                throw RepositoryError.server(.notFound, nil)
-
-            case .internalServerError(let errorResponse):
-                if case let .json(error) = errorResponse.body {
-                    throw RepositoryError.server(.internalServerError, error.message)
-                }
-                throw RepositoryError.server(.internalServerError, nil)
-
-            case .undocumented(let statusCode, let payload):
-                throw RepositoryError.server(.init(rawValue: statusCode), payload)
-            }
-        } catch let error as RepositoryError {
-            Logger.standard.error("RepositoryError: \(error.localizedDescription)")
-            throw error
-        } catch {
-            Logger.standard.error("RepositoryError: \(error)")
-            throw error
-        }
-    }
-
     func followUser(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus {
         do {
             let client = try await Client.build()
             let response = try await client.followUser(path: .init(uid: id))
-            switch response {
-            case .ok(let okResponse):
-                if case let .json(followStatus) = okResponse.body {
-                    return followStatus
-                }
-                throw RepositoryError.invalidResponseBody(okResponse.body)
-
-            case .unauthorized(let errorResponse):
-                if case let .json(error) = errorResponse.body {
-                    throw RepositoryError.server(.unauthorized, error.message)
-                }
-                throw RepositoryError.server(.unauthorized, nil)
-
-            case .notFound(let errorResponse):
-                if case let .json(error) = errorResponse.body {
-                    throw RepositoryError.server(.notFound, error.message)
-                }
-                throw RepositoryError.server(.notFound, nil)
-
-            case .internalServerError(let errorResponse):
-                if case let .json(error) = errorResponse.body {
-                    throw RepositoryError.server(.internalServerError, error.message)
-                }
-                throw RepositoryError.server(.internalServerError, nil)
-
-            case .undocumented(let statusCode, let payload):
-                throw RepositoryError.server(.init(rawValue: statusCode), payload)
-            }
-        } catch let error as RepositoryError {
-            Logger.standard.error("RepositoryError: \(error.localizedDescription)")
-            throw error
-        } catch {
-            Logger.standard.error("RepositoryError: \(error)")
-            throw error
-        }
-    }
-
-    func approveFollowRequest(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus {
-        do {
-            let client = try await Client.build()
-            let response = try await client.approveFollowRequest(path: .init(uid: id))
             switch response {
             case .ok(let okResponse):
                 if case let .json(followStatus) = okResponse.body {

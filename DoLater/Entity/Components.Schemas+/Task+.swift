@@ -12,19 +12,19 @@ typealias DLTask = Components.Schemas.Task
 
 extension Components.Schemas.Task: Identifiable, Transferable {
     var isPending: Bool {
-        pool._type == .pending
+        pool._type == .taskPoolTypePending
     }
     var isToDo: Bool {
-        pool._type == .active && completedAt == nil
+        pool._type == .taskPoolTypeActive && completedAt == nil
     }
     var isCompleted: Bool {
-        pool._type == .active && completedAt != nil
+        pool._type == .taskPoolTypeActive && completedAt != nil
     }
     var isRemoved: Bool {
-        pool._type == .bin
+        pool._type == .taskPoolTypeBin
     }
     var isArchived: Bool {
-        pool._type == .archived
+        pool._type == .taskPoolTypeArchived
     }
 
     var trashImage: Image {

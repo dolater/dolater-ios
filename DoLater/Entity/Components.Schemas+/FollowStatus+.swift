@@ -9,13 +9,12 @@ extension Components.Schemas.FollowStatus {
     static let mock1 = Components.Schemas.FollowStatus(
         from: .mock1,
         to: .mock2,
-        requestedAt: .now.addingTimeInterval(-60 * 60 * 24 * 3),
-        approvedAt: .now.addingTimeInterval(-60 * 60 * 24 * 2)
+        timestamp: .now.addingTimeInterval(-60 * 60 * 24 * 3)
     )
 
     static let mock2 = Components.Schemas.FollowStatus(
         from: .mock2,
         to: .mock1,
-        requestedAt: .now.addingTimeInterval(-60 * 60 * 24 * 3)
+        timestamp: .now.addingTimeInterval(-60 * 60 * 24 * 3)
     )
 }

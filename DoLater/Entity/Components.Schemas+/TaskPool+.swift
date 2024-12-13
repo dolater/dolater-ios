@@ -10,22 +10,22 @@ import Foundation
 extension Components.Schemas.TaskPool {
     static let mockActive = Components.Schemas.TaskPool(
         id: UUID().uuidString,
-        _type: .active
+        _type: .taskPoolTypeActive
     )
 
     static let mockArchived = Components.Schemas.TaskPool(
         id: UUID().uuidString,
-        _type: .archived
+        _type: .taskPoolTypeArchived
     )
 
     static let mockBin = Components.Schemas.TaskPool(
         id: UUID().uuidString,
-        _type: .bin
+        _type: .taskPoolTypeBin
     )
 
     static let mockPending = Components.Schemas.TaskPool(
         id: UUID().uuidString,
-        _type: .pending
+        _type: .taskPoolTypePending
     )
 
     static let mocks: [Components.Schemas.TaskPool] = [

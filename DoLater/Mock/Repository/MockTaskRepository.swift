@@ -46,6 +46,20 @@ final actor MockTaskRepository: TaskRepositoryProtocol {
         return updatedTask
     }
 
+    func updateTaskForcibly(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id)
+    async throws -> Components.Schemas.Task {
+        var updatedTask = Components.Schemas.Task.mock1
+        if let url = task.url {
+            updatedTask.url = url
+        }
+        updatedTask.archivedAt = task.archivedAt
+        updatedTask.completedAt = task.completedAt
+        if let poolId = task.poolId {
+            updatedTask.pool.id = poolId
+        }
+        return updatedTask
+    }
+
     func deleteTask(id: Components.Parameters.id) async throws {
     }
 }

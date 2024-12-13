@@ -13,7 +13,7 @@ final actor TaskService<Environment: EnvironmentProtocol> {
 
     func getActiveTasks() async throws -> [DLTask] {
         let taskPools = try await Environment.shared.taskPoolRepository.getPools()
-        guard let activePool = taskPools.first(where: { $0._type == .active }) else {
+        guard let activePool = taskPools.first(where: { $0._type == .taskPoolTypeActive }) else {
             return []
         }
         let tasks = try await Environment.shared.taskRepository.getTasks(poolId: activePool.id)
@@ -22,14 +22,14 @@ final actor TaskService<Environment: EnvironmentProtocol> {
 
     func getRemovedTasks() async throws -> [DLTask] {
         let taskPools = try await Environment.shared.taskPoolRepository.getPools()
-        guard let binPool = taskPools.first(where: { $0._type == .bin }) else {
+        guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeBin }) else {
             return []
         }
         return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
     }
 
-    func addTask(task: Components.Schemas.CreateTaskInput) async throws -> DLTask {
-        try await Environment.shared.taskRepository.createTask(task)
+    func addTask(url: URL) async throws -> DLTask {
+        try await Environment.shared.taskRepository.createTask(.init(url: url.absoluteString))
     }
 
     func markAsCompleted(taskId: String) async throws -> DLTask {
@@ -40,8 +40,14 @@ final actor TaskService<Environment: EnvironmentProtocol> {
     }
 
     func markAsToDo(taskId: String) async throws -> DLTask {
-        try await Environment.shared.taskRepository.updateTask(
-            .init(completedAt: nil),
+        let task = try await Environment.shared.taskRepository.getTask(id: taskId)
+        return try await Environment.shared.taskRepository.updateTaskForcibly(
+            .init(
+                url: task.url,
+                completedAt: nil,
+                archivedAt: task.archivedAt,
+                poolId: task.pool.id
+            ),
             id: taskId
         )
     }
