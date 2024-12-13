@@ -28,7 +28,6 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
     }
 
     enum Action: Sendable {
-        case onAppear
         case onOpenURL(URL)
         case onSelectedTabChanged
         case onPlusButtonTapped
@@ -45,6 +44,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         authListener = Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             if let user = user {
                 self?.state.authStatus = .authenticated(user)
+                Task {
+                    await self?.registerMe()
+                }
             } else {
                 self?.state.authStatus = .unauthenticated
             }
@@ -67,9 +69,6 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     func dispatch(_ action: Action) async {
         switch action {
-        case .onAppear:
-            await onAppear()
-
         case .onOpenURL(let url):
             await onOpenURL(url)
 
@@ -83,21 +82,6 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 }
 
 extension ContentPresenter {
-    fileprivate func onAppear() async {
-        guard let user = Auth.auth().currentUser else {
-            state.authStatus = .unauthenticated
-            return
-        }
-        do {
-            state.registerMeStatus = .default
-            try await accountService.registerMe()
-            state.registerMeStatus = .loaded
-        } catch {
-            state.registerMeStatus = .failed(.init(error))
-        }
-        state.authStatus = .authenticated(user)
-    }
-
     fileprivate func onOpenURL(_ url: URL) async {
         Logger.standard.debug("Open URL: \(url.absoluteString)")
         let pathComponents = url.pathComponents
@@ -122,5 +106,17 @@ extension ContentPresenter {
     fileprivate func onPlusButtonTapped() async {
         state.selection = .home
         state.isAddTaskDialogPresented = true
+    }
+}
+
+private extension ContentPresenter {
+    func registerMe() async {
+        do {
+            state.registerMeStatus = .default
+            try await accountService.registerMe()
+            state.registerMeStatus = .loaded
+        } catch {
+            state.registerMeStatus = .failed(.init(error))
+        }
     }
 }
