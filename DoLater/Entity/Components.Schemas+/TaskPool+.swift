@@ -20,6 +20,11 @@ extension Components.Schemas.TaskPool {
 
     static let mock3 = Components.Schemas.TaskPool(
         id: UUID().uuidString,
+        _type: .bin
+    )
+
+    static let mock4 = Components.Schemas.TaskPool(
+        id: UUID().uuidString,
         _type: .pending
     )
 }
