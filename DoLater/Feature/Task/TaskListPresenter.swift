@@ -26,7 +26,10 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         case onAppear
         case onTasksDropped([DLTask], CGPoint)
         case onBinTapped
-        case onTrashTapped(DLTask)
+        case onTaskTapped(DLTask)
+        case onMarkAsCompletedButtonTapped(DLTask)
+        case onMarkAsToDoButtonTapped(DLTask)
+        case onDeleteButtonTapped(DLTask)
     }
 
     var state: State
@@ -55,8 +58,17 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         case .onBinTapped:
             await onBinTapped()
 
-        case .onTrashTapped(let task):
-            await onTrashTapped(task)
+        case .onTaskTapped(let task):
+            await onTaskTapped(task)
+
+        case .onMarkAsCompletedButtonTapped(let task):
+            await onMarkAsCompletedButtonTapped(task)
+
+        case .onMarkAsToDoButtonTapped(let task):
+            await onMarkAsToDoButtonTapped(task)
+
+        case .onDeleteButtonTapped(let task):
+            await onDeleteButtonTapped(task)
         }
     }
 }
@@ -72,7 +84,7 @@ private extension TaskListPresenter {
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {
         let nodes = droppedTasks.compactMap { task in
-            state.scene.childNode(withName: task.nodeName)
+            state.scene.childNode(withName: task.displayName)
         }
         state.scene.removeChildren(in: nodes)
         state.tasks.removeAll(where: { task in
@@ -87,8 +99,32 @@ private extension TaskListPresenter {
         state.path.append(State.Path.bin)
     }
 
-    func onTrashTapped(_ task: DLTask) async {
+    func onTaskTapped(_ task: DLTask) async {
         state.path.append(State.Path.detail(task))
+    }
+
+    func onMarkAsCompletedButtonTapped(_ task: DLTask) async {
+        guard var updatedTask = state.tasks.first(where: { $0.id == task.id }) else {
+            return
+        }
+        updatedTask.completedAt = .now
+        state.tasks.removeAll(where: { $0.id == task.id })
+        state.tasks.append(updatedTask)
+        state.tasks.sort { $0.createdAt < $1.createdAt }
+    }
+
+    func onMarkAsToDoButtonTapped(_ task: DLTask) async {
+        guard var updatedTask = state.tasks.first(where: { $0.id == task.id }) else {
+            return
+        }
+        updatedTask.completedAt = nil
+        state.tasks.removeAll(where: { $0.id == task.id })
+        state.tasks.append(updatedTask)
+        state.tasks.sort { $0.createdAt < $1.createdAt }
+    }
+
+    func onDeleteButtonTapped(_ task: DLTask) async {
+        state.tasks.removeAll(where: { $0.id == task.id })
     }
 }
 

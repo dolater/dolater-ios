@@ -44,8 +44,8 @@ struct DLTask: Codable, Hashable, Identifiable, Sendable, Transferable {
         radius * 2
     }
 
-    var nodeName: String {
-        let prefix = "trash_"
+    var displayName: String {
+        let prefix = "task_"
         return"\(prefix)\(id.uuidString.lowercased())"
     }
 

@@ -46,7 +46,7 @@ final class TrashMountainScene: SKScene, Sendable {
 
     func addTrashNode(task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
-        node.name = task.nodeName
+        node.name = task.displayName
         node.position = CGPoint(x: frame.midX, y: frame.midY)
         node.physicsBody = SKPhysicsBody(circleOfRadius: task.radius)
         node.strokeColor = .clear
@@ -71,7 +71,7 @@ final class TrashMountainScene: SKScene, Sendable {
 
     func removeTrashNodes() {
         for child in children {
-            guard child.name?.hasPrefix("trash_") ?? false else {
+            guard child.name?.hasPrefix("task_") ?? false else {
                 continue
             }
             child.removeFromParent()

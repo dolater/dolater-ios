@@ -68,8 +68,8 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
 
     private var tasksView: some View {
         ForEach(presenter.state.tasks) { task in
-            if let position = presenter.state.scene.trashPositions[task.nodeName],
-               let rotation = presenter.state.scene.trashRotations[task.nodeName] {
+            if let position = presenter.state.scene.trashPositions[task.displayName],
+               let rotation = presenter.state.scene.trashRotations[task.displayName] {
                 taskView(
                     task,
                     position: presenter.state.scene.convertPoint(toView: position),
@@ -80,24 +80,18 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     }
 
     private func taskView(_ task: DLTask, position: CGPoint, rotation: CGFloat) -> some View {
-        TrashView(task: task)
-            .rotationEffect(.radians(rotation))
-            .draggable(task)
-            .contextMenu {
-                if task.isCompleted || task.isArchived {
-                    Button("未完了にする", systemImage: "square") {
-                    }
-                } else {
-                    Button("完了にする", systemImage: "checkmark.square") {
-                    }
-                }
-                Button("削除する", systemImage: "trash", role: .destructive) {
-                }
-            }
-            .onTapGesture {
-                presenter.dispatch(.onTrashTapped(task))
-            }
-            .position(position)
+        TaskItemView(task: task, rotationAngle: .radians(rotation)) {
+            presenter.dispatch(.onMarkAsCompletedButtonTapped(task))
+        } onMarkAsToDo: {
+            presenter.dispatch(.onMarkAsToDoButtonTapped(task))
+        } onDelete: {
+            presenter.dispatch(.onDeleteButtonTapped(task))
+        }
+        .draggable(task)
+        .onTapGesture {
+            presenter.dispatch(.onTaskTapped(task))
+        }
+        .position(position)
     }
 }
 
