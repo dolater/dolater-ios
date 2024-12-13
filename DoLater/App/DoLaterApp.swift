@@ -14,6 +14,7 @@ struct DoLaterApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView<EnvironmentImpl>()
+                .preferredColorScheme(.light)
         }
     }
 }

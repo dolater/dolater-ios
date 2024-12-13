@@ -24,7 +24,6 @@ struct DLTextField: View {
         TextField(label, text: $text)
             .focused($focusState)
             .textFieldStyle(.roundedBorder)
-            .colorScheme(.light)
             .sync($isFocused, $focusState)
     }
 }

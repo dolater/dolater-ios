@@ -9,7 +9,6 @@ import AuthenticationServices
 import SwiftUI
 
 struct SignInView<Environment: EnvironmentProtocol>: View {
-    @SwiftUI.Environment(\.colorScheme) private var colorScheme
     @State private var presenter: SignInPresenter<Environment> = .init()
 
     var body: some View {
@@ -19,7 +18,6 @@ struct SignInView<Environment: EnvironmentProtocol>: View {
             } onCompletion: { result in
                 presenter.dispatch(.onSignInWithAppleCompleted(result))
             }
-            //.signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
             .frame(height: 48)
 
 #if DEBUG
@@ -44,7 +42,6 @@ struct SignInView<Environment: EnvironmentProtocol>: View {
                     SecureField("Password", text: $presenter.state.password)
                 }
                 .textFieldStyle(.roundedBorder)
-                .colorScheme(.light)
                 Button("Sign In") {
                     presenter.dispatch(.onSignInButtonTapped)
                 }

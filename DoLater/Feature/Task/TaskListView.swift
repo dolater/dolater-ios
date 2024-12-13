@@ -51,6 +51,11 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     private var binView: some View {
         BinView(isFull: !presenter.state.archivedTasks.isEmpty)
             .dropDestination(for: DLTask.self) { droppedTasks, droppedPoint in
+                for task in droppedTasks {
+                    if !task.isCompleted {
+                        return false
+                    }
+                }
                 presenter.dispatch(.onTasksDropped(droppedTasks, droppedPoint))
                 return true
             }
