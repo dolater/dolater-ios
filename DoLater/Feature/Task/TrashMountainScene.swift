@@ -5,18 +5,22 @@
 //  Created by Kanta Oikawa on 12/11/24.
 //
 
+import CoreMotion
 import Observation
 import SpriteKit
 
 @Observable
-final class TrashMountainScene: SKScene, Sendable {
+final class TrashMountainScene<Environment: EnvironmentProtocol>: SKScene, Sendable {
     var binPosition: CGPoint = .init(x: 0, y: 0)
     var trashPositions: [String:CGPoint] = [:]
     var trashRotations: [String:CGFloat] = [:]
 
+    private let motionManager: CMMotionManager = .init()
+
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        motionManager.startAccelerometerUpdates()
     }
 
     override func update(_ currentTime: TimeInterval) {
@@ -29,6 +33,12 @@ final class TrashMountainScene: SKScene, Sendable {
                 trashPositions[name] = node.position
                 trashRotations[name] = node.zRotation
             }
+        }
+        if let accelerometerData = motionManager.accelerometerData {
+            physicsWorld.gravity = CGVector(
+                dx: accelerometerData.acceleration.x * 9.8,
+                dy: accelerometerData.acceleration.y * 9.8
+            )
         }
     }
 

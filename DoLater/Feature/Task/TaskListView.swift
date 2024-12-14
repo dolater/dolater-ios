@@ -12,24 +12,14 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     @State private var presenter: TaskListPresenter<Environment>
     @Binding private var path: NavigationPath
     @Binding private var isAddTaskDialogPresented: Bool
-    private let debugOptions: SpriteView.DebugOptions
 
     init(
         path: Binding<NavigationPath>,
-        isAddTaskDialogPresented: Binding<Bool>,
-        isDebugMode: Bool = false
+        isAddTaskDialogPresented: Binding<Bool>
     ) {
         _path = path
         _isAddTaskDialogPresented = isAddTaskDialogPresented
         presenter = .init(path: path.wrappedValue)
-        debugOptions = isDebugMode ? [
-            .showsDrawCount,
-            .showsFields,
-            .showsFPS,
-            .showsNodeCount,
-            .showsPhysics,
-            .showsQuadCount,
-        ] : []
     }
 
     var body: some View {
@@ -37,7 +27,14 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
             SpriteView(
                 scene: presenter.state.scene,
                 options: [.allowsTransparency],
-                debugOptions: debugOptions
+                debugOptions: presenter.state.isSpriteKitDebugMode ? [
+                    .showsDrawCount,
+                    .showsFields,
+                    .showsFPS,
+                    .showsNodeCount,
+                    .showsPhysics,
+                    .showsQuadCount,
+                ] : []
             )
             .background(Color.Semantic.Background.primary)
             .overlay {
@@ -149,8 +146,7 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     NavigationStack {
         TaskListView<MockEnvironment>(
             path: $path,
-            isAddTaskDialogPresented: $isAddTaskDialogPresented,
-            isDebugMode: true
+            isAddTaskDialogPresented: $isAddTaskDialogPresented
         )
     }
 }

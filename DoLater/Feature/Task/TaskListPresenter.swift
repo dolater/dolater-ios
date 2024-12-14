@@ -13,12 +13,14 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
     struct State: Equatable {
         var path: NavigationPath
 
-        var scene: TrashMountainScene
+        var scene: TrashMountainScene<Environment>
         var activeTasks: [DLTask] = []
         var renderedTasks: [DLTask] = []
         var removedTasks: [DLTask] = []
         var isAddTaskDialogPresented: Bool = false
         var isBinPresented: Bool = false
+
+        var isSpriteKitDebugMode: Bool = false
 
         var getActiveTasksStatus: DataStatus = .default
         var getRemovedTasksStatus: DataStatus = .default
@@ -48,10 +50,11 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
 
     var state: State
 
+    private let debugService: DebugService<Environment> = .init()
     private let taskService: TaskService<Environment> = .init()
 
     init(path: NavigationPath) {
-        let scene = TrashMountainScene()
+        let scene = TrashMountainScene<Environment>()
         scene.scaleMode = .resizeFill
         scene.backgroundColor = .clear
         state = .init(path: path, scene: scene)
@@ -112,6 +115,8 @@ private extension TaskListPresenter {
         } catch {
             state.getRemovedTasksStatus = .failed(.init(error))
         }
+
+        state.isSpriteKitDebugMode = await debugService.getSpriteKitDebugMode()
     }
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {

@@ -12,6 +12,7 @@ protocol EnvironmentProtocol: Actor {
     var authRepository: AuthRepositoryProtocol { get }
     var httpRepository: HTTPRepositoryProtocol { get }
     var localRepository: LocalRepositoryProtocol { get }
+    var motionRepository: MotionRepositoryProtocol { get }
     var notificationRepository: NotificationRepositoryProtocol { get }
     var remoteConfigRepository: RemoteConfigRepositoryProtocol { get }
     var storageRepository: StorageRepositoryProtocol { get }
@@ -27,6 +28,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
     let authRepository: any AuthRepositoryProtocol
     let httpRepository: any HTTPRepositoryProtocol
     let localRepository: any LocalRepositoryProtocol
+    let motionRepository: any MotionRepositoryProtocol
     let notificationRepository: any NotificationRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
     let storageRepository: any StorageRepositoryProtocol
@@ -39,6 +41,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
         authRepository: any AuthRepositoryProtocol = AuthRepositoryImpl(),
         httpRepository: any HTTPRepositoryProtocol = HTTPRepositoryImpl(),
         localRepository: any LocalRepositoryProtocol = LocalRepositoryImpl(),
+        motionRepository: any MotionRepositoryProtocol = MotionRepositoryImpl(),
         notificationRepository: any NotificationRepositoryProtocol = NotificationRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = RemoteConfigRepositoryImpl(),
         storageRepository: any StorageRepositoryProtocol = StorageRepositoryImpl(),
@@ -50,6 +53,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
         self.authRepository = authRepository
         self.httpRepository = httpRepository
         self.localRepository = localRepository
+        self.motionRepository = motionRepository
         self.notificationRepository = notificationRepository
         self.remoteConfigRepository = remoteConfigRepository
         self.storageRepository = storageRepository
