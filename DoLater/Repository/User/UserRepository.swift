@@ -13,9 +13,15 @@ protocol UserRepositoryProtocol: Actor {
     func getUser(id: Components.Parameters.uid) async throws -> Components.Schemas.User
 
     func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.uid)
-        async throws -> Components.Schemas.User
+    async throws -> Components.Schemas.User
 
     func deleteUser(id: Components.Parameters.uid) async throws
+
+    func getFollowings(id: Components.Parameters.uid) async throws -> [Components.Schemas.User]
+
+    func getFollowers(id: Components.Parameters.uid) async throws -> [Components.Schemas.User]
+
+    func getFriends(id: Components.Parameters.uid) async throws -> [Components.Schemas.User]
 
     func followUser(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus
 
@@ -137,7 +143,7 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
     }
 
     func updateUser(_ user: Components.Schemas.UpdateUserInput, id: Components.Parameters.uid)
-        async throws -> Components.Schemas.User
+    async throws -> Components.Schemas.User
     {
         do {
             let client = try await Client.build()
@@ -201,6 +207,129 @@ final actor UserRepositoryImpl: UserRepositoryProtocol {
                     throw RepositoryError.server(.notFound, error.message)
                 }
                 throw RepositoryError.server(.notFound, nil)
+
+            case .internalServerError(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.internalServerError, error.message)
+                }
+                throw RepositoryError.server(.internalServerError, nil)
+
+            case .undocumented(let statusCode, let payload):
+                throw RepositoryError.server(.init(rawValue: statusCode), payload)
+            }
+        } catch let error as RepositoryError {
+            Logger.standard.error("RepositoryError: \(error.localizedDescription)")
+            throw error
+        } catch {
+            Logger.standard.error("RepositoryError: \(error)")
+            throw error
+        }
+    }
+
+    func getFollowings(id: Components.Parameters.uid) async throws -> [Components.Schemas.User] {
+        do {
+            let client = try await Client.build()
+            let response = try await client.getFollowings(path: .init(uid: id))
+            switch response {
+            case .ok(let okResponse):
+                if case let .json(users) = okResponse.body {
+                    return users
+                }
+                throw RepositoryError.invalidResponseBody(okResponse.body)
+
+            case .unauthorized(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.unauthorized, error.message)
+                }
+                throw RepositoryError.server(.unauthorized, nil)
+
+                //case .notFound(let errorResponse):
+                //    if case let .json(error) = errorResponse.body {
+                //        throw RepositoryError.server(.notFound, error.message)
+                //    }
+                //    throw RepositoryError.server(.notFound, nil)
+
+            case .internalServerError(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.internalServerError, error.message)
+                }
+                throw RepositoryError.server(.internalServerError, nil)
+
+            case .undocumented(let statusCode, let payload):
+                throw RepositoryError.server(.init(rawValue: statusCode), payload)
+            }
+        } catch let error as RepositoryError {
+            Logger.standard.error("RepositoryError: \(error.localizedDescription)")
+            throw error
+        } catch {
+            Logger.standard.error("RepositoryError: \(error)")
+            throw error
+        }
+    }
+
+    func getFollowers(id: Components.Parameters.uid) async throws -> [Components.Schemas.User] {
+        do {
+            let client = try await Client.build()
+            let response = try await client.getFollowers(path: .init(uid: id))
+            switch response {
+            case .ok(let okResponse):
+                if case let .json(users) = okResponse.body {
+                    return users
+                }
+                throw RepositoryError.invalidResponseBody(okResponse.body)
+
+            case .unauthorized(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.unauthorized, error.message)
+                }
+                throw RepositoryError.server(.unauthorized, nil)
+
+                //case .notFound(let errorResponse):
+                //    if case let .json(error) = errorResponse.body {
+                //        throw RepositoryError.server(.notFound, error.message)
+                //    }
+                //    throw RepositoryError.server(.notFound, nil)
+
+            case .internalServerError(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.internalServerError, error.message)
+                }
+                throw RepositoryError.server(.internalServerError, nil)
+
+            case .undocumented(let statusCode, let payload):
+                throw RepositoryError.server(.init(rawValue: statusCode), payload)
+            }
+        } catch let error as RepositoryError {
+            Logger.standard.error("RepositoryError: \(error.localizedDescription)")
+            throw error
+        } catch {
+            Logger.standard.error("RepositoryError: \(error)")
+            throw error
+        }
+    }
+
+    func getFriends(id: Components.Parameters.uid) async throws -> [Components.Schemas.User] {
+        do {
+            let client = try await Client.build()
+            let response = try await client.getFriends(path: .init(uid: id))
+            switch response {
+            case .ok(let okResponse):
+                if case let .json(users) = okResponse.body {
+                    return users
+                }
+                throw RepositoryError.invalidResponseBody(okResponse.body)
+
+            case .unauthorized(let errorResponse):
+                if case let .json(error) = errorResponse.body {
+                    throw RepositoryError.server(.unauthorized, error.message)
+                }
+                throw RepositoryError.server(.unauthorized, nil)
+
+                //case .notFound(let errorResponse):
+                //    if case let .json(error) = errorResponse.body {
+                //        throw RepositoryError.server(.notFound, error.message)
+                //    }
+                //    throw RepositoryError.server(.notFound, nil)
 
             case .internalServerError(let errorResponse):
                 if case let .json(error) = errorResponse.body {

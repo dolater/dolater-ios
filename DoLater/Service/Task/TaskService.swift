@@ -28,6 +28,27 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
     }
 
+    func getArchivedTasks() async throws -> [DLTask] {
+        let taskPools = try await Environment.shared.taskPoolRepository.getPools()
+        guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeArchived }) else {
+            return []
+        }
+        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
+    }
+
+    func getPendingTasks() async throws -> [DLTask] {
+        let taskPools = try await Environment.shared.taskPoolRepository.getPools()
+        guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypePending }) else {
+            return []
+        }
+        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
+    }
+
+    func getTasksFriendHas() async throws -> [DLTask] {
+        // TODO: -
+        []
+    }
+
     func addTask(url: URL) async throws -> DLTask {
         try await Environment.shared.taskRepository.createTask(.init(url: url.absoluteString))
     }

@@ -36,6 +36,18 @@ final actor MockUserRepository: UserRepositoryProtocol {
     func deleteUser(id: Components.Parameters.id) async throws {
     }
 
+    func getFollowings(id: Components.Parameters.uid) async throws -> [Components.Schemas.User] {
+        [.mock1]
+    }
+
+    func getFollowers(id: Components.Parameters.uid) async throws -> [Components.Schemas.User] {
+        [.mock2]
+    }
+
+    func getFriends(id: Components.Parameters.uid) async throws -> [Components.Schemas.User] {
+        [.mock2]
+    }
+
     func followUser(id: Components.Parameters.uid) async throws -> Components.Schemas.FollowStatus {
         .mock2
     }

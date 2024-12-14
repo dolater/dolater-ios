@@ -21,7 +21,7 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                     Group {
                         switch presenter.state.selection {
                         case .home:
-                            HomeView<Environment>(
+                            TaskListView<Environment>(
                                 path: $presenter.state.homeNavigationPath,
                                 isAddTaskDialogPresented: $presenter.state.isAddTaskDialogPresented
                             )

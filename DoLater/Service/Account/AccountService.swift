@@ -21,6 +21,11 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         return try await Environment.shared.userRepository.getUser(id: user.uid)
     }
 
+    func getFriends() async throws -> [Components.Schemas.User] {
+        let user = try await Environment.shared.authRepository.getCurrentUser()
+        return try await Environment.shared.userRepository.getFriends(id: user.uid)
+    }
+
     /// Make Sign in with Apple Request
     /// - Parameter request: Sign in with Apple Request
     /// - Returns: Nonce

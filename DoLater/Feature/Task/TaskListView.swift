@@ -33,27 +33,48 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     }
 
     var body: some View {
-        Group {
-            if presenter.state.getActiveTasksStatus == .loading {
-                ProgressView()
-            } else {
-                SpriteView(
-                    scene: presenter.state.scene,
-                    options: [.allowsTransparency],
-                    debugOptions: debugOptions
-                )
-                .overlay {
-                    binView
-                }
-                .overlay {
-                    if presenter.state.activeTasks.isEmpty {
-                        noTaskMessageView
-                    } else {
-                        tasksView
+        NavigationStack(path: $presenter.state.path) {
+            Group {
+                if presenter.state.getActiveTasksStatus == .loading {
+                    ProgressView()
+                } else {
+                    SpriteView(
+                        scene: presenter.state.scene,
+                        options: [.allowsTransparency],
+                        debugOptions: debugOptions
+                    )
+                    .overlay {
+                        binView
                     }
+                    .overlay {
+                        if presenter.state.activeTasks.isEmpty {
+                            noTaskMessageView
+                        } else {
+                            tasksView
+                        }
+                    }
+                    .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
+                    .errorAlert(dataStatus: presenter.state.updateTaskStatus)
                 }
-                .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
-                .errorAlert(dataStatus: presenter.state.updateTaskStatus)
+            }
+            .background(Color.Semantic.Background.primary)
+            .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
+                switch destination {
+                case .detail(let task):
+                    TaskDetailView(task: task) {
+                        presenter.dispatch(.onMarkAsCompletedButtonTapped(task))
+                        presenter.state.path.removeLast()
+                    } onMarkAsToDo: {
+                        presenter.dispatch(.onMarkAsToDoButtonTapped(task))
+                        presenter.state.path.removeLast()
+                    }
+
+                case .bin:
+                    Image.binFull
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300)
+                }
             }
         }
         .overlay {
@@ -76,24 +97,6 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
         }
         .sync($path, $presenter.state.path)
         .sync($isAddTaskDialogPresented, $presenter.state.isAddTaskDialogPresented)
-        .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
-            switch destination {
-            case .detail(let task):
-                TaskDetailView(task: task) {
-                    presenter.dispatch(.onMarkAsCompletedButtonTapped(task))
-                    presenter.state.path.removeLast()
-                } onMarkAsToDo: {
-                    presenter.dispatch(.onMarkAsToDoButtonTapped(task))
-                    presenter.state.path.removeLast()
-                }
-
-            case .bin:
-                Image.binFull
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 300)
-            }
-        }
     }
 
     private var binView: some View {
