@@ -75,19 +75,20 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         return result.user
     }
 
-    func updateProfile(for user: User, displayName: String) async throws {
+    func updateProfile(displayName: String) async throws -> Components.Schemas.User {
+        let firebaseUser = try await Environment.shared.authRepository.getCurrentUser()
         try await Environment.shared.authRepository.update(
             displayName: displayName,
-            for: user
+            for: firebaseUser
         )
-        _ = try await Environment.shared.userRepository.updateUser(
+        return try await Environment.shared.userRepository.updateUser(
             .init(displayName: displayName),
-            id: user.uid
+            id: firebaseUser.uid
         )
     }
 
     @MainActor
-    func uploadProfile(for user: User, image: Image) async throws {
+    func updateProfile(image: Image) async throws -> Components.Schemas.User {
         let resizedImage = image
             .resizable()
             .scaledToFill()
@@ -99,20 +100,21 @@ final actor AccountService<Environment: EnvironmentProtocol> {
         else {
             throw AccountServiceError.failedToConvertImageToData
         }
-        let user = try await Environment.shared.authRepository.getCurrentUser()
-        let path = "profile_images/\(user.uid)/\(UUID().uuidString.lowercased()).png"
+        let firebaseUser = try await Environment.shared.authRepository.getCurrentUser()
+        let path = "profile_images/\(firebaseUser.uid)/\(UUID().uuidString.lowercased()).png"
         let metadata = try await Environment.shared.storageRepository.upload(data, to: path)
-        let urlString = "https://storage.googleapis.com/\(metadata.bucket)/\(path)"
+        let urlString = "https://firebasestorage.googleapis.com/v0/b/dolater-app.firebasestorage.app/o/\(metadata.path?.replacing("/", with: "%2F") ?? "")?alt=media"
+        Logger.standard.debug("\(urlString)")
         guard let url = URL(string: urlString) else {
             throw AccountServiceError.failedToGetURL
         }
         try await Environment.shared.authRepository.update(
             photoURL: url,
-            for: user
+            for: firebaseUser
         )
-        _ = try await Environment.shared.userRepository.updateUser(
+        return try await Environment.shared.userRepository.updateUser(
             .init(photoURL: url.absoluteString),
-            id: user.uid
+            id: firebaseUser.uid
         )
     }
 

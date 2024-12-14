@@ -21,7 +21,7 @@ final actor AuthMiddleware: ClientMiddleware {
     ) async throws -> (HTTPResponse, HTTPBody?) {
         let appCheckToken = try await AppCheckRepositoryImpl().getAppCheckToken()
         let user = try await AuthRepositoryImpl().getCurrentUser()
-        let idToken = try await user.getIDToken()
+        let idToken = try await user.getIDToken(forcingRefresh: true)
         var request = request
         request.headerFields.append(
             .init(

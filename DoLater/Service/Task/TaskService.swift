@@ -49,7 +49,7 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         []
     }
 
-    func addTask(url: URL) async throws -> DLTask {
+    func add(url: URL) async throws -> DLTask {
         try await Environment.shared.taskRepository.createTask(.init(url: url.absoluteString))
     }
 
@@ -73,9 +73,16 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         )
     }
 
-    func remove(taskId: String) async throws -> DLTask {
-        try await Environment.shared.taskRepository.updateTask(
-            .init(removedAt: .now),
+    func remove(taskId: String) async throws -> DLTask? {
+        let taskPools = try await Environment.shared.taskPoolRepository.getPools()
+        guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeBin }) else {
+            return nil
+        }
+        return try await Environment.shared.taskRepository.updateTask(
+            .init(
+                removedAt: .now,
+                poolId: binPool.id
+            ),
             id: taskId
         )
     }

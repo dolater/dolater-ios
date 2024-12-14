@@ -36,7 +36,7 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         case onMarkAsCompletedButtonTapped(DLTask)
         case onMarkAsToDoButtonTapped(DLTask)
         case onDeleteButtonTapped(DLTask)
-        case onAddingTaskConfirmed(String)
+        case onAddTaskConfirmed(String)
     }
 
     var state: State
@@ -79,8 +79,8 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
         case .onDeleteButtonTapped(let task):
             await onDeleteButtonTapped(task)
 
-        case .onAddingTaskConfirmed(let text):
-            await onAddingTaskConfirmed(text: text)
+        case .onAddTaskConfirmed(let text):
+            await onAddTaskConfirmed(text: text)
         }
     }
 }
@@ -109,7 +109,7 @@ private extension TaskListPresenter {
     }
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {
-        var successfullyDroppedTasks: [DLTask] = []
+        var successfullyDroppedTasks: [DLTask?] = []
         for task in droppedTasks {
             do {
                 state.updateTaskStatus = .loading
@@ -121,10 +121,10 @@ private extension TaskListPresenter {
             }
         }
         let nodes = successfullyDroppedTasks.compactMap { task in
-            state.scene.childNode(withName: task.displayName)
+            state.scene.childNode(withName: task?.displayName ?? "")
         }
         state.scene.removeChildren(in: nodes)
-        let successfullyDroppedTaskIds = successfullyDroppedTasks.map(\.id)
+        let successfullyDroppedTaskIds = successfullyDroppedTasks.compactMap { $0?.id }
         state.activeTasks.removeAll(where: { task in
             successfullyDroppedTaskIds.contains(task.id)
         })
@@ -177,7 +177,7 @@ private extension TaskListPresenter {
         }
     }
 
-    func onAddingTaskConfirmed(text: String) async {
+    func onAddTaskConfirmed(text: String) async {
         guard
             let url = URL(string: text),
             UIApplication.shared.canOpenURL(url),
@@ -188,7 +188,7 @@ private extension TaskListPresenter {
         }
         do {
             state.addTaskStatus = .loading
-            let task = try await taskService.addTask(url: url)
+            let task = try await taskService.add(url: url)
             if task.isToDo {
                 state.activeTasks.append(task)
                 state.scene.addTrashNode(for: task)

@@ -43,6 +43,7 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                         options: [.allowsTransparency],
                         debugOptions: debugOptions
                     )
+                    .background(Color.Semantic.Background.primary)
                     .overlay {
                         binView
                     }
@@ -57,7 +58,6 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                     .errorAlert(dataStatus: presenter.state.updateTaskStatus)
                 }
             }
-            .background(Color.Semantic.Background.primary)
             .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
                 switch destination {
                 case .detail(let task):
@@ -87,7 +87,7 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                     }
                 } onConfirm: { text in
                     withAnimation(.easeInOut(duration: 0.1)) {
-                        presenter.dispatch(.onAddingTaskConfirmed(text))
+                        presenter.dispatch(.onAddTaskConfirmed(text))
                     }
                 }
             }

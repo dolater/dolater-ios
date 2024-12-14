@@ -8,6 +8,12 @@
 import FirebaseAuth
 
 extension Components.Schemas.User {
+    var profileURL: URL? {
+        URL(string: "https://dolater.kantacky.com/users/\(id)")
+    }
+}
+
+extension Components.Schemas.User {
     static let mock1 = Components.Schemas.User(
         id: FirebaseAuth.User.mock1.uid,
         displayName: FirebaseAuth.User.mock1.displayName ?? "",

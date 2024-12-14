@@ -5,6 +5,7 @@
 //  Created by Kanta Oikawa on 12/11/24.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct AccountView<Environment: EnvironmentProtocol>: View {
@@ -31,24 +32,11 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                             VStack(spacing: 30) {
                                 VStack(spacing: 18) {
                                     if let user = presenter.state.user {
-                                        HStack(spacing: 18) {
-                                            UserIcon(imageURLString: user.photoURL)
-                                                .frame(width: 60, height: 60)
-
-                                            HStack(spacing: 4) {
-                                                Text(user.displayName)
-                                                    .font(.DL.title1)
-
-                                                Button("", systemImage: "link") {
-                                                }
-                                                .font(.DL.button)
-                                            }
-                                        }
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        profileView(user: user)
                                     }
 
                                     HStack(spacing: 18) {
-                                        countView(label: "フレンド", count: presenter.state.friendsCount?.description)
+                                        countView(label: "フレンド", count: presenter.state.friendsCountString)
                                         countView(label: "完了したタスク", count: presenter.state.tasksCountString)
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -81,11 +69,59 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                     EmptyView()
                 }
             }
+            .errorAlert(dataStatus: presenter.state.getUserStatus)
+            .errorAlert(dataStatus: presenter.state.getFriendsCountStatus)
+            .errorAlert(dataStatus: presenter.state.getTaskCountStatus)
+            .errorAlert(dataStatus: presenter.state.updateProfilePhotoStatus)
+            .errorAlert(dataStatus: presenter.state.updateNameStatus)
+            .errorAlert(dataStatus: presenter.state.signOutStatus)
         }
         .sync($path, $presenter.state.path)
         .task {
             await presenter.dispatch(.onAppear)
         }
+    }
+
+    @ViewBuilder
+    private func profileView(user: Components.Schemas.User) -> some View {
+        let userIcon = UserIcon(
+            imageURLString: user.photoURL,
+            isLoading: presenter.state.updateProfilePhotoStatus.isLoading
+        )
+        HStack(spacing: 18) {
+            PhotosPicker(
+                selection: $presenter.state.photosPickerItem,
+                matching: .images
+            ) {
+                userIcon
+            }
+            .frame(width: 60, height: 60)
+            .onChange(of: presenter.state.photosPickerItem) { _, _ in
+                presenter.dispatch(.onSelectedPhotoChanged)
+            }
+
+            if presenter.state.isNameEditing {
+                TextField("名前", text: $presenter.state.editingNameText)
+                    .onSubmit {
+                        presenter.dispatch(.onNameSubmitted)
+                    }
+                    .disabled(presenter.state.updateNameStatus.isLoading)
+            } else {
+                HStack(spacing: 4) {
+                    Text(user.displayName.isEmpty ? "未設定" : user.displayName)
+                        .font(.DL.title1)
+                        .onTapGesture {
+                            presenter.dispatch(.onNameTapped)
+                        }
+
+                    Button("", systemImage: "link") {
+                        UIPasteboard.general.url = user.profileURL
+                    }
+                    .font(.DL.button)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func countView(label: String, count: String?) -> some View {

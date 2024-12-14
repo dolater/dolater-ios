@@ -7,18 +7,37 @@
 
 import Observation
 import SwiftUI
+import PhotosUI
 
 @Observable
 final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
     struct State: Equatable {
         var path: NavigationPath
-        var signOutStatus: DataStatus = .default
         var user: Components.Schemas.User?
         var getUserStatus: DataStatus = .default
         var friendsCount: Int?
         var getFriendsCountStatus: DataStatus = .default
         var tasksCount: Int?
         var getTaskCountStatus: DataStatus = .default
+        var photosPickerItem: PhotosPickerItem?
+        var updateProfilePhotoStatus: DataStatus = .default
+        var isNameEditing: Bool = false
+        var editingNameText: String = ""
+        var updateNameStatus: DataStatus = .default
+        var signOutStatus: DataStatus = .default
+
+        var friendsCountString: String? {
+            guard let friendsCount else {
+                return nil
+            }
+            if friendsCount < 1000 {
+                return friendsCount.description
+            }
+            if friendsCount < 1000000 {
+                return String(format: "%.1fK", Double(friendsCount) / 1000)
+            }
+            return String(format: "%.1fM", Double(friendsCount) / 1000000)
+        }
 
         var tasksCountString: String? {
             guard let tasksCount else {
@@ -41,7 +60,11 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     enum Action {
         case onAppear
+        case onSelectedPhotoChanged
+        case onNameTapped
+        case onNameSubmitted
         case onSignOutButtonTapped
+        case onDeleteAccountButtonTapped
     }
 
     var state: State
@@ -64,8 +87,20 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case .onAppear:
             await onAppear()
 
+        case .onSelectedPhotoChanged:
+            await onSelectedPhotoChanged()
+
+        case .onNameTapped:
+            await onNameTapped()
+
+        case .onNameSubmitted:
+            await onNameSubmitted()
+
         case .onSignOutButtonTapped:
             await onSignOutButtonTapped()
+
+        case .onDeleteAccountButtonTapped:
+            await onDeleteAccountButtonTapped()
         }
     }
 }
@@ -99,6 +134,40 @@ private extension AccountPresenter {
         }
     }
 
+    func onSelectedPhotoChanged() async {
+        state.updateProfilePhotoStatus = .loading
+        guard let photosPickerItem = state.photosPickerItem else {
+            state.updateProfilePhotoStatus = .loaded
+            return
+        }
+        do {
+            guard let photo = try await photosPickerItem.loadTransferable(type: Image.self) else {
+                state.updateProfilePhotoStatus = .loaded
+                return
+            }
+            state.user = try await accountService.updateProfile(image: photo)
+            state.updateProfilePhotoStatus = .loaded
+        } catch {
+            state.updateProfilePhotoStatus = .failed(.init(error))
+        }
+    }
+
+    func onNameTapped() async {
+        state.editingNameText = state.user?.displayName ?? ""
+        state.isNameEditing = true
+    }
+
+    func onNameSubmitted() async {
+        do {
+            state.updateNameStatus = .loading
+            state.user = try await accountService.updateProfile(displayName: state.editingNameText)
+            state.updateNameStatus = .loaded
+            state.isNameEditing = false
+        } catch {
+            state.updateNameStatus = .failed(.init(error))
+        }
+    }
+
     func onSignOutButtonTapped() async {
         do {
             state.signOutStatus = .loading
@@ -107,5 +176,8 @@ private extension AccountPresenter {
         } catch {
             state.signOutStatus = .failed(.init(error))
         }
+    }
+
+    func onDeleteAccountButtonTapped() async {
     }
 }
