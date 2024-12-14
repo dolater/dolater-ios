@@ -56,6 +56,9 @@ private extension NotificationListPresenter {
         do {
             state.getNotificationsStatus = .loading
             state.notifications = try await notificationService.get()
+            state.notifications.sort { lhs, rhs in
+                lhs.createdAt > rhs.createdAt
+            }
             state.getNotificationsStatus = .loaded
         } catch {
             state.getNotificationsStatus = .failed(.init(error))

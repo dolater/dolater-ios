@@ -63,11 +63,9 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                         presenter.state.path.removeLast()
                     }
 
-                case .bin:
-                    Image.binFull
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 300)
+                case .preview(let task):
+                    TaskNotifyView(task: task) {
+                    }
                 }
             }
             .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
@@ -100,11 +98,6 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     private var binView: some View {
         BinView(isFull: !presenter.state.removedTasks.isEmpty)
             .dropDestination(for: DLTask.self) { droppedTasks, droppedPoint in
-                for task in droppedTasks {
-                    if !task.isCompleted {
-                        return false
-                    }
-                }
                 presenter.dispatch(.onTasksDropped(droppedTasks, droppedPoint))
                 return true
             }
@@ -121,7 +114,7 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
     }
 
     private var tasksView: some View {
-        ForEach(presenter.state.activeTasks) { task in
+        ForEach(presenter.state.renderingTasks) { task in
             if let position = presenter.state.scene.trashPositions[task.displayName],
                let rotation = presenter.state.scene.trashRotations[task.displayName] {
                 taskView(

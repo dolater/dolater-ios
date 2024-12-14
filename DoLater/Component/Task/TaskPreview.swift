@@ -23,6 +23,12 @@ struct TaskPreview: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 268)
+                .overlay(alignment: .bottomLeading) {
+                    if !task.isMyTask {
+                        UserIcon(imageURLString: task.owner.photoURL)
+                            .frame(width: 90, height: 90)
+                    }
+                }
 
             HStack(alignment: .top, spacing: 18) {
                 AsyncImage(url: imageURL) { phase in

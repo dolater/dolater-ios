@@ -52,7 +52,7 @@ final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicati
     }
 
     func application(
-        _ application: UIApplication,
+        _ app: UIApplication,
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey : Any] = [:]
     ) -> Bool {
@@ -128,6 +128,7 @@ final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicati
         if let string = userInfo[fcmURLKey] as? String,
            let url = URL(string: string)
         {
+            Logger.standard.debug("Opening URL: \(url)")
             await UIApplication.shared.open(url)
         }
     }

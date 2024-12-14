@@ -61,6 +61,10 @@ extension Components.Schemas.Task: Identifiable, Transferable {
         "\(Self.namePrefix)\(id.lowercased())"
     }
 
+    var isMyTask: Bool {
+        owner.id == pool.owner?.id
+    }
+
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(for: Self.self, contentType: .data)
     }

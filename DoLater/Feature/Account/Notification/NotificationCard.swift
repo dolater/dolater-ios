@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NotificationCard: View {
+    @Environment(\.openURL) private var openURL
     private let notification: Components.Schemas.Notification
 
     init(notification: Components.Schemas.Notification) {
@@ -24,14 +25,16 @@ struct NotificationCard: View {
                 .font(.DL.body2)
             if let url = URL(string: notification.url ?? "") {
                 DLButton(.text("詳細を見る")) {
-                    UIApplication.shared.open(url)
+                    openURL(url)
                 }
             }
         }
         .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundStyle(Color.Semantic.Text.primary)
         .background(Color.Semantic.Background.secondary)
         .clipShape(RoundedRectangle(cornerRadius: 18))
+        .shadow()
     }
 }
 

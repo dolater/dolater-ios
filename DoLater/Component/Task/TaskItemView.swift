@@ -39,6 +39,12 @@ struct TaskItemView: View {
                 TaskLabelView(url: task.url)
                     .frame(width: task.size * 1.2)
             }
+            .overlay(alignment: .bottomLeading) {
+                if !task.isMyTask {
+                    UserIcon(imageURLString: task.owner.photoURL)
+                        .frame(width: task.size * 0.3, height: task.size * 0.3)
+                }
+            }
             .rotationEffect(rotationAngle)
             .contextMenu {
                 if task.isCompleted {

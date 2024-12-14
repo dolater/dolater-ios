@@ -231,7 +231,7 @@ private extension AccountPresenter {
         Task {
             do {
                 state.getTaskCountStatus = .loading
-                let tasks = try await taskService.getActiveTasks()
+                let tasks = try await taskService.getArchivedTasks()
                 state.tasksCount = tasks.count
                 state.getTaskCountStatus = .loaded
             } catch {

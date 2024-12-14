@@ -42,7 +42,7 @@ struct TaskFriendHasListView: View {
                 ProgressView()
             } else if tasks.isEmpty {
                 Text("あとまわしリンクがありません")
-                    .font(.DL.title1)
+                    .font(.DL.title3)
                     .foregroundStyle(Color.Semantic.Text.secondary)
             } else {
                 ForEach(Array(tasks.keys.enumerated()), id: \.0) { i, user in

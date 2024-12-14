@@ -41,10 +41,16 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                                             label: String(localized: "フレンド"),
                                             count: presenter.state.friendsCountString
                                         )
+                                        .onTapGesture {
+                                            presenter.dispatch(.onFriendsCountTapped)
+                                        }
                                         countView(
                                             label: String(localized: "完了したタスク"),
                                             count: presenter.state.tasksCountString
                                         )
+                                        .onTapGesture {
+                                            presenter.dispatch(.onArchivedTasksCountTapped)
+                                        }
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 }
