@@ -116,7 +116,7 @@ extension ContentPresenter {
             }
             do {
                 state.openURLStatus = .loading
-                let task = try await taskService.get(taskId: id)
+                let task = try await taskService.get(id: id)
                 let me = try await accountService.getMe()
                 if task.pool.owner?.id == me.id {
                     state.selection = .home

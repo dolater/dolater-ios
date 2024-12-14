@@ -84,7 +84,7 @@ extension TaskItemView {
         var image: Image {
             switch self {
             case .opened: Image.trashOpened
-            case .closing: Image.trashHalf
+            case .closing: Image.trashClosing
             case .closed: Image.trashClosed
             }
         }

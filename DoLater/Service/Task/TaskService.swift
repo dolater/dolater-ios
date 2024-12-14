@@ -57,8 +57,8 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         try await Environment.shared.taskRepository.getTasks(poolId: nil, friendHas: true)
     }
 
-    func get(taskId: String) async throws -> DLTask {
-        try await Environment.shared.taskRepository.getTask(id: taskId)
+    func get(id: String) async throws -> DLTask {
+        try await Environment.shared.taskRepository.getTask(id: id)
     }
 
     func add(url: URL) async throws -> DLTask {
@@ -72,8 +72,8 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         )
     }
 
-    func markAsToDo(taskId: String) async throws -> DLTask {
-        let task = try await Environment.shared.taskRepository.getTask(id: taskId)
+    func markAsToDo(id: String) async throws -> DLTask {
+        let task = try await Environment.shared.taskRepository.getTask(id: id)
         return try await Environment.shared.taskRepository.updateTaskForcibly(
             .init(
                 url: task.url,
@@ -81,11 +81,11 @@ final actor TaskService<Environment: EnvironmentProtocol> {
                 archivedAt: task.archivedAt,
                 poolId: task.pool.id
             ),
-            id: taskId
+            id: id
         )
     }
 
-    func remove(taskId: String) async throws -> DLTask? {
+    func remove(id: String) async throws -> DLTask? {
         let taskPools = try await Environment.shared.taskPoolRepository.getPools()
         guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeBin }) else {
             return nil
@@ -95,7 +95,7 @@ final actor TaskService<Environment: EnvironmentProtocol> {
                 removedAt: .now,
                 poolId: binPool.id
             ),
-            id: taskId
+            id: id
         )
     }
 
@@ -119,6 +119,13 @@ final actor TaskService<Environment: EnvironmentProtocol> {
                 !successfulTaskIds.contains(task.id)
             }
         }
+    }
+
+    func archive(id: String) async throws -> DLTask {
+        try await Environment.shared.taskRepository.updateTask(
+            .init(removedAt: .now),
+            id: id
+        )
     }
 
     func delete(taskId: String) async throws {

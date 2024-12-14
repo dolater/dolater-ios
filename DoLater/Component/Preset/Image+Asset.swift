@@ -11,6 +11,6 @@ extension Image {
     static let binEmpty = Image(.Asset.binEmpty)
     static let binFull = Image(.Asset.binFull)
     static let trashClosed = Image(.Asset.trashClosed)
-    static let trashHalf = Image(.Asset.trashHalf)
+    static let trashClosing = Image(.Asset.trashClosing)
     static let trashOpened = Image(.Asset.trashOpened)
 }

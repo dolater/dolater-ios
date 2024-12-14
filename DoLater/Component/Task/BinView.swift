@@ -18,7 +18,6 @@ struct BinView: View {
         (isFull ? Image.binFull : Image.binEmpty)
             .resizable()
             .scaledToFit()
-            .frame(width: 172, height: 172)
     }
 }
 

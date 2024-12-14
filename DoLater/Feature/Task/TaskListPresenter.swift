@@ -13,7 +13,7 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
     struct State: Equatable {
         var path: NavigationPath
 
-        var scene: TrashMountainScene<Environment>
+        var scene: TaskListScene<Environment>
         var activeTasks: [DLTask] = []
         var renderedTasks: [DLTask] = []
         var removedTasks: [DLTask] = []
@@ -54,7 +54,7 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
     private let taskService: TaskService<Environment> = .init()
 
     init(path: NavigationPath) {
-        let scene = TrashMountainScene<Environment>()
+        let scene = TaskListScene<Environment>()
         scene.scaleMode = .resizeFill
         scene.backgroundColor = .clear
         state = .init(path: path, scene: scene)
@@ -137,7 +137,7 @@ private extension TaskListPresenter {
         for task in droppedTasks {
             do {
                 state.updateTaskStatus = .loading
-                let updatedTask = try await taskService.remove(taskId: task.id)
+                let updatedTask = try await taskService.remove(id: task.id)
                 successfullyRemovedTasks.append(updatedTask)
                 state.updateTaskStatus = .loaded
             } catch {
@@ -180,7 +180,7 @@ private extension TaskListPresenter {
     func onMarkAsToDoButtonTapped(_ task: DLTask) async {
         do {
             state.updateTaskStatus = .loading
-            let updatedTask = try await taskService.markAsToDo(taskId: task.id)
+            let updatedTask = try await taskService.markAsToDo(id: task.id)
             state.activeTasks.removeAll(where: { $0.id == task.id })
             state.activeTasks.append(updatedTask)
             state.updateTaskStatus = .loaded

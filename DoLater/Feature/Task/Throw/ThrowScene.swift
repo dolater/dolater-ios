@@ -1,5 +1,5 @@
 //
-//  TrashMountainScene.swift
+//  ThrowScene.swift
 //  DoLater
 //
 //  Created by Kanta Oikawa on 12/11/24.
@@ -10,8 +10,7 @@ import Observation
 import SpriteKit
 
 @Observable
-final class TrashMountainScene<Environment: EnvironmentProtocol>: SKScene, Sendable {
-    var binPosition: CGPoint = .init(x: 0, y: 0)
+final class ThrowScene<Environment: EnvironmentProtocol>: SKScene, Sendable {
     var trashPositions: [String:CGPoint] = [:]
     var trashRotations: [String:CGFloat] = [:]
 
@@ -25,9 +24,6 @@ final class TrashMountainScene<Environment: EnvironmentProtocol>: SKScene, Senda
 
     override func update(_ currentTime: TimeInterval) {
         super.update(currentTime)
-        if let node = childNode(withName: "bin") {
-            binPosition = node.position
-        }
         children.forEach { node in
             if let name = node.name {
                 trashPositions[name] = node.position
@@ -42,18 +38,6 @@ final class TrashMountainScene<Environment: EnvironmentProtocol>: SKScene, Senda
         }
     }
 
-    func addBinNode(radius: CGFloat) {
-        let node = SKShapeNode(circleOfRadius: radius)
-        node.name = "bin"
-        node.position = CGPoint(x: frame.minX + radius, y: frame.minY)
-        node.physicsBody = SKPhysicsBody(circleOfRadius: radius)
-        node.strokeColor = .clear
-        node.physicsBody?.affectedByGravity = false
-        node.physicsBody?.isDynamic = false
-        addChild(node)
-        binPosition = node.position
-    }
-
     func addTaskNode(for task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
         node.name = task.displayName
@@ -63,19 +47,6 @@ final class TrashMountainScene<Environment: EnvironmentProtocol>: SKScene, Senda
         addChild(node)
         trashPositions[node.name ?? ""] = node.position
         trashRotations[node.name ?? ""] = node.zRotation
-        addShakeAction(for: node)
-    }
-
-    func addShakeAction(for node: SKNode) {
-        let clockwiseAction = SKAction.rotate(byAngle: .pi / 180, duration: 0.1)
-        let counterClockwiseAction = SKAction.rotate(byAngle: -.pi / 180, duration: 0.1)
-        let allAction = SKAction.sequence([clockwiseAction, counterClockwiseAction])
-        let actionLoop = SKAction.repeatForever(allAction)
-        node.run(actionLoop)
-    }
-
-    func removeBinNode() {
-        childNode(withName: "bin")?.removeFromParent()
     }
 
     func removeTrashNode(for task: DLTask) {

@@ -85,6 +85,11 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                 }
             }
         }
+        .overlay {
+            if presenter.state.isBinPresented {
+                ThrowView<Environment>(tasks: presenter.state.removedTasks)
+            }
+        }
         .task {
             await presenter.dispatch(.onAppear)
         }
@@ -94,6 +99,7 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
 
     private var binView: some View {
         BinView(isFull: !presenter.state.removedTasks.isEmpty)
+            .frame(width: 172)
             .dropDestination(for: DLTask.self) { droppedTasks, droppedPoint in
                 presenter.dispatch(.onTasksDropped(droppedTasks, droppedPoint))
                 return true
