@@ -9,14 +9,31 @@ import Foundation
 
 final actor DebugService<Environment: EnvironmentProtocol> {
     func getServerEnvironment() async -> ServerEnvironment {
-        let string = try? await Environment.shared.localRepository.getString(
-            for: .serverEnvironment)
-        return .init(rawValue: string ?? "") ?? .production
+        let value = try? await Environment.shared.localRepository.getString(
+            for: .serverEnvironment
+        )
+        return .init(rawValue: value ?? "") ?? .production
     }
 
-    func setServerEnvironment(_ serverEnvironment: ServerEnvironment) async throws {
+    func setServerEnvironment(_ value: ServerEnvironment) async throws {
         try await Environment.shared.localRepository.setString(
-            serverEnvironment.rawValue, for: .serverEnvironment)
+            value.rawValue,
+            for: .serverEnvironment
+        )
+    }
+
+    func getSpriteKitDebugMode() async -> Bool {
+        let value = try? await Environment.shared.localRepository.getBool(
+            for: .isSpriteKitDebugModeEnabled
+        )
+        return value ?? false
+    }
+
+    func setSpriteKitDebugMode(_ value: Bool) async throws {
+        try await Environment.shared.localRepository.setBool(
+            value,
+            for: .isSpriteKitDebugModeEnabled
+        )
     }
 
     func getAppCheckToken() async throws -> String {

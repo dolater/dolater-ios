@@ -34,30 +34,28 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
 
     var body: some View {
         NavigationStack(path: $presenter.state.path) {
-            Group {
+            SpriteView(
+                scene: presenter.state.scene,
+                options: [.allowsTransparency],
+                debugOptions: debugOptions
+            )
+            .background(Color.Semantic.Background.primary)
+            .overlay {
+                binView
+            }
+            .overlay {
                 if presenter.state.getActiveTasksStatus == .loading {
                     ProgressView()
+                } else if presenter.state.activeTasks.isEmpty {
+                    noTaskMessageView
                 } else {
-                    SpriteView(
-                        scene: presenter.state.scene,
-                        options: [.allowsTransparency],
-                        debugOptions: debugOptions
-                    )
-                    .background(Color.Semantic.Background.primary)
-                    .overlay {
-                        binView
-                    }
-                    .overlay {
-                        if presenter.state.activeTasks.isEmpty {
-                            noTaskMessageView
-                        } else {
-                            tasksView
-                        }
-                    }
-                    .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
-                    .errorAlert(dataStatus: presenter.state.updateTaskStatus)
+                    tasksView
                 }
             }
+            .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
+            .errorAlert(dataStatus: presenter.state.getRemovedTasksStatus)
+            .errorAlert(dataStatus: presenter.state.updateTaskStatus)
+            .errorAlert(dataStatus: presenter.state.addTaskStatus)
             .navigationDestination(for: TaskListPresenter<Environment>.State.Path.self) { destination in
                 switch destination {
                 case .detail(let task):
@@ -76,10 +74,6 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                         .frame(width: 300)
                 }
             }
-            .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
-            .errorAlert(dataStatus: presenter.state.getRemovedTasksStatus)
-            .errorAlert(dataStatus: presenter.state.updateTaskStatus)
-            .errorAlert(dataStatus: presenter.state.addTaskStatus)
         }
         .overlay {
             if presenter.state.isAddTaskDialogPresented {

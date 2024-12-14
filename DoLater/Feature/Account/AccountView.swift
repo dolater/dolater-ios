@@ -37,8 +37,14 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                                     }
 
                                     HStack(spacing: 18) {
-                                        countView(label: "フレンド", count: presenter.state.friendsCountString)
-                                        countView(label: "完了したタスク", count: presenter.state.tasksCountString)
+                                        countView(
+                                            label: String(localized: "フレンド"),
+                                            count: presenter.state.friendsCountString
+                                        )
+                                        countView(
+                                            label: String(localized: "完了したタスク"),
+                                            count: presenter.state.tasksCountString
+                                        )
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 }
@@ -71,6 +77,12 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
             .navigationDestination(for: AccountPresenter<Environment>.State.Path.self) { destination in
                 switch destination {
                 case .notifications:
+                    EmptyView()
+
+                case .friends:
+                    EmptyView()
+
+                case .archivedTasks:
                     EmptyView()
 
                 case .task(let task):
@@ -141,7 +153,7 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func countView(label: String, count: String?) -> some View {
+    private func countView<S>(label: S, count: S?) -> some View where S : StringProtocol {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
                 .font(.DL.note1)

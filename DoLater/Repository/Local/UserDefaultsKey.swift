@@ -20,4 +20,8 @@ extension UserDefaultsKey {
     static let serverEnvironment = UserDefaultsKey(
         name: "server_environment"
     )
+
+    static let isSpriteKitDebugModeEnabled = UserDefaultsKey(
+        name: "is_sprite_kit_debug_mode_enabled"
+    )
 }

@@ -12,14 +12,16 @@ import SwiftUI
 final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
     struct State: Equatable {
         var path: NavigationPath
+
         var scene: TrashMountainScene
         var activeTasks: [DLTask] = []
         var renderedTasks: [DLTask] = []
         var removedTasks: [DLTask] = []
+        var isAddTaskDialogPresented: Bool = false
+
         var getActiveTasksStatus: DataStatus = .default
         var getRemovedTasksStatus: DataStatus = .default
         var updateTaskStatus: DataStatus = .default
-        var isAddTaskDialogPresented: Bool = false
         var addTaskStatus: DataStatus = .default
 
         enum Path: Hashable {
@@ -87,24 +89,25 @@ final class TaskListPresenter<Environment: EnvironmentProtocol>: PresenterProtoc
 
 private extension TaskListPresenter {
     func onAppear() async {
+        Task {
+            do {
+                state.getRemovedTasksStatus = .loading
+                state.removedTasks = try await taskService.getActiveTasks()
+                state.getRemovedTasksStatus = .loaded
+            } catch {
+                state.getRemovedTasksStatus = .failed(.init(error))
+            }
+        }
+
         do {
             state.getActiveTasksStatus = .loading
             state.activeTasks = try await taskService.getActiveTasks()
+            if state.activeTasks != state.renderedTasks {
+                await refreshNodes()
+            }
             state.getActiveTasksStatus = .loaded
         } catch {
             state.getActiveTasksStatus = .failed(.init(error))
-        }
-
-        do {
-            state.getRemovedTasksStatus = .loading
-            state.removedTasks = try await taskService.getActiveTasks()
-            state.getRemovedTasksStatus = .loaded
-        } catch {
-            state.getRemovedTasksStatus = .failed(.init(error))
-        }
-
-        if state.activeTasks != state.renderedTasks {
-            await refreshNodes()
         }
     }
 
@@ -191,7 +194,7 @@ private extension TaskListPresenter {
             let task = try await taskService.add(url: url)
             if task.isToDo {
                 state.activeTasks.append(task)
-                state.scene.addTrashNode(for: task)
+                state.scene.addTaskNode(for: task)
             }
             state.addTaskStatus = .loaded
         } catch {
@@ -208,9 +211,8 @@ private extension TaskListPresenter {
         state.scene.addBinNode(radius: 172 / 2)
         state.renderedTasks = []
         state.activeTasks.forEach { task in
-            state.scene.addTrashNode(for: task)
+            state.scene.addTaskNode(for: task)
             state.renderedTasks.append(task)
         }
-        state.scene.addShakeAction()
     }
 }

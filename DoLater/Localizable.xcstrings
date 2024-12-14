@@ -2,10 +2,23 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "%lld日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld day"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld日"
+          }
+        }
+      }
     },
     "Cancel" : {
       "localizations" : {
@@ -33,6 +46,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "デバッグ"
+          }
+        }
+      }
+    },
+    "Debug Mode" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デバッグモード"
           }
         }
       }
@@ -137,12 +160,12 @@
         }
       }
     },
-    "Sign Out" : {
+    "Sprite Kit" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "サインアウト"
+            "value" : "Sprite Kit"
           }
         }
       }
@@ -154,7 +177,20 @@
       "shouldTranslate" : false
     },
     "アカウントを削除" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Account"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アカウントを削除"
+          }
+        }
+      }
     },
     "あとまわしリンクがありません" : {
       "localizations" : {
@@ -173,7 +209,36 @@
       }
     },
     "サインアウト" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Out"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サインアウト"
+          }
+        }
+      }
+    },
+    "フレンド" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Friends"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フレンド"
+          }
+        }
+      }
     },
     "削除する" : {
       "localizations" : {
@@ -192,17 +257,59 @@
       }
     },
     "友達に預けたあとまわしリンク" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do Later Links Your Friends Have"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "友達に預けたあとまわしリンク"
+          }
+        }
+      }
     },
     "名前" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名前"
+          }
+        }
+      }
+    },
+    "完了したタスク" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achieved Tasks"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了したタスク"
+          }
+        }
+      }
     },
     "完了にする" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mark as Done"
+            "value" : "Mark as Completed"
           }
         },
         "ja" : {

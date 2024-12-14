@@ -44,7 +44,7 @@ final class TrashMountainScene: SKScene, Sendable {
         binPosition = node.position
     }
 
-    func addTrashNode(for task: DLTask) {
+    func addTaskNode(for task: DLTask) {
         let node = SKShapeNode(circleOfRadius: task.radius)
         node.name = task.displayName
         node.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -53,16 +53,15 @@ final class TrashMountainScene: SKScene, Sendable {
         addChild(node)
         trashPositions[node.name ?? ""] = node.position
         trashRotations[node.name ?? ""] = node.zRotation
+        addShakeAction(for: node)
     }
 
-    func addShakeAction() {
-        enumerateChildNodes(withName: "\(DLTask.namePrefix)\(String.uuidRegex)") { node, _ in
-            let clockwiseAction = SKAction.rotate(byAngle: .pi / 180, duration: 0.1)
-            let counterClockwiseAction = SKAction.rotate(byAngle: -.pi / 180, duration: 0.1)
-            let allAction = SKAction.sequence([clockwiseAction, counterClockwiseAction])
-            let actionLoop = SKAction.repeatForever(allAction)
-            node.run(actionLoop)
-        }
+    func addShakeAction(for node: SKNode) {
+        let clockwiseAction = SKAction.rotate(byAngle: .pi / 180, duration: 0.1)
+        let counterClockwiseAction = SKAction.rotate(byAngle: -.pi / 180, duration: 0.1)
+        let allAction = SKAction.sequence([clockwiseAction, counterClockwiseAction])
+        let actionLoop = SKAction.repeatForever(allAction)
+        node.run(actionLoop)
     }
 
     func removeBinNode() {

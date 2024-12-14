@@ -13,18 +13,20 @@ import PhotosUI
 final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
     struct State: Equatable {
         var path: NavigationPath
+
         var user: Components.Schemas.User?
-        var getUserStatus: DataStatus = .default
         var friendsCount: Int?
-        var getFriendsCountStatus: DataStatus = .default
         var tasksCount: Int?
-        var getTaskCountStatus: DataStatus = .default
         var photosPickerItem: PhotosPickerItem?
-        var updateProfilePhotoStatus: DataStatus = .default
         var isNameEditing: Bool = false
         var editingNameText: String = ""
-        var updateNameStatus: DataStatus = .default
         var tasksFriendHas: [Components.Schemas.User : [Components.Schemas.Task]] = [:]
+
+        var getUserStatus: DataStatus = .default
+        var getFriendsCountStatus: DataStatus = .default
+        var getTaskCountStatus: DataStatus = .default
+        var updateProfilePhotoStatus: DataStatus = .default
+        var updateNameStatus: DataStatus = .default
         var getTasksFriendHasStatus: DataStatus = .default
         var signOutStatus: DataStatus = .default
 
@@ -56,6 +58,8 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
         enum Path: Hashable {
             case notifications
+            case friends
+            case archivedTasks
             case task(DLTask)
             case user(Components.Schemas.User)
         }
@@ -67,6 +71,8 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case onSelectedPhotoChanged
         case onNameTapped
         case onNameSubmitted
+        case onFriendsCountTapped
+        case onArchivedTasksCountTapped
         case onTaskFriendHasTapped(DLTask)
         case onSignOutButtonTapped
         case onDeleteAccountButtonTapped
@@ -103,6 +109,12 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
         case .onNameSubmitted:
             await onNameSubmitted()
+
+        case .onFriendsCountTapped:
+            await onFriendsCountTapped()
+
+        case .onArchivedTasksCountTapped:
+            await onArchivedTasksCountTapped()
 
         case .onTaskFriendHasTapped(let task):
             await onTaskFriendHasTapped(task)
@@ -154,14 +166,16 @@ private extension AccountPresenter {
             do {
                 state.getTasksFriendHasStatus = .loading
                 let tasks = try await taskService.getTasksFriendHas()
+                var dict: [Components.Schemas.User: [DLTask]] = [:]
                 Set(tasks.map(\.pool)).forEach { pool in
                     guard let friend = pool.owner else {
                         return
                     }
-                    state.tasksFriendHas[friend] = tasks.filter({ task in
+                    dict[friend] = tasks.filter({ task in
                         task.pool.owner == friend
                     })
                 }
+                state.tasksFriendHas = dict
                 state.getTasksFriendHasStatus = .loaded
             } catch {
                 state.getTasksFriendHasStatus = .failed(.init(error))
@@ -205,6 +219,14 @@ private extension AccountPresenter {
         } catch {
             state.updateNameStatus = .failed(.init(error))
         }
+    }
+
+    func onFriendsCountTapped() async {
+        state.path.append(State.Path.friends)
+    }
+
+    func onArchivedTasksCountTapped() async {
+        state.path.append(State.Path.archivedTasks)
     }
 
     func onTaskFriendHasTapped(_ task: DLTask) async {

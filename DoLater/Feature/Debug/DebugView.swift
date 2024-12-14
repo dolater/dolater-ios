@@ -36,9 +36,20 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                 }
 
                 Section {
+                    Toggle("Debug Mode", isOn: $presenter.state.isSpriteKitDebugModeEnabled)
+                        .onChange(of: presenter.state.isSpriteKitDebugModeEnabled) { _, _ in
+                            presenter.dispatch(.onSpriteKitDebugModeChanged)
+                        }
+                } header: {
+                    Text("Sprite Kit")
+                }
+
+                Section {
                     Text(presenter.state.appCheckToken)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
                         .contextMenu {
                             Button("Copy", systemImage: "document.on.document") {
                                 UIPasteboard.general.string = presenter.state.appCheckToken
@@ -52,6 +63,8 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                     Text(presenter.state.fcmToken)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
                         .contextMenu {
                             Button("Copy", systemImage: "document.on.document") {
                                 UIPasteboard.general.string = presenter.state.fcmToken
@@ -65,6 +78,8 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                     Text(presenter.state.uid)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
                         .contextMenu {
                             Button("Copy", systemImage: "document.on.document") {
                                 UIPasteboard.general.string = presenter.state.uid
@@ -78,6 +93,8 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                     Text(presenter.state.idToken)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
                         .contextMenu {
                             Button("Copy", systemImage: "document.on.document") {
                                 UIPasteboard.general.string = presenter.state.idToken
@@ -85,12 +102,6 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
                         }
                 } header: {
                     Text("ID Token")
-                }
-
-                Section {
-                    Button("Sign Out", role: .destructive) {
-                        presenter.dispatch(.onSignOutButtonTapped)
-                    }
                 }
             }
             .navigationTitle("Debug")
@@ -101,6 +112,8 @@ struct DebugView<Environment: EnvironmentProtocol>: View {
         }
         .errorAlert(dataStatus: presenter.state.getServerEnvironmentStatus)
         .errorAlert(dataStatus: presenter.state.setServerEnvironmentStatus)
+        .errorAlert(dataStatus: presenter.state.getSpriteKitDebugMode)
+        .errorAlert(dataStatus: presenter.state.setSpriteKitDebugMode)
         .errorAlert(dataStatus: presenter.state.getAppCheckTokenStatus)
         .errorAlert(dataStatus: presenter.state.getFCMTokenStatus)
         .errorAlert(dataStatus: presenter.state.getIDTokenStatus)

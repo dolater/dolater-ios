@@ -14,6 +14,10 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
         var getServerEnvironmentStatus: DataStatus = .default
         var setServerEnvironmentStatus: DataStatus = .default
 
+        var isSpriteKitDebugModeEnabled: Bool = false
+        var getSpriteKitDebugMode: DataStatus = .default
+        var setSpriteKitDebugMode: DataStatus = .default
+
         var appCheckToken: String = ""
         var getAppCheckTokenStatus: DataStatus = .default
 
@@ -26,27 +30,24 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
         var idToken: String = ""
         var getIDTokenStatus: DataStatus = .default
 
-        var signOutStatus: DataStatus = .default
-
         var isLoading: Bool {
             getServerEnvironmentStatus.isLoading
                 || setServerEnvironmentStatus.isLoading
                 || getAppCheckTokenStatus.isLoading
                 || getFCMTokenStatus.isLoading
                 || getIDTokenStatus.isLoading
-                || signOutStatus.isLoading
+                || getSpriteKitDebugMode.isLoading
         }
     }
 
     enum Action: Hashable, Sendable {
         case onAppear
         case onServerEnvironmentChanged
-        case onSignOutButtonTapped
+        case onSpriteKitDebugModeChanged
     }
 
     var state: State = .init()
 
-    private let accountService: AccountService<Environment> = .init()
     private let debugService: DebugService<Environment> = .init()
 
     func dispatch(_ action: Action) {
@@ -63,54 +64,70 @@ final class DebugPresenter<Environment: EnvironmentProtocol>: PresenterProtocol 
         case .onServerEnvironmentChanged:
             await onServerEnvironmentChanged()
 
-        case .onSignOutButtonTapped:
-            await onSignOutButtonTapped()
+        case .onSpriteKitDebugModeChanged:
+            await onSpriteKitDebugModeChanged()
         }
     }
 }
 
 extension DebugPresenter {
     fileprivate func onAppear() async {
-        state.getServerEnvironmentStatus = .loading
-        state.serverEnvironment = await debugService.getServerEnvironment()
-        state.getServerEnvironmentStatus = .loaded
-
-        state.getAppCheckTokenStatus = .loading
-        do {
-            state.appCheckToken = try await debugService.getAppCheckToken()
-            state.getAppCheckTokenStatus = .loaded
-        } catch {
-            state.getAppCheckTokenStatus = .failed(.init(error))
+        Task {
+            state.getServerEnvironmentStatus = .loading
+            state.serverEnvironment = await debugService.getServerEnvironment()
+            state.getServerEnvironmentStatus = .loaded
         }
 
-        state.getFCMTokenStatus = .loading
-        do {
-            state.fcmToken = try await debugService.getFCMToken()
-            state.getFCMTokenStatus = .loaded
-        } catch {
-            state.getFCMTokenStatus = .failed(.init(error))
+        Task {
+            state.getSpriteKitDebugMode = .loading
+            state.isSpriteKitDebugModeEnabled = await debugService.getSpriteKitDebugMode()
+            state.getSpriteKitDebugMode = .loaded
         }
 
-        state.getUIDStatus = .loading
-        do {
-            state.uid = try await debugService.getUID()
-            state.getIDTokenStatus = .loaded
-        } catch {
-            state.getIDTokenStatus = .failed(.init(error))
+        Task {
+            do {
+                state.getAppCheckTokenStatus = .loading
+                state.appCheckToken = try await debugService.getAppCheckToken()
+                state.getAppCheckTokenStatus = .loaded
+            } catch {
+                state.getAppCheckTokenStatus = .failed(.init(error))
+            }
         }
 
-        state.getIDTokenStatus = .loading
-        do {
-            state.idToken = try await debugService.getIdToken()
-            state.getIDTokenStatus = .loaded
-        } catch {
-            state.getIDTokenStatus = .failed(.init(error))
+        Task {
+            do {
+                state.getFCMTokenStatus = .loading
+                state.fcmToken = try await debugService.getFCMToken()
+                state.getFCMTokenStatus = .loaded
+            } catch {
+                state.getFCMTokenStatus = .failed(.init(error))
+            }
+        }
+
+        Task {
+            do {
+                state.getUIDStatus = .loading
+                state.uid = try await debugService.getUID()
+                state.getIDTokenStatus = .loaded
+            } catch {
+                state.getIDTokenStatus = .failed(.init(error))
+            }
+        }
+
+        Task {
+            do {
+                state.getIDTokenStatus = .loading
+                state.idToken = try await debugService.getIdToken()
+                state.getIDTokenStatus = .loaded
+            } catch {
+                state.getIDTokenStatus = .failed(.init(error))
+            }
         }
     }
 
     fileprivate func onServerEnvironmentChanged() async {
-        state.setServerEnvironmentStatus = .loading
         do {
+            state.setServerEnvironmentStatus = .loading
             try await debugService.setServerEnvironment(state.serverEnvironment)
             state.setServerEnvironmentStatus = .loaded
         } catch {
@@ -118,13 +135,13 @@ extension DebugPresenter {
         }
     }
 
-    fileprivate func onSignOutButtonTapped() async {
-        state.signOutStatus = .loading
+    fileprivate func onSpriteKitDebugModeChanged() async {
         do {
-            try await accountService.signOut()
-            state.signOutStatus = .loaded
+            state.setSpriteKitDebugMode = .loading
+            try await debugService.setServerEnvironment(state.serverEnvironment)
+            state.setSpriteKitDebugMode = .loaded
         } catch {
-            state.signOutStatus = .failed(.init(error))
+            state.setSpriteKitDebugMode = .failed(.init(error))
         }
     }
 }
