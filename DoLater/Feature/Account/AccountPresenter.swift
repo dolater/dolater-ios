@@ -67,6 +67,7 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     enum Action {
         case onAppear
+        case onRefresh
         case onNotificationButtonTapped
         case onSelectedPhotoChanged
         case onNameTapped
@@ -97,6 +98,9 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         switch action {
         case .onAppear:
             await onAppear()
+
+        case .onRefresh:
+            await onRefresh()
 
         case .onNotificationButtonTapped:
             await onNotificationButtonTapped()
@@ -130,57 +134,11 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
 private extension AccountPresenter {
     func onAppear() async {
-        Task {
-            do {
-                state.getUserStatus = .loading
-                state.user = try await accountService.getMe()
-                state.getUserStatus = .loaded
-            } catch {
-                state.getUserStatus = .failed(.init(error))
-            }
-        }
+        await refresh()
+    }
 
-        Task {
-            do {
-                state.getFriendsCountStatus = .loading
-                let friends = try await accountService.getFriends()
-                state.friendsCount = friends.count
-                state.getFriendsCountStatus = .loaded
-            } catch {
-                state.getFriendsCountStatus = .failed(.init(error))
-            }
-        }
-
-        Task {
-            do {
-                state.getTaskCountStatus = .loading
-                let tasks = try await taskService.getActiveTasks()
-                state.tasksCount = tasks.count
-                state.getTaskCountStatus = .loaded
-            } catch {
-                state.getTaskCountStatus = .failed(.init(error))
-            }
-        }
-
-        Task {
-            do {
-                state.getTasksFriendHasStatus = .loading
-                let tasks = try await taskService.getTasksFriendHas()
-                var dict: [Components.Schemas.User: [DLTask]] = [:]
-                Set(tasks.map(\.pool)).forEach { pool in
-                    guard let friend = pool.owner else {
-                        return
-                    }
-                    dict[friend] = tasks.filter({ task in
-                        task.pool.owner == friend
-                    })
-                }
-                state.tasksFriendHas = dict
-                state.getTasksFriendHasStatus = .loaded
-            } catch {
-                state.getTasksFriendHasStatus = .failed(.init(error))
-            }
-        }
+    func onRefresh() async {
+        await refresh()
     }
 
     func onNotificationButtonTapped() async {
@@ -244,5 +202,61 @@ private extension AccountPresenter {
     }
 
     func onDeleteAccountButtonTapped() async {
+    }
+}
+
+private extension AccountPresenter {
+    func refresh() async {
+        Task {
+            do {
+                state.getUserStatus = .loading
+                state.user = try await accountService.getMe()
+                state.getUserStatus = .loaded
+            } catch {
+                state.getUserStatus = .failed(.init(error))
+            }
+        }
+
+        Task {
+            do {
+                state.getFriendsCountStatus = .loading
+                let friends = try await accountService.getFriends()
+                state.friendsCount = friends.count
+                state.getFriendsCountStatus = .loaded
+            } catch {
+                state.getFriendsCountStatus = .failed(.init(error))
+            }
+        }
+
+        Task {
+            do {
+                state.getTaskCountStatus = .loading
+                let tasks = try await taskService.getActiveTasks()
+                state.tasksCount = tasks.count
+                state.getTaskCountStatus = .loaded
+            } catch {
+                state.getTaskCountStatus = .failed(.init(error))
+            }
+        }
+
+        Task {
+            do {
+                state.getTasksFriendHasStatus = .loading
+                let tasks = try await taskService.getTasksFriendHas()
+                var dict: [Components.Schemas.User: [DLTask]] = [:]
+                Set(tasks.map(\.pool)).forEach { pool in
+                    guard let friend = pool.owner else {
+                        return
+                    }
+                    dict[friend] = tasks.filter({ task in
+                        task.pool.owner == friend
+                    })
+                }
+                state.tasksFriendHas = dict
+                state.getTasksFriendHasStatus = .loaded
+            } catch {
+                state.getTasksFriendHasStatus = .failed(.init(error))
+            }
+        }
     }
 }

@@ -11,15 +11,24 @@ struct TaskFriendHasListView: View {
     private let tasks: [Components.Schemas.User: [DLTask]]
     private let isLoading: Bool
     private let onTaskTappedAction: (DLTask) -> Void
+    private let onMarkAsToDoAction: (DLTask) -> Void
+    private let onMarkAsCompletedAction: (DLTask) -> Void
+    private let onDeletedAction: (DLTask) -> Void
 
     init(
         tasks: [Components.Schemas.User : [DLTask]],
         isLoading: Bool = false,
-        onTaskTapped onTaskTappedAction: @escaping (DLTask) -> Void
+        onTaskTapped onTaskTappedAction: @escaping (DLTask) -> Void,
+        onMarkAsToDo onMarkAsToDoAction: @escaping (DLTask) -> Void,
+        onMarkAsCompleted onMarkAsCompletedAction: @escaping (DLTask) -> Void,
+        onDeleted onDeletedAction: @escaping (DLTask) -> Void
     ) {
         self.tasks = tasks
         self.isLoading = isLoading
         self.onTaskTappedAction = onTaskTappedAction
+        self.onMarkAsToDoAction = onMarkAsToDoAction
+        self.onMarkAsCompletedAction = onMarkAsCompletedAction
+        self.onDeletedAction = onDeletedAction
     }
 
     var body: some View {
@@ -31,6 +40,10 @@ struct TaskFriendHasListView: View {
 
             if isLoading {
                 ProgressView()
+            } else if tasks.isEmpty {
+                Text("あとまわしリンクがありません")
+                    .font(.DL.title1)
+                    .foregroundStyle(Color.Semantic.Text.secondary)
             } else {
                 ForEach(Array(tasks.keys.enumerated()), id: \.0) { i, user in
                     if let tasks = tasks[user] {
@@ -63,6 +76,21 @@ struct TaskFriendHasListView: View {
                 HStack(spacing: 10) {
                     TaskLabelView(url: task.url, isFullWidth: true, alignment: .leading)
                         .frame(maxWidth: .infinity)
+                        .contextMenu {
+                            if task.isCompleted {
+                                Button("未完了にする", systemImage: "square") {
+                                    onMarkAsToDoAction(task)
+                                }
+                            } else {
+                                Button("完了にする", systemImage: "checkmark.square") {
+                                    onMarkAsCompletedAction(task)
+                                }
+                            }
+                            Button("削除する", systemImage: "trash", role: .destructive) {
+                                onDeletedAction(task)
+                            }
+                        }
+
                     Text("\(task.passedDays)日")
                         .font(.DL.note1)
                 }
@@ -82,6 +110,9 @@ struct TaskFriendHasListView: View {
                 .mock2: DLTask.mocks,
             ]
         ) { _ in
+        } onMarkAsToDo: { _ in
+        } onMarkAsCompleted: { _ in
+        } onDeleted: { _ in
         }
     }
 }

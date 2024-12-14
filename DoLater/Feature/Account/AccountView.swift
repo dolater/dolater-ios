@@ -55,6 +55,9 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                                 isLoading: presenter.state.getTasksFriendHasStatus.isLoading
                             ) { task in
                                 presenter.dispatch(.onTaskFriendHasTapped(task))
+                            } onMarkAsToDo: { _ in
+                            } onMarkAsCompleted: { _ in
+                            } onDeleted: { _ in
                             }
 
                             Button("サインアウト") {
@@ -69,6 +72,9 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                         .padding(.vertical, 8)
                         .padding(.horizontal, 24)
                         .foregroundStyle(Color.Semantic.Text.primary)
+                    }
+                    .refreshable {
+                        await presenter.dispatch(.onRefresh)
                     }
                 }
             }
@@ -86,7 +92,9 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                     EmptyView()
 
                 case .task(let task):
-                    EmptyView()
+                    TaskFriendHasView(task: task) {
+                    } markAsToDo: {
+                    }
 
                 case .user(let user):
                     UserView<Environment>(user: user)

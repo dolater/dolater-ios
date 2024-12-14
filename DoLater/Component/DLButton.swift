@@ -16,6 +16,8 @@ struct DLButton: View {
     enum ButtonStyle {
         case primary
         case secondary
+        case tertiary
+        case alert
 
         var background: Color {
             switch self {
@@ -24,6 +26,12 @@ struct DLButton: View {
 
             case .secondary:
                 Color.Semantic.Background.secondary
+
+            case .tertiary:
+                Color.clear
+
+            case .alert:
+                Color.clear
             }
         }
 
@@ -34,6 +42,12 @@ struct DLButton: View {
 
             case .secondary:
                 Color.Semantic.Text.primary
+
+            case .tertiary:
+                Color.Semantic.Text.primary
+
+            case .alert:
+                Color.Semantic.Text.alert
             }
         }
     }

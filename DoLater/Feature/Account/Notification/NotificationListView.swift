@@ -22,9 +22,9 @@ struct NotificationListView<Environment: EnvironmentProtocol>: View {
                         }
                     }
                     .padding(24)
-                    .refreshable {
-                        await presenter.dispatch(.onRefresh)
-                    }
+                }
+                .refreshable {
+                    await presenter.dispatch(.onRefresh)
                 }
             }
         }
