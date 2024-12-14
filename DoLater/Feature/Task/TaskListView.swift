@@ -76,6 +76,10 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
                         .frame(width: 300)
                 }
             }
+            .errorAlert(dataStatus: presenter.state.getActiveTasksStatus)
+            .errorAlert(dataStatus: presenter.state.getRemovedTasksStatus)
+            .errorAlert(dataStatus: presenter.state.updateTaskStatus)
+            .errorAlert(dataStatus: presenter.state.addTaskStatus)
         }
         .overlay {
             if presenter.state.isAddTaskDialogPresented {

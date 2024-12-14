@@ -57,11 +57,13 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         enum Path: Hashable {
             case notifications
             case task(DLTask)
+            case user(Components.Schemas.User)
         }
     }
 
     enum Action {
         case onAppear
+        case onNotificationButtonTapped
         case onSelectedPhotoChanged
         case onNameTapped
         case onNameSubmitted
@@ -89,6 +91,9 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         switch action {
         case .onAppear:
             await onAppear()
+
+        case .onNotificationButtonTapped:
+            await onNotificationButtonTapped()
 
         case .onSelectedPhotoChanged:
             await onSelectedPhotoChanged()
@@ -162,6 +167,10 @@ private extension AccountPresenter {
                 state.getTasksFriendHasStatus = .failed(.init(error))
             }
         }
+    }
+
+    func onNotificationButtonTapped() async {
+        state.path.append(State.Path.notifications)
     }
 
     func onSelectedPhotoChanged() async {

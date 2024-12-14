@@ -26,6 +26,7 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                     ScrollView {
                         LazyVStack(spacing: 24) {
                             DLButton(.icon("bell"), style: .secondary) {
+                                presenter.dispatch(.onNotificationButtonTapped)
                             }
                             .frame(maxWidth: .infinity, alignment: .trailing)
 
@@ -74,6 +75,9 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
 
                 case .task(let task):
                     EmptyView()
+
+                case .user(let user):
+                    UserView<Environment>(user: user)
                 }
             }
             .errorAlert(dataStatus: presenter.state.getUserStatus)

@@ -19,6 +19,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var homeNavigationPath: NavigationPath = .init()
         var accountNavigationPath: NavigationPath = .init()
         var isAddTaskDialogPresented: Bool = false
+        var openURLStatus: DataStatus = .default
 
         enum AuthStatus: Hashable, Sendable {
             case unchecked
@@ -37,6 +38,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     private let accountService: AccountService<Environment> = .init()
     private let taskService: TaskService<Environment> = .init()
+    private let userService: UserService<Environment> = .init()
 
     private var authListener: NSObjectProtocol?
 
@@ -85,14 +87,45 @@ extension ContentPresenter {
     fileprivate func onOpenURL(_ url: URL) async {
         Logger.standard.debug("Open URL: \(url.absoluteString)")
         let pathComponents = url.pathComponents
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            Logger.standard.error("Invalid URL: \(url.absoluteString)")
-            return
-        }
-        let _ = components.queryItems
-        switch pathComponents.first {
+        switch pathComponents[safe: 1] {
         case "users":
-            state.selection = .account
+            guard let id = pathComponents[safe: 2] else {
+                return
+            }
+            do {
+                state.openURLStatus = .loading
+                state.selection = .account
+                let me = try await accountService.getMe()
+                if id == me.id {
+                    state.openURLStatus = .loaded
+                    return
+                }
+                let user = try await userService.get(id: id)
+                state.accountNavigationPath = .init([AccountPresenter<Environment>.State.Path.user(user)])
+                state.openURLStatus = .loaded
+            } catch {
+                state.openURLStatus = .failed(.init(error))
+            }
+
+        case "tasks":
+            guard let id = pathComponents[safe: 2] else {
+                return
+            }
+            do {
+                state.openURLStatus = .loading
+                let task = try await taskService.get(taskId: id)
+                let me = try await accountService.getMe()
+                if task.pool.owner?.id == me.id {
+                    state.selection = .home
+                    state.homeNavigationPath = .init([TaskListPresenter<Environment>.State.Path.detail(task)])
+                } else {
+                    state.selection = .account
+                    state.accountNavigationPath = .init([AccountPresenter<Environment>.State.Path.task(task)])
+                }
+                state.openURLStatus = .loaded
+            } catch {
+                state.openURLStatus = .failed(.init(error))
+            }
 
         default:
             return

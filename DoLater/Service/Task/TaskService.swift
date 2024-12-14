@@ -20,6 +20,15 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         return tasks.sorted { $0.createdAt > $1.createdAt }
     }
 
+    func getActiveTasks(id: String) async throws -> [DLTask] {
+        let taskPools = try await Environment.shared.taskPoolRepository.getPools()
+        guard let activePool = taskPools.first(where: { $0._type == .taskPoolTypeActive }) else {
+            return []
+        }
+        let tasks = try await Environment.shared.taskRepository.getTasks(poolId: activePool.id, friendHas: nil)
+        return tasks.sorted { $0.createdAt > $1.createdAt }
+    }
+
     func getRemovedTasks() async throws -> [DLTask] {
         let taskPools = try await Environment.shared.taskPoolRepository.getPools()
         guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeBin }) else {
@@ -46,6 +55,10 @@ final actor TaskService<Environment: EnvironmentProtocol> {
 
     func getTasksFriendHas() async throws -> [DLTask] {
         try await Environment.shared.taskRepository.getTasks(poolId: nil, friendHas: true)
+    }
+
+    func get(taskId: String) async throws -> DLTask {
+        try await Environment.shared.taskRepository.getTask(id: taskId)
     }
 
     func add(url: URL) async throws -> DLTask {
