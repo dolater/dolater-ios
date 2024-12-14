@@ -43,6 +43,7 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 .errorAlert(dataStatus: presenter.state.registerMeStatus)
+                .errorAlert(dataStatus: presenter.state.openURLStatus)
 
             case .unauthenticated:
                 SignInView<Environment>()

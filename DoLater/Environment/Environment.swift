@@ -12,7 +12,7 @@ protocol EnvironmentProtocol: Actor {
     var authRepository: AuthRepositoryProtocol { get }
     var httpRepository: HTTPRepositoryProtocol { get }
     var localRepository: LocalRepositoryProtocol { get }
-    var messagingRepository: MessagingRepositoryProtocol { get }
+    var notificationRepository: NotificationRepositoryProtocol { get }
     var remoteConfigRepository: RemoteConfigRepositoryProtocol { get }
     var storageRepository: StorageRepositoryProtocol { get }
     var taskPoolRepository: TaskPoolRepositoryProtocol { get }
@@ -27,7 +27,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
     let authRepository: any AuthRepositoryProtocol
     let httpRepository: any HTTPRepositoryProtocol
     let localRepository: any LocalRepositoryProtocol
-    let messagingRepository: any MessagingRepositoryProtocol
+    let notificationRepository: any NotificationRepositoryProtocol
     let remoteConfigRepository: any RemoteConfigRepositoryProtocol
     let storageRepository: any StorageRepositoryProtocol
     let taskPoolRepository: any TaskPoolRepositoryProtocol
@@ -39,7 +39,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
         authRepository: any AuthRepositoryProtocol = AuthRepositoryImpl(),
         httpRepository: any HTTPRepositoryProtocol = HTTPRepositoryImpl(),
         localRepository: any LocalRepositoryProtocol = LocalRepositoryImpl(),
-        messagingRepository: any MessagingRepositoryProtocol = MessagingRepositoryImpl(),
+        notificationRepository: any NotificationRepositoryProtocol = NotificationRepositoryImpl(),
         remoteConfigRepository: any RemoteConfigRepositoryProtocol = RemoteConfigRepositoryImpl(),
         storageRepository: any StorageRepositoryProtocol = StorageRepositoryImpl(),
         taskPoolRepository: any TaskPoolRepositoryProtocol = TaskPoolRepositoryImpl(),
@@ -50,7 +50,7 @@ final actor EnvironmentImpl: EnvironmentProtocol {
         self.authRepository = authRepository
         self.httpRepository = httpRepository
         self.localRepository = localRepository
-        self.messagingRepository = messagingRepository
+        self.notificationRepository = notificationRepository
         self.remoteConfigRepository = remoteConfigRepository
         self.storageRepository = storageRepository
         self.taskPoolRepository = taskPoolRepository

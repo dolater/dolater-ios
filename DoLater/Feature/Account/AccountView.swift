@@ -77,7 +77,7 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
             .navigationDestination(for: AccountPresenter<Environment>.State.Path.self) { destination in
                 switch destination {
                 case .notifications:
-                    EmptyView()
+                    NotificationListView<Environment>()
 
                 case .friends:
                     EmptyView()

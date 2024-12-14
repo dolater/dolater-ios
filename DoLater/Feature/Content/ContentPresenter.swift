@@ -13,12 +13,15 @@ import SwiftUI
 final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtocol {
     struct State: Equatable {
         var authStatus: AuthStatus = .unchecked
-        var registerMeStatus: DataStatus = .default
+
         var isDebugScreenPresented: Bool = false
         var selection: TabBarItem = .home
+
         var homeNavigationPath: NavigationPath = .init()
         var accountNavigationPath: NavigationPath = .init()
         var isAddTaskDialogPresented: Bool = false
+
+        var registerMeStatus: DataStatus = .default
         var openURLStatus: DataStatus = .default
 
         enum AuthStatus: Hashable, Sendable {

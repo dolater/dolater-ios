@@ -208,6 +208,22 @@
         }
       }
     },
+    "お知らせ" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お知らせ"
+          }
+        }
+      }
+    },
     "サインアウト" : {
       "localizations" : {
         "en" : {

@@ -41,7 +41,7 @@ final actor DebugService<Environment: EnvironmentProtocol> {
     }
 
     func getFCMToken() async throws -> String {
-        try await Environment.shared.messagingRepository.getFCMToken()
+        try await Environment.shared.notificationRepository.getFCMToken()
     }
 
     func getUID() async throws -> String {

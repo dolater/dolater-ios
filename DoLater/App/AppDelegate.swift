@@ -12,6 +12,9 @@ import FirebaseMessaging
 import SwiftUI
 
 final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
+
+    private let notificationService: NotificationService<Environment> = .init()
+
     private let gcmMessageIDKey = "gcm.message_id"
     private let fcmURLKey = "url"
 
@@ -57,6 +60,10 @@ final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicati
 
         let sendingAppID = options[.sourceApplication]
         Logger.standard.debug("Source Application: \(sendingAppID.debugDescription)")
+
+        if url.host() == "dolater.kantacky.com" {
+            return true
+        }
 
         guard let _ = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             return false
@@ -141,10 +148,7 @@ final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicati
             guard let fcmToken else {
                 return
             }
-            try await Environment.shared.messagingRepository.postFCMToken(
-                fcmToken,
-                timestamp: .now
-            )
+            try await notificationService.upsertFCMToken(fcmToken)
         }
     }
 }

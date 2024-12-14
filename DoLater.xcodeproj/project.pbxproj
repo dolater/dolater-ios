@@ -339,7 +339,6 @@
 				F1D38CEC2D0560D300B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
 				F1D38CED2D0560EA00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
 				F1D38CF02D0560FD00B12A9C /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
-				F1750B5A2D07EE4B0012002B /* XCRemoteSwiftPackageReference "swift-format" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F1773F422D04753600F162C4 /* Products */;
@@ -852,14 +851,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F1750B5A2D07EE4B0012002B /* XCRemoteSwiftPackageReference "swift-format" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/swiftlang/swift-format";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 600.0.0;
-			};
-		};
 		F1D38C1B2D055EA400B12A9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";

@@ -112,6 +112,10 @@ private extension TaskListPresenter {
     }
 
     func onTasksDropped(_ droppedTasks: [DLTask], at droppedPoint: CGPoint) async {
+        let droppedTaskIds = droppedTasks.map { $0.id }
+        state.activeTasks.removeAll { task in
+            droppedTaskIds.contains(task.id)
+        }
         var successfullyDroppedTasks: [DLTask?] = []
         for task in droppedTasks {
             do {
