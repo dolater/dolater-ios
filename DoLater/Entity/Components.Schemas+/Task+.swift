@@ -34,6 +34,12 @@ extension Components.Schemas.Task: Identifiable, Transferable {
         return .trashOpened
     }
 
+    var passedDays: Int {
+        let interval = Date().timeIntervalSince(createdAt)
+        let passedDays = interval / TimeInterval(60 * 60 * 24)
+        return Int(passedDays)
+    }
+
     var radius: CGFloat {
         let maxInterval: TimeInterval = 60 * 60 * 24 * 7 * 4
         let interval = Date().timeIntervalSince(createdAt)

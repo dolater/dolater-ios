@@ -15,14 +15,14 @@ extension Components.Schemas.User {
 
 extension Components.Schemas.User {
     static let mock1 = Components.Schemas.User(
-        id: FirebaseAuth.User.mock1.uid,
-        displayName: FirebaseAuth.User.mock1.displayName ?? "",
-        photoURL: FirebaseAuth.User.mock1.photoURL?.absoluteString ?? ""
+        id: UUID().uuidString,
+        displayName: "Debug User1",
+        photoURL: ""
     )
 
     static let mock2 = Components.Schemas.User(
-        id: FirebaseAuth.User.mock2.uid,
-        displayName: FirebaseAuth.User.mock2.displayName ?? "",
-        photoURL: FirebaseAuth.User.mock2.photoURL?.absoluteString ?? ""
+        id: UUID().uuidString,
+        displayName: "Debug User2",
+        photoURL: ""
     )
 }

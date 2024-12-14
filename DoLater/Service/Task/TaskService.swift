@@ -16,7 +16,7 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         guard let activePool = taskPools.first(where: { $0._type == .taskPoolTypeActive }) else {
             return []
         }
-        let tasks = try await Environment.shared.taskRepository.getTasks(poolId: activePool.id)
+        let tasks = try await Environment.shared.taskRepository.getTasks(poolId: activePool.id, friendHas: nil)
         return tasks.sorted { $0.createdAt > $1.createdAt }
     }
 
@@ -25,7 +25,7 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeBin }) else {
             return []
         }
-        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
+        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id, friendHas: nil)
     }
 
     func getArchivedTasks() async throws -> [DLTask] {
@@ -33,7 +33,7 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypeArchived }) else {
             return []
         }
-        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
+        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id, friendHas: nil)
     }
 
     func getPendingTasks() async throws -> [DLTask] {
@@ -41,12 +41,11 @@ final actor TaskService<Environment: EnvironmentProtocol> {
         guard let binPool = taskPools.first(where: { $0._type == .taskPoolTypePending }) else {
             return []
         }
-        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id)
+        return try await Environment.shared.taskRepository.getTasks(poolId: binPool.id, friendHas: nil)
     }
 
     func getTasksFriendHas() async throws -> [DLTask] {
-        // TODO: -
-        []
+        try await Environment.shared.taskRepository.getTasks(poolId: nil, friendHas: true)
     }
 
     func add(url: URL) async throws -> DLTask {

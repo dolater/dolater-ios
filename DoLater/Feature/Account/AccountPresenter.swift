@@ -24,6 +24,8 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var isNameEditing: Bool = false
         var editingNameText: String = ""
         var updateNameStatus: DataStatus = .default
+        var tasksFriendHas: [Components.Schemas.User : [Components.Schemas.Task]] = [:]
+        var getTasksFriendHasStatus: DataStatus = .default
         var signOutStatus: DataStatus = .default
 
         var friendsCountString: String? {
@@ -63,6 +65,7 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case onSelectedPhotoChanged
         case onNameTapped
         case onNameSubmitted
+        case onTaskFriendHasTapped(DLTask)
         case onSignOutButtonTapped
         case onDeleteAccountButtonTapped
     }
@@ -96,6 +99,9 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         case .onNameSubmitted:
             await onNameSubmitted()
 
+        case .onTaskFriendHasTapped(let task):
+            await onTaskFriendHasTapped(task)
+
         case .onSignOutButtonTapped:
             await onSignOutButtonTapped()
 
@@ -107,30 +113,54 @@ final class AccountPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
 private extension AccountPresenter {
     func onAppear() async {
-        do {
-            state.getUserStatus = .loading
-            state.user = try await accountService.getMe()
-            state.getUserStatus = .loaded
-        } catch {
-            state.getUserStatus = .failed(.init(error))
+        Task {
+            do {
+                state.getUserStatus = .loading
+                state.user = try await accountService.getMe()
+                state.getUserStatus = .loaded
+            } catch {
+                state.getUserStatus = .failed(.init(error))
+            }
         }
 
-        do {
-            state.getFriendsCountStatus = .loading
-            let friends = try await accountService.getFriends()
-            state.friendsCount = friends.count
-            state.getFriendsCountStatus = .loaded
-        } catch {
-            state.getFriendsCountStatus = .failed(.init(error))
+        Task {
+            do {
+                state.getFriendsCountStatus = .loading
+                let friends = try await accountService.getFriends()
+                state.friendsCount = friends.count
+                state.getFriendsCountStatus = .loaded
+            } catch {
+                state.getFriendsCountStatus = .failed(.init(error))
+            }
         }
 
-        do {
-            state.getTaskCountStatus = .loading
-            let tasks = try await taskService.getActiveTasks()
-            state.tasksCount = tasks.count
-            state.getTaskCountStatus = .loaded
-        } catch {
-            state.getTaskCountStatus = .failed(.init(error))
+        Task {
+            do {
+                state.getTaskCountStatus = .loading
+                let tasks = try await taskService.getActiveTasks()
+                state.tasksCount = tasks.count
+                state.getTaskCountStatus = .loaded
+            } catch {
+                state.getTaskCountStatus = .failed(.init(error))
+            }
+        }
+
+        Task {
+            do {
+                state.getTasksFriendHasStatus = .loading
+                let tasks = try await taskService.getTasksFriendHas()
+                Set(tasks.map(\.pool)).forEach { pool in
+                    guard let friend = pool.owner else {
+                        return
+                    }
+                    state.tasksFriendHas[friend] = tasks.filter({ task in
+                        task.pool.owner == friend
+                    })
+                }
+                state.getTasksFriendHasStatus = .loaded
+            } catch {
+                state.getTasksFriendHasStatus = .failed(.init(error))
+            }
         }
     }
 
@@ -166,6 +196,10 @@ private extension AccountPresenter {
         } catch {
             state.updateNameStatus = .failed(.init(error))
         }
+    }
+
+    func onTaskFriendHasTapped(_ task: DLTask) async {
+        state.path.append(State.Path.task(task))
     }
 
     func onSignOutButtonTapped() async {

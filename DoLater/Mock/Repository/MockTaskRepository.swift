@@ -8,7 +8,12 @@
 final actor MockTaskRepository: TaskRepositoryProtocol {
     init() {}
 
-    func getTasks(poolId: Components.Parameters.poolId?) async throws -> [Components.Schemas.Task] {
+    func getTasks(poolId: Components.Parameters.poolId?, friendHas: Components.Parameters.friendHas?) async throws -> [Components.Schemas.Task] {
+        if friendHas ?? false {
+            return Components.Schemas.Task.mocks.filter { task in
+                task.owner.id != Components.Schemas.User.mock1.id
+            }
+        }
         if let poolId {
             return Components.Schemas.Task.mocks.filter { task in
                 task.pool.id == poolId

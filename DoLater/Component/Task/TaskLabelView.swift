@@ -9,26 +9,20 @@ import SwiftUI
 
 struct TaskLabelView: View {
     private let url: URL?
-    @State private var title: String
-    @State private var imageURL: URL?
+    private let isFullWidth: Bool
+    private let alignment: Alignment
+    @State private var title: String = ""
+    @State private var imageURL: URL? = nil
     @State private var isTitleLoading: Bool = false
 
-    init(url: String) {
-        self.url = URL(string: url)
-        self.title = ""
-        self.imageURL = nil
-    }
-
-    init(url: URL) {
-        self.url = url
-        self.title = ""
-        self.imageURL = nil
-    }
-
-    init(title: String, imageURL: URL?) {
-        self.url = nil
-        self.title = title
-        self.imageURL = imageURL
+    init(
+        url: String,
+        isFullWidth: Bool = false,
+        alignment: Alignment = .center
+    ) {
+        self.url = .init(string: url)
+        self.isFullWidth = isFullWidth
+        self.alignment = alignment
     }
 
     var body: some View {
@@ -73,6 +67,7 @@ struct TaskLabelView: View {
                     .frame(height: 26, alignment: .leading)
             }
         }
+        .frame(maxWidth: isFullWidth ? .infinity : nil, alignment: alignment)
         .foregroundStyle(Color.Semantic.Text.primary)
         .padding(.vertical, 4)
         .padding(.horizontal, 10)

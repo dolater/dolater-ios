@@ -43,6 +43,13 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
                                 }
                             }
 
+                            TaskFriendHasListView(
+                                tasks: presenter.state.tasksFriendHas,
+                                isLoading: presenter.state.getTasksFriendHasStatus.isLoading
+                            ) { task in
+                                presenter.dispatch(.onTaskFriendHasTapped(task))
+                            }
+
                             Button("サインアウト") {
                                 presenter.dispatch(.onSignOutButtonTapped)
                             }
@@ -74,6 +81,7 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
             .errorAlert(dataStatus: presenter.state.getTaskCountStatus)
             .errorAlert(dataStatus: presenter.state.updateProfilePhotoStatus)
             .errorAlert(dataStatus: presenter.state.updateNameStatus)
+            .errorAlert(dataStatus: presenter.state.getTasksFriendHasStatus)
             .errorAlert(dataStatus: presenter.state.signOutStatus)
         }
         .sync($path, $presenter.state.path)
@@ -101,11 +109,16 @@ struct AccountView<Environment: EnvironmentProtocol>: View {
             }
 
             if presenter.state.isNameEditing {
-                TextField("名前", text: $presenter.state.editingNameText)
-                    .onSubmit {
-                        presenter.dispatch(.onNameSubmitted)
+                HStack {
+                    TextField("名前", text: $presenter.state.editingNameText)
+                        .onSubmit {
+                            presenter.dispatch(.onNameSubmitted)
+                        }
+                        .disabled(presenter.state.updateNameStatus.isLoading)
+                    if presenter.state.updateNameStatus.isLoading {
+                        ProgressView()
                     }
-                    .disabled(presenter.state.updateNameStatus.isLoading)
+                }
             } else {
                 HStack(spacing: 4) {
                     Text(user.displayName.isEmpty ? "未設定" : user.displayName)

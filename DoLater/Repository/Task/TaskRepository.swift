@@ -6,18 +6,26 @@
 //
 
 protocol TaskRepositoryProtocol: Actor {
-    func getTasks(poolId: Components.Parameters.poolId?) async throws -> [Components.Schemas.Task]
+    func getTasks(
+        poolId: Components.Parameters.poolId?,
+        friendHas: Components.Parameters.friendHas?
+    ) async throws -> [Components.Schemas.Task]
 
-    func createTask(_ task: Components.Schemas.CreateTaskInput) async throws
-        -> Components.Schemas.Task
+    func createTask(
+        _ task: Components.Schemas.CreateTaskInput
+    ) async throws -> Components.Schemas.Task
 
     func getTask(id: Components.Parameters.id) async throws -> Components.Schemas.Task
 
-    func updateTask(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id)
-        async throws -> Components.Schemas.Task
+    func updateTask(
+        _ task: Components.Schemas.UpdateTaskInput,
+        id: Components.Parameters.id
+    ) async throws -> Components.Schemas.Task
 
-    func updateTaskForcibly(_ task: Components.Schemas.UpdateTaskInput, id: Components.Parameters.id)
-        async throws -> Components.Schemas.Task
+    func updateTaskForcibly(
+        _ task: Components.Schemas.UpdateTaskInput,
+        id: Components.Parameters.id
+    ) async throws -> Components.Schemas.Task
 
     func deleteTask(id: Components.Parameters.id) async throws
 }
@@ -25,10 +33,18 @@ protocol TaskRepositoryProtocol: Actor {
 final actor TaskRepositoryImpl: TaskRepositoryProtocol {
     init() {}
 
-    func getTasks(poolId: Components.Parameters.poolId?) async throws -> [Components.Schemas.Task] {
+    func getTasks(
+        poolId: Components.Parameters.poolId?,
+        friendHas: Components.Parameters.friendHas?
+    ) async throws -> [Components.Schemas.Task] {
         do {
             let client = try await Client.build()
-            let response = try await client.getTasks(query: .init(poolId: poolId))
+            let response = try await client.getTasks(
+                query: .init(
+                    poolId: poolId,
+                    friendHas: friendHas
+                )
+            )
             switch response {
             case .ok(let okResponse):
                 if case let .json(tasks) = okResponse.body {
