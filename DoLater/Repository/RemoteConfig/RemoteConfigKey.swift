@@ -15,6 +15,9 @@ struct RemoteConfigKey: Codable, Hashable, Identifiable, Sendable {
 }
 
 extension RemoteConfigKey {
+    static let appStoreURL = RemoteConfigKey(
+        name: "app_store_url"
+    )
     static let isValidAppVersion = RemoteConfigKey(
         name: "is_valid_app_version"
     )

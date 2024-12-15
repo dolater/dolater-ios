@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView<Environment: EnvironmentProtocol>: View {
+    @SwiftUI.Environment(\.openURL) private var openURL
     @State private var presenter: ContentPresenter<Environment> = .init()
 
     var body: some View {
@@ -53,6 +54,13 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
         .background(Color.Semantic.Background.primary)
         .onOpenURL { url in
             presenter.dispatch(.onOpenURL(url))
+        }
+        .errorAlert(dataStatus: presenter.state.appVersionValidation) { _ in
+            if let url = presenter.state.appStoreURL {
+                Button("App Storeを開く") {
+                    openURL(url)
+                }
+            }
         }
 #if DEBUG
         .sheet(isPresented: $presenter.state.isDebugScreenPresented) {

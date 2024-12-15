@@ -20,6 +20,22 @@
         }
       }
     },
+    "App Storeを開く" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open App Store"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Storeを開く"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "ja" : {
@@ -166,6 +182,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sprite Kit"
+          }
+        }
+      }
+    },
+    "This app version is not supported" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアプリバージョンはサポートされていません"
           }
         }
       }

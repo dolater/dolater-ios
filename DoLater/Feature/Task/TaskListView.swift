@@ -87,7 +87,11 @@ struct TaskListView<Environment: EnvironmentProtocol>: View {
         }
         .overlay {
             if presenter.state.isBinPresented {
-                ThrowView<Environment>(tasks: presenter.state.removedTasks)
+                ThrowView<Environment>(tasks: presenter.state.removedTasks) {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        presenter.state.isBinPresented = false
+                    }
+                }
             }
         }
         .task {

@@ -21,6 +21,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
         var accountNavigationPath: NavigationPath = .init()
         var isAddTaskDialogPresented: Bool = false
 
+        var appStoreURL: URL?
+
+        var appVersionValidation: DataStatus = .default
         var registerMeStatus: DataStatus = .default
         var openURLStatus: DataStatus = .default
 
@@ -32,6 +35,7 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
     }
 
     enum Action: Sendable {
+        case onAppear
         case onOpenURL(URL)
         case onSelectedTabChanged
         case onPlusButtonTapped
@@ -74,6 +78,9 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 
     func dispatch(_ action: Action) async {
         switch action {
+        case .onAppear:
+            await onAppear()
+
         case .onOpenURL(let url):
             await onOpenURL(url)
 
@@ -87,6 +94,18 @@ final class ContentPresenter<Environment: EnvironmentProtocol>: PresenterProtoco
 }
 
 extension ContentPresenter {
+    fileprivate func onAppear() async {
+        state.appStoreURL = URL(string: (try? await Environment.shared.remoteConfigRepository.fetchString(for: .appStoreURL)) ?? "")
+        do {
+            let isValidAppVersion = try await Environment.shared.remoteConfigRepository.fetchBool(for: .isValidAppVersion)
+            if !isValidAppVersion {
+                throw PresenterError.invalidAppVersion
+            }
+        } catch {
+            state.appVersionValidation = .failed(.init(error))
+        }
+    }
+
     fileprivate func onOpenURL(_ url: URL) async {
         Logger.standard.debug("Open URL: \(url.absoluteString)")
         let pathComponents = url.pathComponents

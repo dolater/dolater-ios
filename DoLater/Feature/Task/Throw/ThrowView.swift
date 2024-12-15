@@ -10,9 +10,11 @@ import SwiftUI
 
 struct ThrowView<Environment: EnvironmentProtocol>: View {
     @State private var presenter: ThrowPresenter<Environment>
+    private let onDismissAction: () -> Void
 
-    init(tasks: [DLTask]) {
+    init(tasks: [DLTask], onDismiss onDismissAction: @escaping () -> Void) {
         self.presenter = .init(tasks: tasks)
+        self.onDismissAction = onDismissAction
     }
 
     var body: some View {
@@ -24,12 +26,20 @@ struct ThrowView<Environment: EnvironmentProtocol>: View {
         .overlay {
         }
         .overlay {
-            BinView(isFull: true)
+            BinView(isFull: !presenter.state.tasks.isEmpty)
                 .frame(width: 320)
+        }
+        .overlay(alignment: .topTrailing) {
+            DLButton(.icon("xmark"), style: .secondary) {
+                onDismissAction()
+            }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 24)
         }
     }
 }
 
 #Preview {
-    ThrowView<MockEnvironment>(tasks: DLTask.mocks)
+    ThrowView<MockEnvironment>(tasks: DLTask.mocks) {
+    }
 }
