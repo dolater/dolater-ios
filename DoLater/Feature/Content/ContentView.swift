@@ -55,6 +55,9 @@ struct ContentView<Environment: EnvironmentProtocol>: View {
         .onOpenURL { url in
             presenter.dispatch(.onOpenURL(url))
         }
+        .task {
+            await presenter.dispatch(.onAppear)
+        }
         .errorAlert(dataStatus: presenter.state.appVersionValidation) { _ in
             if let url = presenter.state.appStoreURL {
                 Button("App Storeを開く") {
