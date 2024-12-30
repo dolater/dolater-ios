@@ -52,27 +52,6 @@ final class AppDelegate<Environment: EnvironmentProtocol>: NSObject, UIApplicati
     }
 
     func application(
-        _ app: UIApplication,
-        open url: URL,
-        options: [UIApplication.OpenURLOptionsKey : Any] = [:]
-    ) -> Bool {
-        Logger.standard.debug("AppDelegate OpenURL: \(url.absoluteString)")
-
-        let sendingAppID = options[.sourceApplication]
-        Logger.standard.debug("Source Application: \(sendingAppID.debugDescription)")
-
-        if url.host() == "dolater.kantacky.com" {
-            return true
-        }
-
-        guard let _ = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            return false
-        }
-
-        return false
-    }
-
-    func application(
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable: Any]
     ) async -> UIBackgroundFetchResult {
