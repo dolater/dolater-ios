@@ -36,4 +36,4 @@ jobs:
       - name: Test
         run: make test
         env:
-          FASTLANE_SLACK_WEBHOOK_URL: ${{ secrets.FASTLANE_SLACK_WEBHOOK_URL }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
