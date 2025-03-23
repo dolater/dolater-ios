@@ -1,22 +1,22 @@
 name: CI
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - ready_for_review
-      - reopened
-      - synchronize
-  schedule:
-    - cron: 0 15 * * *
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types:
+  #     - opened
+  #     - ready_for_review
+  #     - reopened
+  #     - synchronize
+  # schedule:
+  #   - cron: 0 15 * * *
   workflow_dispatch:
 jobs:
   test-ios-app:
-    if: github.event.pull_request.draft == false
+    # if: github.event.pull_request.draft == false
     runs-on:
       - self-hosted
       - macOS
