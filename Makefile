@@ -1,5 +1,39 @@
 FASTLANE := bundle exec fastlane
 
+.PHONY: help
+help:
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Targets:"
+	@echo "  install                Install dependencies"
+	@echo "  test                   Run tests"
+	@echo "  distribute_firebase    Distribute to Firebase"
+	@echo "  distribute_testflight  Distribute to TestFlight"
+	@echo "  submit_appstore        Submit to App Store"
+	@echo "  gym_development        Build development app"
+	@echo "  gym_adhoc              Build adhoc app"
+	@echo "  gym_appstore           Build app store app"
+	@echo "  scan_development       Run tests with scan"
+	@echo "  pilot_appstore         Upload to TestFlight"
+	@echo "  deliver_appstore       Deliver to App Store"
+	@echo "  bump_patch_version     Bump patch version"
+	@echo "  bump_minor_version     Bump minor version"
+	@echo "  bump_major_version     Bump major version"
+	@echo "  match_all              Match all certificates and profiles"
+	@echo "  match_development      Match development certificate and profile"
+	@echo "  match_adhoc            Match adhoc certificate and profile"
+	@echo "  match_appstore         Match app store certificate and profile"
+	@echo "  match_fetch_all        Fetch all certificates and profiles"
+	@echo "  match_fetch_development Fetch development certificate and profile"
+	@echo "  match_fetch_adhoc      Fetch adhoc certificate and profile"
+	@echo "  match_fetch_appstore   Fetch app store certificate and profile"
+	@echo "  match_delete_all       Delete all certificates and profiles"
+	@echo "  match_delete_development Delete development certificate and profile"
+	@echo "  match_delete_adhoc     Delete adhoc certificate and profile"
+	@echo "  match_delete_appstore  Delete app store certificate and profile"
+	@echo "  register_bundle_id     Register bundle ID in App Store Connect"
+	@echo "  register_device        Register device in App Store Connect"
+
 .PHONY: install
 install:
 	bundle install
